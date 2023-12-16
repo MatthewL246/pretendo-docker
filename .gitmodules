@@ -1,0 +1,4 @@
+[submodule "repos/account"]
+path = repos/account
+url = https://github.com/PretendoNetwork/account.git
+branch = dev
