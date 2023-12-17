@@ -1,0 +1,10 @@
+diff --git i/docker/entrypoint.sh w/docker/entrypoint.sh
+index 2c6aa02..c9d3234 100644
+--- i/docker/entrypoint.sh
++++ w/docker/entrypoint.sh
+@@ -25,4 +25,4 @@ for file in $keys; do
+     fi
+ done
+ 
+-exec node src/server.js
++exec node dist/server.js

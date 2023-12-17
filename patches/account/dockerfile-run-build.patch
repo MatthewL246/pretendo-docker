@@ -1,0 +1,14 @@
+diff --git i/Dockerfile w/Dockerfile
+index a810a90..93c8f2a 100644
+--- i/Dockerfile
++++ w/Dockerfile
+@@ -11,6 +11,8 @@ RUN npm install
+ 
+ COPY . ./
+ 
+-VOLUME [ "/app/config.json", "/app/certs" ]
++RUN npm run build
++
++VOLUME [ "/app/certs" ]
+ 
+ CMD ["sh", "entrypoint.sh"]

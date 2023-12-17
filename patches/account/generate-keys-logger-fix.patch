@@ -1,0 +1,151 @@
+diff --git i/generate-keys.js w/generate-keys.js
+index b1a311b..df80793 100644
+--- i/generate-keys.js
++++ w/generate-keys.js
+@@ -2,7 +2,7 @@ const NodeRSA = require('node-rsa');
+ const crypto = require('crypto');
+ const fs = require('fs-extra');
+ const yesno = require('yesno');
+-const logger = require('./logger');
++const logger = require('./dist/logger');
+ require('colors');
+ 
+ const ALLOWED_CHARS_REGEX = /[^a-zA-Z0-9_-]/g;
+@@ -11,7 +11,7 @@ async function main() {
+ 	const args = process.argv.slice(2);
+ 
+ 	if (args.length < 1) {
+-		logger.error('Must pass in type and optional name');
++		logger.LOG_ERROR('Must pass in type and optional name');
+ 		usage();
+ 		return;
+ 	}
+@@ -24,25 +24,25 @@ async function main() {
+ 		name = name.toLowerCase().trim();
+ 
+ 		if (ALLOWED_CHARS_REGEX.test(name)) {
+-			logger.error(`Invalid name. Names must only contain [^a-zA-Z0-9_-]. Got ${name}`);
++			logger.LOG_ERROR(`Invalid name. Names must only contain [^a-zA-Z0-9_-]. Got ${name}`);
+ 			return;
+ 		}
+ 	}
+ 
+ 	if (!['nex', 'service', 'account'].includes(type)) {
+-		logger.error(`Invalid type. Expected nex, service, or account. Got ${type}`);
++		logger.LOG_ERROR(`Invalid type. Expected nex, service, or account. Got ${type}`);
+ 		usage();
+ 		return;
+ 	}
+ 
+ 	if (type !== 'account' && (!name || name === '')) {
+-		logger.error('If type is not account, a name MUST be passed');
++		logger.LOG_ERROR('If type is not account, a name MUST be passed');
+ 		usage();
+ 		return;
+ 	}
+ 
+ 	if (type === 'service' && name === 'account') {
+-		logger.error('Cannot use service name \'account\'. Reserved');
++		logger.LOG_ERROR('Cannot use service name \'account\'. Reserved');
+ 		usage();
+ 		return;
+ 	}
+@@ -61,7 +61,7 @@ async function main() {
+ 		});
+ 
+ 		if (!overwrite) {
+-			logger.info('Not overwriting existing keys. Exiting program');
++			logger.LOG_INFO('Not overwriting existing keys. Exiting program');
+ 			return;
+ 		}
+ 	}
+@@ -72,9 +72,9 @@ async function main() {
+ 	const secretKeyPath = `${path}/secret.key`;
+ 
+ 	// Ensure the output directories exist
+-	logger.info('Creating output directories...');
++	logger.LOG_INFO('Creating output directories...');
+ 	fs.ensureDirSync(path);
+-	logger.success('Created output directories!');
++	logger.LOG_SUCCESS('Created output directories!');
+ 
+ 	const key = new NodeRSA({ b: 1024 }, null, {
+ 		environment: 'browser',
+@@ -84,50 +84,49 @@ async function main() {
+ 	});
+ 
+ 	// Generate new key pair
+-	logger.info('Generating RSA key pair...');
+-	logger.warn('(this may take a while)')
++	logger.LOG_INFO('Generating RSA key pair...');
+ 	key.generateKeyPair(1024);
+-	logger.success('Generated RSA key pair!');
++	logger.LOG_SUCCESS('Generated RSA key pair!');
+ 
+ 	// Export the keys
+-	logger.info('Exporting public key...');
++	logger.LOG_INFO('Exporting public key...');
+ 	const publicKey = key.exportKey('public');
+-	logger.success('Exported public key!');
++	logger.LOG_SUCCESS('Exported public key!');
+ 
+ 	// Saving public key
+-	logger.info('Saving public key to disk...');
++	logger.LOG_INFO('Saving public key to disk...');
+ 	fs.writeFileSync(publicKeyPath, publicKey);
+-	logger.success(`Saved public key to ${publicKeyPath}!`);
++	logger.LOG_SUCCESS(`Saved public key to ${publicKeyPath}!`);
+ 
+-	logger.info('Exporting private key...');
++	logger.LOG_INFO('Exporting private key...');
+ 	const privateKey = key.exportKey('private');
+-	logger.success('Exported private key!');
++	logger.LOG_SUCCESS('Exported private key!');
+ 
+ 	// Saving private key
+-	logger.info('Saving private key to disk...');
++	logger.LOG_INFO('Saving private key to disk...');
+ 	fs.writeFileSync(privateKeyPath, privateKey);
+-	logger.success(`Saved private key to ${privateKeyPath}!`);
++	logger.LOG_SUCCESS(`Saved private key to ${privateKeyPath}!`);
+ 
+ 	// Generate new AES key
+-	logger.info('Generating AES key...');
++	logger.LOG_INFO('Generating AES key...');
+ 	const aesKey = crypto.randomBytes(16);
+-	logger.success('Generated AES key!');
++	logger.LOG_SUCCESS('Generated AES key!');
+ 
+ 	// Saving AES key
+-	logger.info('Saving AES key to disk...');
++	logger.LOG_INFO('Saving AES key to disk...');
+ 	fs.writeFileSync(aesKeyPath, aesKey.toString('hex'));
+-	logger.success(`Saved AES key to ${aesKeyPath}!`);
++	logger.LOG_SUCCESS(`Saved AES key to ${aesKeyPath}!`);
+ 
+ 	// Create HMAC secret key
+-	logger.info('Generating HMAC secret...');
++	logger.LOG_INFO('Generating HMAC secret...');
+ 	const secret = crypto.randomBytes(16);
+-	logger.success('Generated RSA key pair!');
++	logger.LOG_SUCCESS('Generated RSA key pair!');
+ 
+-	logger.info('Saving HMAC secret to disk...');
++	logger.LOG_INFO('Saving HMAC secret to disk...');
+ 	fs.writeFileSync(secretKeyPath, secret.toString('hex'));
+-	logger.success(`Saved HMAC secret to ${secretKeyPath}!`);
++	logger.LOG_SUCCESS(`Saved HMAC secret to ${secretKeyPath}!`);
+ 
+-	logger.success('Keys generated successfully');
++	logger.LOG_SUCCESS('Keys generated successfully');
+ }
+ 
+ // Display usage information
+@@ -142,4 +141,4 @@ function usage() {
+ 	console.log('Name: Service or NEX server name. Not used in account type');
+ }
+ 
+-main().catch(logger.error);
+\ No newline at end of file
++main().catch(logger.LOG_ERROR);
+\ No newline at end of file

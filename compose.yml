@@ -1,0 +1,74 @@
+name: pretendo-network
+version: "3.8"
+services:
+    mitmproxy-pretendo:
+        build: ./repos/mitmproxy-pretendo
+        ports:
+            # Proxy server
+            - 8080:8080
+            # Mitmweb interface
+            - 127.0.0.1:8081:8081
+        volumes:
+            - type: volume
+              source: mitmproxy-pretendo-data
+              target: /home/mitmproxy/.mitmproxy
+        command: mitmweb --web-host 0.0.0.0
+        tty: true
+
+    nginx:
+        build: ./nginx
+        ports:
+            - 80:80
+            - 443:443
+
+    mongodb:
+        image: mongo:latest
+        ports:
+            # For connecting with mongosh or MongoDB Compass
+            - 127.0.0.1:27017:27017
+        volumes:
+            - type: volume
+              source: mongodb-database
+              target: /data/db
+
+    minio:
+        image: minio/minio:latest
+        ports:
+            # Web console
+            - 127.0.0.1:9090:9090
+        env_file:
+            - ./environment/minio.env
+            - ./environment/minio.local.env
+        volumes:
+            - type: volume
+              source: minio-s3-data
+              target: /data
+        command: server /data --console-address ":9090"
+
+    # redis:
+    #     image: redis:latest
+    #     volumes:
+    #         - type: volume
+    #           source: redis-data
+    #           target: /data
+    #     command: redis-server --save 60 1 --appendonly yes
+
+    account:
+        build: ./repos/account
+        depends_on:
+            - mongodb
+            - minio
+        env_file:
+            - ./environment/account.env
+            - ./environment/account.local.env
+        volumes:
+            - type: volume
+              source: account-certificates
+              target: /app/certs
+
+volumes:
+    mitmproxy-pretendo-data:
+    mongodb-database:
+    minio-s3-data:
+    redis-data:
+    account-certificates:

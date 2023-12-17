@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -eu
+
+echo "Setting up local environment variables..."
+
+rm environment/*.local.env || true
+
+# Generate an AES-256-CBC key for account server tokens
+account_aes_key=$(openssl rand -hex 32)
+echo "PN_ACT_CONFIG_AES_KEY=$account_aes_key" >>./environment/account.local.env
+
+# Generate master API keys for the account gRPC server
+account_api_key_account=$(openssl rand -base64 32)
+account_api_key_api=$(openssl rand -base64 32)
+echo "PN_ACT_CONFIG_GRPC_MASTER_API_KEY_ACCOUNT=$account_api_key_account" >>./environment/account.local.env
+echo "PN_ACT_CONFIG_GRPC_MASTER_API_KEY_API=$account_api_key_api" >>./environment/account.local.env
+
+# Generate access and secret keys for MinIO
+minio_access_key=$(openssl rand -base64 32)
+echo "PN_ACT_CONFIG_S3_ACCESS_KEY=$minio_access_key" >>./environment/account.local.env
+echo "MINIO_ACCESS_KEY=$minio_access_key" >>./environment/minio.local.env
+minio_secret_key=$(openssl rand -base64 32)
+echo "PN_ACT_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./environment/account.local.env
+echo "MINIO_SECRET_KEY=$minio_secret_key" >>./environment/minio.local.env
+
+echo "Successfully set up environment."

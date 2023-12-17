@@ -1,0 +1,14 @@
+diff --git i/mitmproxy-config.yaml w/mitmproxy-config.yaml
+index b9a4877..2e157a4 100644
+--- i/mitmproxy-config.yaml
++++ w/mitmproxy-config.yaml
+@@ -10,6 +10,9 @@ confdir: ./.mitmproxy
+ # Enable the Pretendo redirection script
+ scripts: ["../pretendo_addon.py"]
+ pretendo_redirect: true
++pretendo_http: true
++pretendo_host: nginx
++pretendo_host_port: 80
+ 
+ # Allow self-signed certificates
+ ssl_insecure: true
