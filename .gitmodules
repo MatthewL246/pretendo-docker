@@ -1,3 +1,7 @@
+[submodule "repos/mitmproxy-pretendo"]
+path = repos/mitmproxy-pretendo
+url = https://github.com/MatthewL246/mitmproxy-pretendo.git
+branch = main
 [submodule "repos/account"]
 path = repos/account
 url = https://github.com/PretendoNetwork/account.git
