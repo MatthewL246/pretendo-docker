@@ -31,10 +31,17 @@ services:
         command: -conf /etc/coredns/Corefile
 
     nginx:
-        build: ./nginx
+        image: nginx:mainline-alpine
         ports:
             - 80:80
             - 443:443
+        volumes:
+            - type: bind
+              source: ./config/nginx.conf
+              target: /etc/nginx/nginx.conf
+            - type: bind
+              source: ./config/nginx
+              target: /etc/nginx/conf.d/
         dns: 172.20.0.2
         networks:
             default:
