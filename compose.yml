@@ -2,6 +2,7 @@ name: pretendo-network
 version: "3.8"
 services:
     mitmproxy-pretendo:
+        image: ghcr.io/matthewl246/mitmproxy-pretendo:main
         build: ./repos/mitmproxy-pretendo
         ports:
             # Proxy server
@@ -9,6 +10,9 @@ services:
             # Mitmweb interface
             - 127.0.0.1:8081:8081
         volumes:
+            - type: bind
+              source: ./config/mitmproxy.yaml
+              target: /home/mitmproxy/mitmproxy-config.yaml
             - type: volume
               source: mitmproxy-pretendo-data
               target: /home/mitmproxy/.mitmproxy
