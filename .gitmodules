@@ -14,3 +14,7 @@ branch = dev
 path = repos/website
 url = https://github.com/PretendoNetwork/website.git
 branch = master
+[submodule "repos/friends"]
+path = repos/friends
+url = https://github.com/PretendoNetwork/friends.git
+branch = master
