@@ -1,7 +1,7 @@
 {
     "http": {
         "port": 8080,
-        "base_url": "http://www.pretendo.cc"
+        "base_url": "https://pretendo.network"
     },
     "api_base": "http://api.pretendo.cc",
     "database": {

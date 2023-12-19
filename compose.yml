@@ -64,8 +64,6 @@ services:
             internal:
         command: --config "/etc/mongod.conf" --replSet rs
 
-    # TODO: S3 uploads from the servers use the first part of the path (like
-    # "mii") as the bucket name instead of "pn-cdn". Why?
     minio:
         image: minio/minio:latest
         ports:
