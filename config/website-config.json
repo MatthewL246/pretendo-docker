@@ -1,0 +1,16 @@
+{
+	"http": {
+		"port": 8080,
+		"base_url": "http://www.pretendo.cc"
+	},
+	"api_base": "http://api.pretendo.cc",
+	"database": {
+		"account": {
+			"connection_string": "mongodb://mongodb:27017/pretendo_account?replicaSet=rs&directConnection=true",
+			"options": {
+				"useNewUrlParser": true,
+				"useUnifiedTopology": true
+			}
+		}
+	}
+}

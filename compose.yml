@@ -79,18 +79,14 @@ services:
             - type: volume
               source: minio-s3-data
               target: /data
+        # TODO: Create the mii bucket and allow anonymous access
         command: server /data --console-address ":9090"
         dns: 172.20.0.2
         networks:
             internal:
 
-    # redis:
-    #     image: redis:latest
-    #     volumes:
-    #         - type: volume
-    #           source: redis-data
-    #           target: /data
-    #     command: redis-server --save 60 1 --appendonly yes
+    # TODO: Set up Redis
+    # TODO: Set up a SMTP server to log emails
 
     account:
         build: ./repos/account
@@ -111,6 +107,21 @@ services:
         networks:
             internal:
 
+    website:
+        build: ./repos/website
+        depends_on:
+            - mongodb
+            - account
+        ports:
+            # For the Node.js debugger
+            - 127.0.0.1:9230:9230
+        volumes:
+            - type: bind
+              source: ./config/website-config.json
+              target: /app/config.json
+        dns: 172.20.0.2
+        networks:
+            internal:
 
 volumes:
     mitmproxy-pretendo-data:

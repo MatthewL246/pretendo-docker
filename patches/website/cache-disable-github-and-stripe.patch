@@ -1,0 +1,49 @@
+diff --git i/src/cache.js w/src/cache.js
+index 68f8838..004b02f 100644
+--- i/src/cache.js
++++ w/src/cache.js
+@@ -3,14 +3,6 @@ const Stripe = require('stripe');
+ const logger = require('./logger');
+ const config = require('../config.json');
+ 
+-const github = new GraphQLClient('https://api.github.com/graphql', {
+-	headers: {
+-		Authorization: `bearer ${config.github.graphql_token}`,
+-	}
+-});
+-
+-const stripe = new Stripe(config.stripe.secret_key);
+-
+ const getProjectsV2GQL = gql`
+ query getProjectsV2($orgName: String!, $cursor: String!) {
+ 	organization(login: $orgName) {
+@@ -84,6 +76,7 @@ let stripeDonationCache = {
+ 
+ async function getGitHubProjectsV2(after='') {
+ 	let projects = [];
++	return projects;
+ 
+ 	const data = await github.request(getProjectsV2GQL, {
+ 		orgName: 'PretendoNetwork',
+@@ -110,6 +103,7 @@ async function getGitHubProjectsV2(after='') {
+ 
+ async function getGitHubProjectsV2Fields(id, after='') {
+ 	let fields = [];
++	return fields;
+ 
+ 	const data = await github.request(getProjectsV2FieldsGQL, {
+ 		id: id,
+@@ -202,12 +196,12 @@ async function getStripeDonationCache() {
+ async function updateStripeDonationCache() {
+ 	const donationCache = {
+ 		update_time: Date.now(),
+-		goal: config.stripe.goal_cents,
+ 		total: 0,
+ 		donators: 0,
+ 		completed_real: 0,
+ 		completed_capped: 0
+ 	};
++	return donationCache;
+ 
+ 	let hasMore = true;
+ 	let lastId;

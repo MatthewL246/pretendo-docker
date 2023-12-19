@@ -1,0 +1,80 @@
+diff --git i/src/routes/account.js w/src/routes/account.js
+index 1f398b0..6d46424 100644
+--- i/src/routes/account.js
++++ w/src/routes/account.js
+@@ -15,17 +15,7 @@ const editorJSON =  require('../json/miieditor.json');
+ 
+ const { Router } = express;
+ 
+-const stripe = new Stripe(config.stripe.secret_key);
+ const router = new Router();
+-const discordRest = new DiscordRest({ version: '10' }).setToken(config.discord.bot_token);
+-
+-// Create OAuth client
+-const discordOAuth = new DiscordOauth2({
+-	clientId: config.discord.client_id,
+-	clientSecret: config.discord.client_secret,
+-	redirectUri: `${config.http.base_url}/account/connect/discord`,
+-	version: 'v10'
+-});
+ 
+ router.get('/', requireLoginMiddleware, async (request, response) => {
+ 	// Setup the data to be sent to the handlebars renderer
+@@ -49,6 +39,9 @@ router.get('/', requireLoginMiddleware, async (request, response) => {
+ 	renderData.account = account;
+ 	renderData.isTester = account.access_level > 0;
+ 
++	response.render('account/account', renderData);
++	return;
++
+ 	// Check if a Discord account is linked to the PNID
+ 	if (account.connections.discord.id && account.connections.discord.id.trim() !== '') {
+ 		try {
+@@ -169,6 +162,7 @@ router.get('/reset-password', async (request, response) => {
+ });
+ 
+ router.get('/connect/discord', requireLoginMiddleware, async (request, response) => {
++	return response.redirect('/account');
+ 	const { pnid } = request;
+ 	let tokens;
+ 	try {
+@@ -213,6 +207,7 @@ router.get('/connect/discord', requireLoginMiddleware, async (request, response)
+ });
+ 
+ router.get('/remove/discord', requireLoginMiddleware, async (request, response) => {
++	return response.redirect('/account');
+ 	const { account, pnid } = request;
+ 
+ 	try {
+@@ -251,6 +246,7 @@ router.get('/miieditor', requireLoginMiddleware, async (request, response) => {
+ });
+ 
+ router.get('/upgrade', requireLoginMiddleware, async (request, response) => {
++	return response.redirect('/account');
+ 	// Set user account info to render data
+ 	const { pnid } = request;
+ 
+@@ -292,6 +288,7 @@ router.get('/upgrade', requireLoginMiddleware, async (request, response) => {
+ });
+ 
+ router.post('/stripe/checkout/:priceId', requireLoginMiddleware, async (request, response) => {
++	return response.redirect('/account');
+ 	// Set user account info to render data
+ 	const { account } = request;
+ 	const pid = account.pid;
+@@ -353,6 +350,7 @@ router.post('/stripe/checkout/:priceId', requireLoginMiddleware, async (request,
+ });
+ 
+ router.post('/stripe/unsubscribe', requireLoginMiddleware, async (request, response) => {
++	return response.redirect('/account');
+ 	// Set user account info to render data
+ 	const { pnid } = request;
+ 
+@@ -392,6 +390,7 @@ router.post('/stripe/unsubscribe', requireLoginMiddleware, async (request, respo
+ });
+ 
+ router.post('/stripe/webhook', async (request, response) => {
++	return response.redirect('/account');
+ 	const stripeSignature = request.headers['stripe-signature'];
+ 	let event;
+ 

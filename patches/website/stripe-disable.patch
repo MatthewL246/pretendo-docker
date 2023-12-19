@@ -1,0 +1,15 @@
+diff --git i/src/stripe.js w/src/stripe.js
+index eddb382..b60c1c2 100644
+--- i/src/stripe.js
++++ w/src/stripe.js
+@@ -5,9 +5,8 @@ const database = require('./database');
+ const logger = require('./logger');
+ const config = require('../config.json');
+ 
+-const stripe = new Stripe(config.stripe.secret_key);
+-
+ async function handleStripeEvent(event) {
++	return;
+ 	if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
+ 		const subscription = event.data.object;
+ 		const product = await stripe.products.retrieve(subscription.plan.product);

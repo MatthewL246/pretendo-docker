@@ -1,0 +1,44 @@
+diff --git i/src/util.js w/src/util.js
+index 043091a..f1095aa 100644
+--- i/src/util.js
++++ w/src/util.js
+@@ -10,8 +10,6 @@ const logger = require('./logger');
+ const config = require('../config.json');
+ const baseLocale = require(`${__dirname}/../locales/en_US.json`);
+ 
+-const discordRest = new DiscordRest({ version: '10' }).setToken(config.discord.bot_token);
+-
+ function fullUrl(request) {
+ 	return `${request.protocol}://${request.hostname}${request.originalUrl}`;
+ }
+@@ -222,6 +220,7 @@ function nintendoPasswordHash(password, pid) {
+ }
+ 
+ async function assignDiscordMemberSupporterRole(memberId, roleId) {
++	return;
+ 	if (memberId && memberId.trim() !== '') {
+ 		await discordRest.put(DiscordRoutes.guildMemberRole(config.discord.guild_id, memberId, config.discord.roles.supporter));
+ 		await discordRest.put(DiscordRoutes.guildMemberRole(config.discord.guild_id, memberId, roleId));
+@@ -229,12 +228,14 @@ async function assignDiscordMemberSupporterRole(memberId, roleId) {
+ }
+ 
+ async function assignDiscordMemberTesterRole(memberId) {
++	return;
+ 	if (memberId && memberId.trim() !== '') {
+ 		await discordRest.put(DiscordRoutes.guildMemberRole(config.discord.guild_id, memberId, config.discord.roles.tester));
+ 	}
+ }
+ 
+ async function removeDiscordMemberSupporterRole(memberId, roleId) {
++	return;
+ 	if (memberId && memberId.trim() !== '') {
+ 		await discordRest.delete(DiscordRoutes.guildMemberRole(config.discord.guild_id, memberId, config.discord.roles.supporter));
+ 		await discordRest.delete(DiscordRoutes.guildMemberRole(config.discord.guild_id, memberId, roleId));
+@@ -242,6 +243,7 @@ async function removeDiscordMemberSupporterRole(memberId, roleId) {
+ }
+ 
+ async function removeDiscordMemberTesterRole(memberId) {
++	return;
+ 	if (memberId && memberId.trim() !== '') {
+ 		await discordRest.delete(DiscordRoutes.guildMemberRole(config.discord.guild_id, memberId, config.discord.roles.tester));
+ 	}

@@ -1,0 +1,15 @@
+diff --git i/views/partials/header.handlebars w/views/partials/header.handlebars
+index 8fda1e0..db4c26b 100644
+--- i/views/partials/header.handlebars
++++ w/views/partials/header.handlebars
+@@ -1,5 +1,9 @@
+ <link rel="stylesheet" href="/assets/css/partials/header.css" ></link>
+-
++<div style="margin: auto; margin-top: 2rem; padding: 2rem; text-align: center; width: 80%; color: white; background-color: red">
++	<h1><b>⚠️ NOTICE: This is an unofficial Pretendo Network server! ⚠️</b></h1>
++	<h2>If you're the server admin, congrats, your server is working! :)</h2>
++	<p>If you didn't expect this, don't enter your official Pretendo account password here.</p>
++</div>
+ <header class="transparent">
+ 	<div class="left-section">
+ 		<button class="dropdown-button" id="mobile-button">

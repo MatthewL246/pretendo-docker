@@ -17,6 +17,14 @@
                 "cwd": "${workspaceFolder}/repos/account"
             },
             "command": "npm install && npm run build"
+        },
+        {
+            "label": "Build website",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/repos/website"
+            },
+            "command": "npm install && npm run build"
         }
     ]
 }
