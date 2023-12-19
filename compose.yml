@@ -53,6 +53,12 @@ services:
             # For connecting with mongosh or MongoDB Compass
             - 127.0.0.1:27017:27017
         volumes:
+            - type: bind
+              source: ./config/mongod.conf
+              target: /etc/mongod.conf
+            - type: bind
+              source: ./config/mongodb-init.js
+              target: /docker-entrypoint-initdb.d/init.js
             - type: volume
               source: mongodb-database
               target: /data/db
