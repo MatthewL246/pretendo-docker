@@ -56,9 +56,6 @@ services:
             - type: bind
               source: ./config/mongod.conf
               target: /etc/mongod.conf
-            - type: bind
-              source: ./config/mongodb-init.js
-              target: /docker-entrypoint-initdb.d/init.js
             - type: volume
               source: mongodb-database
               target: /data/db
@@ -79,7 +76,6 @@ services:
             - type: volume
               source: minio-s3-data
               target: /data
-        # TODO: Create the mii bucket and allow anonymous access
         command: server /data --console-address ":9090"
         dns: 172.20.0.2
         networks:

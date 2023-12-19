@@ -19,9 +19,9 @@ echo "PN_ACT_CONFIG_GRPC_MASTER_API_KEY_API=$account_api_key_api" >>./environmen
 # Generate access and secret keys for MinIO
 minio_access_key=$(openssl rand -base64 32)
 echo "PN_ACT_CONFIG_S3_ACCESS_KEY=$minio_access_key" >>./environment/account.local.env
-echo "MINIO_ACCESS_KEY=$minio_access_key" >>./environment/minio.local.env
+echo "MINIO_ROOT_USER=$minio_access_key" >>./environment/minio.local.env
 minio_secret_key=$(openssl rand -base64 32)
 echo "PN_ACT_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./environment/account.local.env
-echo "MINIO_SECRET_KEY=$minio_secret_key" >>./environment/minio.local.env
+echo "MINIO_ROOT_PASSWORD=$minio_secret_key" >>./environment/minio.local.env
 
 echo "Successfully set up environment."
