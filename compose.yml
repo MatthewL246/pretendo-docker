@@ -15,11 +15,26 @@ services:
         command: mitmweb --web-host 0.0.0.0
         tty: true
 
+    coredns:
+        image: coredns/coredns:latest
+        volumes:
+            - type: bind
+              source: ./config/Corefile
+              target: /etc/coredns/Corefile
+        networks:
+            internal:
+                ipv4_address: 172.20.0.2
+        command: -conf /etc/coredns/Corefile
+
     nginx:
         build: ./nginx
         ports:
             - 80:80
             - 443:443
+        dns: 172.20.0.2
+        networks:
+            default:
+            internal:
 
     mongodb:
         image: mongo:latest
@@ -30,6 +45,10 @@ services:
             - type: volume
               source: mongodb-database
               target: /data/db
+        dns: 172.20.0.2
+        networks:
+            internal:
+        command: --config "/etc/mongod.conf" --replSet rs
 
     minio:
         image: minio/minio:latest
@@ -44,6 +63,9 @@ services:
               source: minio-s3-data
               target: /data
         command: server /data --console-address ":9090"
+        dns: 172.20.0.2
+        networks:
+            internal:
 
     # redis:
     #     image: redis:latest
@@ -65,10 +87,22 @@ services:
             - type: volume
               source: account-certificates
               target: /app/certs
+        dns: 172.20.0.2
+        networks:
+            internal:
+
 
 volumes:
     mitmproxy-pretendo-data:
     mongodb-database:
     minio-s3-data:
-    redis-data:
     account-certificates:
+
+networks:
+    # We need to use a custom network so that we can set a static IP address for
+    # CoreDNS and use it as a DNS server for the other containers.
+    internal:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16

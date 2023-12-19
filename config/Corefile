@@ -1,0 +1,7 @@
+. {
+    log
+    rewrite name regex .*pretendo\.cc nginx
+    rewrite name regex .*pretendo\.network nginx
+    rewrite name regex .*minio minio
+    forward . /etc/resolv.conf
+}
