@@ -91,6 +91,9 @@ services:
         depends_on:
             - mongodb
             - minio
+        ports:
+            # For the Node.js debugger
+            - 127.0.0.1:9229:9229
         env_file:
             - ./environment/account.env
             - ./environment/account.local.env
