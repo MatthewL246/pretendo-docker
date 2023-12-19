@@ -81,7 +81,17 @@ services:
         networks:
             internal:
 
-    # TODO: Set up Redis
+    redis:
+        image: redis:latest
+        volumes:
+            - type: volume
+              source: redis-data
+              target: /data
+        command: redis-server --save 60 1 --appendonly yes
+        dns: 172.20.0.2
+        networks:
+            internal:
+
     # TODO: Set up a SMTP server to log emails
 
     account:
@@ -123,6 +133,7 @@ volumes:
     mitmproxy-pretendo-data:
     mongodb-database:
     minio-s3-data:
+    redis-data:
     account-certificates:
 
 networks:
