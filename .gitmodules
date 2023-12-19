@@ -2,7 +2,15 @@
 path = repos/mitmproxy-pretendo
 url = https://github.com/MatthewL246/mitmproxy-pretendo.git
 branch = main
+[submodule "repos/Inkay"]
+path = repos/Inkay
+url = https://github.com/PretendoNetwork/Inkay.git
+branch = main
 [submodule "repos/account"]
 path = repos/account
 url = https://github.com/PretendoNetwork/account.git
 branch = dev
+[submodule "repos/website"]
+path = repos/website
+url = https://github.com/PretendoNetwork/website.git
+branch = master
