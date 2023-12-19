@@ -1,5 +1,5 @@
 diff --git i/docker/entrypoint.sh w/docker/entrypoint.sh
-index 2c6aa02..b8c8d5a 100644
+index 2c6aa02..c3c375e 100644
 --- i/docker/entrypoint.sh
 +++ w/docker/entrypoint.sh
 @@ -1,15 +1,5 @@

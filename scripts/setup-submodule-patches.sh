@@ -20,6 +20,7 @@ for dir in "$git_base/patches/"*; do
         for patch in "$git_base/patches/$subdir"/*; do
             echo "Applying patch $patch..."
             git apply "$patch" -v
+            git add .
             num_patches=$((num_patches + 1))
         done
     fi
