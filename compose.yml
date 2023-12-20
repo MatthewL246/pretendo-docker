@@ -84,7 +84,7 @@ services:
             internal:
 
     redis:
-        image: redis:latest
+        image: redis:alpine
         volumes:
             - type: volume
               source: redis-data
@@ -94,6 +94,9 @@ services:
         networks:
             internal:
 
+    # TODO: MailDev appears to be unmaintained and has security vulnerabilities.
+    # Find an alternative. MailCatcher doesn't support persistance, and MailHog
+    # also seems unmaintained.
     maildev:
         image: maildev/maildev:latest
         ports:
