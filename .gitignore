@@ -1,2 +1,5 @@
 # Local environment variables (used for secrets)
 /environment/*.local.env
+
+# Account server certificates
+/certs/
