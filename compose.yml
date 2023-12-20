@@ -137,6 +137,38 @@ services:
         networks:
             internal:
 
+    postgres:
+        image: postgres:alpine
+        depends_on:
+            - coredns
+        volumes:
+            - type: volume
+              source: postgres-database
+              target: /var/lib/postgresql/data
+            - type: bind
+              source: ./config/postgres-init.sh
+              target: /docker-entrypoint-initdb.d/postgres-init.sh
+        env_file:
+            - ./environment/postgres.env
+            - ./environment/postgres.local.env
+        dns: 172.20.0.2
+        networks:
+            internal:
+
+    adminer:
+        image: adminer:latest
+        depends_on:
+            - coredns
+            - postgres
+        ports:
+            # For the Adminer web interface
+            - 127.0.0.1:8091:8080
+        env_file:
+            - ./environment/adminer.env
+        dns: 172.20.0.2
+        networks:
+            internal:
+
     account:
         build: ./repos/account
         depends_on:
@@ -182,6 +214,7 @@ volumes:
     minio-s3-data:
     redis-data:
     maildev-mail:
+    postgres-database:
     account-certificates:
 
 networks:

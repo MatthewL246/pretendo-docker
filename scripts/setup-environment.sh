@@ -28,6 +28,11 @@ echo "MINIO_ROOT_PASSWORD=$minio_secret_key" >>./minio.local.env
 mongo_express_password=$(openssl rand -base64 32)
 echo "ME_CONFIG_BASICAUTH_PASSWORD=$mongo_express_password" >>./mongo-express.local.env
 
+# Generate a password for Postgres
+postgres_password=$(openssl rand -base64 32)
+echo "POSTGRES_PASSWORD=$postgres_password" >>./postgres.local.env
+echo "PN_FRIENDS_CONFIG_DATABASE_URI=postgres://postgres_pretendo:$postgres_password@postgres/friends?sslmode=disable" >>./friends.local.env
+
 # Get the Wii U IP address
 printf "Enter your Wii U's IP address: "
 read -r wiiu_ip
