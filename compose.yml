@@ -212,7 +212,6 @@ services:
         build: ./repos/friends
         depends_on:
             - account
-            - mongodb
             - postgres
         ports:
             # Authentication server
