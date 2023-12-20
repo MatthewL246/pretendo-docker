@@ -24,6 +24,10 @@ minio_secret_key=$(openssl rand -base64 32)
 echo "PN_ACT_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./account.local.env
 echo "MINIO_ROOT_PASSWORD=$minio_secret_key" >>./minio.local.env
 
+# Generate a password for mongo-express
+mongo_express_password=$(openssl rand -base64 32)
+echo "ME_CONFIG_BASICAUTH_PASSWORD=$mongo_express_password" >>./mongo-express.local.env
+
 # Get the Wii U IP address
 printf "Enter your Wii U's IP address: "
 read -r wiiu_ip

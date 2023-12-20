@@ -69,6 +69,20 @@ services:
             internal:
         command: --config "/etc/mongod.conf" --replSet rs
 
+    mongo-express:
+        image: mongo-express:latest
+        depends_on:
+            - coredns
+        ports:
+            # Web interface
+            - 127.0.0.1:8090:8081
+        env_file:
+            - ./environment/mongo-express.env
+            - ./environment/mongo-express.local.env
+        dns: 172.20.0.2
+        networks:
+            internal:
+
     minio:
         image: minio/minio:latest
         depends_on:
