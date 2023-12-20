@@ -1,0 +1,93 @@
+diff --git c/src/create-database-server.ts i/src/create-database-server.ts
+new file mode 100644
+index 0000000..b8d7727
+--- /dev/null
++++ i/src/create-database-server.ts
+@@ -0,0 +1,87 @@
++/* eslint-disable indent */
++/* eslint-disable quotes */
++import mongoose from "mongoose";
++import { connect } from "./database";
++import { Server } from "./models/server";
++
++async function runAsync(): Promise<void> {
++    const args = process.argv.slice(2);
++    if (args.length < 1) {
++        throw new Error(
++            "Not enough arguments.\nUsage: create-database-server <nex|service> <args>"
++        );
++    }
++
++    await connect();
++
++    if (args[0] === "nex") {
++        if (args.length !== 8) {
++            throw new Error(
++                "Wrong arguments.\nUsage: create-database-server nex <service_name> <game_server_id> <title_id> <ip> <port> <access_mode> <aes_key>"
++            );
++        }
++
++        const newServer = new Server({
++            service_name: args[1],
++            service_type: "nex",
++            game_server_id: args[2],
++            // I think that unless we're using systems from multiple regions,
++            // only one title ID is needed?
++            title_ids: [args[3]],
++            ip: args[4],
++            port: args[5],
++            access_mode: args[6],
++            maintenance_mode: false,
++            device: 1,
++            aes_key: args[7],
++        });
++
++        console.log("Saving new nex server...");
++        console.log(newServer);
++
++        await newServer.save();
++    } else if (args[0] === "service") {
++        if (args.length !== 6) {
++            throw new Error(
++                "Wrong arguments.\nUsage: create-database-server service <service_name> <client_id> <title_id> <access_mode> <aes_key>"
++            );
++        }
++
++        const newServer = new Server({
++            service_name: args[1],
++            service_type: "service",
++            client_id: args[2],
++            title_ids: [args[3]],
++            access_mode: args[4],
++            maintenance_mode: false,
++            device: 1,
++            aes_key: args[5],
++        });
++
++        console.log("Saving new service server...");
++        console.log(newServer);
++
++        await newServer.save();
++    } else {
++        throw new Error("We only do nex and service servers here.");
++    }
++
++    await mongoose.connection.close();
++}
++
++runAsync();
++
++/* Notes:
++    Finding the right server on Wii U:
++        Client ID is for services
++        Game server ID is for nex servers
++    IP and port are only for nex servers
++    Service name and service type seem to be unused, so just for documentation?
++    Title ID is used for nex and service 3DS servers, not client or game server IDs
++    Access mode separates servers into prod and test, based on to PNID access level
++    Maintenance mode is self-explanatory
++    Device seems to be 1 for Wii U, 2 for 3DS, and 3 for internal API usage?
++        Except this is only used for the Wii U nex and service tokens, the 3DS
++        tokens are harcoded to 2 and internal API are hardcoded to 3
++    AES key is a 32-byte hex string used for creating tokens
++*/

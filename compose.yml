@@ -208,6 +208,24 @@ services:
         networks:
             internal:
 
+    friends:
+        build: ./repos/friends
+        depends_on:
+            - account
+            - mongodb
+            - postgres
+        ports:
+            # Authentication server
+            - 6000:6000/udp
+            # Secure server
+            - 6001:6001/udp
+        env_file:
+            - ./environment/friends.env
+            - ./environment/friends.local.env
+        dns: 172.20.0.2
+        networks:
+            internal:
+
 volumes:
     mitmproxy-pretendo-data:
     mongodb-database:

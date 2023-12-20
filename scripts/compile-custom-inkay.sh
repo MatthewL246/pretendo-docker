@@ -3,7 +3,7 @@
 set -eu
 
 git_base=$(git rev-parse --show-toplevel)
-. "$git_base/environment/wiiu.local.env"
+. "$git_base/environment/system.local.env"
 cd "$git_base/repos/Inkay"
 
 # Get the current certificate (requires mitmproxy-pretendo to have been run at
