@@ -22,4 +22,4 @@ index a810a90..3f73456 100644
 +VOLUME [ "/app/certs" ]
  
 -CMD ["sh", "entrypoint.sh"]
-+CMD ["node", "--inspect=0.0.0.0:9229" "./dist/server.js"]
++CMD ["node", "--inspect=0.0.0.0:9229", "./dist/server.js"]
