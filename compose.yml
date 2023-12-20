@@ -52,6 +52,8 @@ services:
     mongodb:
         # TODO: Set up authentication
         image: mongo:latest
+        depends_on:
+            - coredns
         ports:
             # For connecting with mongosh or MongoDB Compass
             - 127.0.0.1:27017:27017
@@ -69,6 +71,8 @@ services:
 
     minio:
         image: minio/minio:latest
+        depends_on:
+            - coredns
         ports:
             # Web console
             - 127.0.0.1:9090:9090
@@ -86,6 +90,8 @@ services:
 
     redis:
         image: redis:alpine
+        depends_on:
+            - coredns
         volumes:
             - type: volume
               source: redis-data
@@ -100,6 +106,8 @@ services:
     # also seems unmaintained.
     maildev:
         image: maildev/maildev:latest
+        depends_on:
+            - coredns
         ports:
             # MailDev web UI
             - 127.0.0.1:1080:1080
