@@ -3,7 +3,7 @@ version: "3.8"
 services:
     mitmproxy-pretendo:
         image: ghcr.io/matthewl246/mitmproxy-pretendo:main
-        build: ./repos/mitmproxy-pretendo
+        # build: ./repos/mitmproxy-pretendo
         ports:
             # Proxy server
             - 8080:8080
