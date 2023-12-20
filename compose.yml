@@ -185,8 +185,8 @@ services:
             - ./environment/account.env
             - ./environment/account.local.env
         volumes:
-            - type: bind
-              source: ./certs
+            - type: volume
+              source: account-certificates
               target: /app/certs
         dns: 172.20.0.2
         networks:
