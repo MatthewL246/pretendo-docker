@@ -13,8 +13,8 @@ branch = dev
 [submodule "repos/website"]
 path = repos/website
 url = https://github.com/PretendoNetwork/website.git
-branch = master
+branch = dev
 [submodule "repos/friends"]
 path = repos/friends
 url = https://github.com/PretendoNetwork/friends.git
-branch = master
+branch = dev
