@@ -71,4 +71,4 @@ echo "Successfully set up environment."
 # Some things need to be updated with the new environment variables and secrets
 echo "Running necessary scripts..."
 "$git_base"/scripts/update-postgres-password.sh
-"$git_base"/scripts/setup-account-servers-database.sh
+"$git_base"/scripts/update-account-servers-database.sh

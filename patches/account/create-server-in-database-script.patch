@@ -1,9 +1,9 @@
-diff --git c/src/create-database-server.ts i/src/create-database-server.ts
+diff --git c/src/create-server-in-database.ts i/src/create-server-in-database.ts
 new file mode 100644
-index 0000000..b8d7727
+index 0000000..5176d41
 --- /dev/null
-+++ i/src/create-database-server.ts
-@@ -0,0 +1,87 @@
++++ i/src/create-server-in-database.ts
+@@ -0,0 +1,90 @@
 +/* eslint-disable indent */
 +/* eslint-disable quotes */
 +import mongoose from "mongoose";
@@ -14,13 +14,16 @@ index 0000000..b8d7727
 +    const args = process.argv.slice(2);
 +    if (args.length < 1) {
 +        throw new Error(
-+            "Not enough arguments.\nUsage: create-database-server <nex|service> <args>"
++            "Not enough arguments.\nUsage: create-database-server <reset|nex|service> <args>"
 +        );
 +    }
 +
 +    await connect();
-+
-+    if (args[0] === "nex") {
++    if (args[0] === "reset") {
++        console.log("Deleting all servers...");
++        await Server.deleteMany({});
++        console.log("Database reset.");
++    } else if (args[0] === "nex") {
 +        if (args.length !== 8) {
 +            throw new Error(
 +                "Wrong arguments.\nUsage: create-database-server nex <service_name> <game_server_id> <title_id> <ip> <port> <access_mode> <aes_key>"

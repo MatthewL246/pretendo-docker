@@ -8,7 +8,9 @@ git_base=$(git rev-parse --show-toplevel)
 
 docker compose up -d account
 
-docker compose exec account node /app/dist/create-database-server.js nex \
+docker compose exec account node /app/dist/create-server-in-database.js reset
+
+docker compose exec account node /app/dist/create-server-in-database.js nex \
     "Friend List" "00003200" "0005001010001C00" "$COMPUTER_IP" \
     "$PN_FRIENDS_AUTHENTICATION_SERVER_PORT" "prod" "$PN_FRIENDS_CONFIG_AES_KEY"
 
