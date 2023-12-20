@@ -50,6 +50,7 @@ services:
             internal:
 
     mongodb:
+        # TODO: Set up authentication
         image: mongo:latest
         ports:
             # For connecting with mongosh or MongoDB Compass
