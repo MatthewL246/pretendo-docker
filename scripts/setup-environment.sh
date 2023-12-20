@@ -2,6 +2,16 @@
 
 set -eu
 
+generate_password() {
+    length=$1
+    tr -dc 'a-zA-Z0-9' </dev/urandom | fold -w "$length" | head -n 1
+}
+
+generate_hex() {
+    length=$1
+    tr -dc 'A-F0-9' </dev/urandom | fold -w "$length" | head -n 1
+}
+
 echo "Setting up local environment variables..."
 
 git_base=$(git rev-parse --show-toplevel)
@@ -21,38 +31,38 @@ fi
 rm ./*.local.env || true
 
 # Generate an AES-256-CBC key for account server tokens
-account_aes_key=$(openssl rand -hex 32)
+account_aes_key=$(generate_hex 64)
 echo "PN_ACT_CONFIG_AES_KEY=$account_aes_key" >>./account.local.env
 
 # Generate master API keys for the account gRPC server
-account_api_key_account=$(openssl rand -base64 32)
-account_api_key_api=$(openssl rand -base64 32)
+account_api_key_account=$(generate_password 32)
+account_api_key_api=$(generate_password 32)
 echo "PN_ACT_CONFIG_GRPC_MASTER_API_KEY_ACCOUNT=$account_api_key_account" >>./account.local.env
 echo "PN_ACT_CONFIG_GRPC_MASTER_API_KEY_API=$account_api_key_api" >>./account.local.env
 echo "PN_FRIENDS_ACCOUNT_GRPC_API_KEY=$account_api_key_account" >>./friends.local.env
 
 # Generate secret key for MinIO
-minio_secret_key=$(openssl rand -base64 32)
+minio_secret_key=$(generate_password 32)
 echo "PN_ACT_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./account.local.env
 echo "MINIO_ROOT_PASSWORD=$minio_secret_key" >>./minio.local.env
 
 # Generate a password for mongo-express
-mongo_express_password=$(openssl rand -base64 32)
+mongo_express_password=$(generate_password 32)
 echo "ME_CONFIG_BASICAUTH_PASSWORD=$mongo_express_password" >>./mongo-express.local.env
 
 # Generate a password for Postgres
 if [ -z "${postgres_password-}" ]; then
-    postgres_password=$(openssl rand -base64 32)
+    postgres_password=$(generate_password 32)
 fi
 echo "POSTGRES_PASSWORD=$postgres_password" >>./postgres.local.env
 echo "PN_FRIENDS_CONFIG_DATABASE_URI=postgres://postgres_pretendo:$postgres_password@postgres/friends?sslmode=disable" >>./friends.local.env
 
 # Generate a Kerberos password and a gRPC API key for the friends server
-friends_kerberos_password=$(openssl rand -base64 32)
+friends_kerberos_password=$(generate_password 32)
 echo "PN_FRIENDS_CONFIG_KERBEROS_PASSWORD=$friends_kerberos_password" >>./friends.local.env
-friends_api_key=$(openssl rand -base64 32)
+friends_api_key=$(generate_password 32)
 echo "PN_FRIENDS_CONFIG_GRPC_API_KEY=$friends_api_key" >>./friends.local.env
-friends_aes_key=$(openssl rand -hex 32)
+friends_aes_key=$(generate_hex 64)
 echo "PN_FRIENDS_CONFIG_AES_KEY=$friends_aes_key" >>./friends.local.env
 
 # Get the computer IP address
