@@ -7,6 +7,17 @@ echo "Setting up local environment variables..."
 git_base=$(git rev-parse --show-toplevel)
 cd "$git_base/environment"
 
+postgres_password=""
+if [ -f ./postgres.local.env ]; then
+    # Changing the Postgres password doesn't apply to the database if it's
+    # already created, and changing now it would break the other servers
+    . ./postgres.local.env
+    if [ -n "${POSTGRES_PASSWORD-}" ]; then
+        echo "Using existing Postgres password"
+        postgres_password=$POSTGRES_PASSWORD
+    fi
+fi
+
 rm ./*.local.env || true
 
 # Generate an AES-256-CBC key for account server tokens
@@ -30,7 +41,9 @@ mongo_express_password=$(openssl rand -base64 32)
 echo "ME_CONFIG_BASICAUTH_PASSWORD=$mongo_express_password" >>./mongo-express.local.env
 
 # Generate a password for Postgres
-postgres_password=$(openssl rand -base64 32)
+if [ -z "${postgres_password-}" ]; then
+    postgres_password=$(openssl rand -base64 32)
+fi
 echo "POSTGRES_PASSWORD=$postgres_password" >>./postgres.local.env
 echo "PN_FRIENDS_CONFIG_DATABASE_URI=postgres://postgres_pretendo:$postgres_password@postgres/friends?sslmode=disable" >>./friends.local.env
 
