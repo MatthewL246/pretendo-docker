@@ -9,4 +9,4 @@ docker compose up -d minio
 
 docker compose exec minio sh -c "$minio_init_script"
 
-docker compose down minio
+docker compose down

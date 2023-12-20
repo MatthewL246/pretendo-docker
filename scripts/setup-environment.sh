@@ -2,6 +2,9 @@
 
 set -eu
 
+# Stop all running containers so the new environment variable can be applied
+docker compose down
+
 generate_password() {
     length=$1
     tr -dc 'a-zA-Z0-9' </dev/urandom | fold -w "$length" | head -n 1
@@ -16,17 +19,6 @@ echo "Setting up local environment variables..."
 
 git_base=$(git rev-parse --show-toplevel)
 cd "$git_base/environment"
-
-postgres_password=""
-if [ -f ./postgres.local.env ]; then
-    # Changing the Postgres password doesn't apply to the database if it's
-    # already created, and changing now it would break the other servers
-    . ./postgres.local.env
-    if [ -n "${POSTGRES_PASSWORD-}" ]; then
-        echo "Using existing Postgres password"
-        postgres_password=$POSTGRES_PASSWORD
-    fi
-fi
 
 rm ./*.local.env || true
 
@@ -51,9 +43,7 @@ mongo_express_password=$(generate_password 32)
 echo "ME_CONFIG_BASICAUTH_PASSWORD=$mongo_express_password" >>./mongo-express.local.env
 
 # Generate a password for Postgres
-if [ -z "${postgres_password-}" ]; then
-    postgres_password=$(generate_password 32)
-fi
+postgres_password=$(generate_password 32)
 echo "POSTGRES_PASSWORD=$postgres_password" >>./postgres.local.env
 echo "PN_FRIENDS_CONFIG_DATABASE_URI=postgres://postgres_pretendo:$postgres_password@postgres/friends?sslmode=disable" >>./friends.local.env
 
@@ -77,3 +67,8 @@ read -r wiiu_ip
 echo "WIIU_IP=$wiiu_ip" >>./system.local.env
 
 echo "Successfully set up environment."
+
+# Some things need to be updated with the new environment variables and secrets
+echo "Running necessary scripts..."
+"$git_base"/scripts/update-postgres-password.sh
+"$git_base"/scripts/setup-account-servers-database.sh

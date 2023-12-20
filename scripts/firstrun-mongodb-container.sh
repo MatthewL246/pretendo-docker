@@ -19,4 +19,4 @@ done
 
 docker compose exec mongodb mongosh --eval "$mongodb_init_script"
 
-docker compose down mongodb
+docker compose down
