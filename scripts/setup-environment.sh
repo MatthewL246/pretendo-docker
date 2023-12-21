@@ -27,16 +27,21 @@ account_aes_key=$(generate_hex 64)
 echo "PN_ACT_CONFIG_AES_KEY=$account_aes_key" >>./account.local.env
 
 # Generate master API keys for the account gRPC server
-account_api_key_account=$(generate_password 32)
-account_api_key_api=$(generate_password 32)
-echo "PN_ACT_CONFIG_GRPC_MASTER_API_KEY_ACCOUNT=$account_api_key_account" >>./account.local.env
-echo "PN_ACT_CONFIG_GRPC_MASTER_API_KEY_API=$account_api_key_api" >>./account.local.env
-echo "PN_FRIENDS_ACCOUNT_GRPC_API_KEY=$account_api_key_account" >>./friends.local.env
+# The Juxtaposition UI uses the same API key for both the account and API
+# servers, so both keys need to be the same
+account_grpc_api_key=$(generate_password 32)
+echo "PN_ACT_CONFIG_GRPC_MASTER_API_KEY_ACCOUNT=$account_grpc_api_key" >>./account.local.env
+echo "PN_ACT_CONFIG_GRPC_MASTER_API_KEY_API=$account_grpc_api_key" >>./account.local.env
+echo "PN_FRIENDS_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./friends.local.env
+echo "PN_MIIVERSE_API_CONFIG_GRPC_ACCOUNT_API_KEY=$account_grpc_api_key" >>./miiverse-api.local.env
+echo "JUXT_CONFIG_GRPC_ACCOUNT_API_KEY=$account_grpc_api_key" >>./juxtaposition-ui.local.env
 
 # Generate secret key for MinIO
 minio_secret_key=$(generate_password 32)
-echo "PN_ACT_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./account.local.env
 echo "MINIO_ROOT_PASSWORD=$minio_secret_key" >>./minio.local.env
+echo "PN_ACT_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./account.local.env
+echo "PN_MIIVERSE_API_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./miiverse-api.local.env
+echo "JUXT_CONFIG_AWS_SPACES_SECRET=$minio_secret_key" >>./juxtaposition-ui.local.env
 
 # Generate a password for mongo-express
 mongo_express_password=$(generate_password 32)
@@ -53,12 +58,19 @@ echo "PN_FRIENDS_CONFIG_KERBEROS_PASSWORD=$friends_kerberos_password" >>./friend
 friends_api_key=$(generate_password 32)
 echo "PN_FRIENDS_CONFIG_GRPC_API_KEY=$friends_api_key" >>./friends.local.env
 echo "PN_WIIU_CHAT_FRIENDS_GRPC_API_KEY=$friends_api_key" >>./wiiu-chat.local.env
+echo "PN_MIIVERSE_API_CONFIG_GRPC_FRIENDS_API_KEY=$friends_api_key" >>./miiverse-api.local.env
+echo "JUXT_CONFIG_GRPC_FRIENDS_API_KEY=$friends_api_key" >>./juxtaposition-ui.local.env
 friends_aes_key=$(generate_hex 64)
 echo "PN_FRIENDS_CONFIG_AES_KEY=$friends_aes_key" >>./friends.local.env
 
 # Generate a Kerberos password for the Wii U Chat server
 chat_kerberos_password=$(generate_password 32)
 echo "PN_WIIU_CHAT_KERBEROS_PASSWORD=$chat_kerberos_password" >>./wiiu-chat.local.env
+
+# Generate an AES key for the Miiverse servers
+miiverse_aes_key=$(generate_hex 64)
+echo "PN_MIIVERSE_API_CONFIG_AES_KEY=$miiverse_aes_key" >>./miiverse-api.local.env
+echo "JUXT_CONFIG_AES_KEY=$miiverse_aes_key" >>./juxtaposition-ui.local.env
 
 # Get the computer IP address
 printf "What is your computer's IP address? It must be accessible to your consoles: "

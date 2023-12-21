@@ -1,0 +1,21 @@
+diff --git i/Dockerfile w/Dockerfile
+index be1b7af..3293f6c 100644
+--- i/Dockerfile
++++ w/Dockerfile
+@@ -1,6 +1,5 @@
+ FROM node:18-alpine
+ 
+-RUN apk add --no-cache python3 make gcc g++ 
+ WORKDIR /app
+ 
+ COPY "docker/entrypoint.sh" ./
+@@ -9,7 +8,6 @@ COPY package*.json ./
+ RUN npm install
+ 
+ COPY . ./
++RUN npm run build
+ 
+-VOLUME [ "/app/config.json", "/app/certs" ]
+-
+-CMD ["sh", "entrypoint.sh"]
++CMD ["node", "--inspect=0.0.0.0:9231", "./dist/server.js"]

@@ -25,6 +25,22 @@
                 "cwd": "${workspaceFolder}/repos/website"
             },
             "command": "npm install && npm run build"
+        },
+        {
+            "label": "Build miiverse-api",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/repos/miiverse-api"
+            },
+            "command": "npm install && npm run build"
+        },
+        {
+            "label": "Build juxtaposition-ui",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/repos/juxtaposition-ui"
+            },
+            "command": "npm install"
         }
     ]
 }

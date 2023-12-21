@@ -24,6 +24,29 @@
             "remoteRoot": "/app",
             "localRoot": "${workspaceFolder}/repos/website",
             "port": 9230
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Debug miiverse-api",
+            "preLaunchTask": "Build miiverse-api",
+            "remoteRoot": "/app",
+            "localRoot": "${workspaceFolder}/repos/miiverse-api",
+            "sourceMaps": true,
+            "resolveSourceMapLocations": [
+                "${workspaceFolder}/repos/miiverse-api/dist/**",
+                "!**/node_modules/**"
+            ],
+            "port": 9231
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Debug juxtaposition-ui",
+            "preLaunchTask": "Build juxtaposition-ui",
+            "remoteRoot": "/app",
+            "localRoot": "${workspaceFolder}/repos/juxtaposition-ui",
+            "port": 9232
         }
     ]
 }

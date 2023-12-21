@@ -1,0 +1,10 @@
+diff --git c/mongoose-connect-options.json i/mongoose-connect-options.json
+new file mode 100644
+index 0000000..0fda81f
+--- /dev/null
++++ i/mongoose-connect-options.json
+@@ -0,0 +1,4 @@
++{
++    "useNewUrlParser": true,
++    "useUnifiedTopology": true
++}

@@ -1,0 +1,21 @@
+diff --git i/src/database.js w/src/database.js
+index ebdd39a..21a4b77 100644
+--- i/src/database.js
++++ w/src/database.js
+@@ -9,14 +9,14 @@ const { POST } = require('./models/post');
+ const { SETTINGS } = require('./models/settings');
+ const { REPORT } = require('./models/report');
+ 
+-const { uri, database, options } = mongooseConfig;
++const { uri, options } = mongooseConfig;
+ const logger = require('./logger');
+ 
+ let connection;
+ mongoose.set('strictQuery', true);
+ 
+ async function connect() {
+-	await mongoose.connect(`${uri}/${database}`, options);
++	await mongoose.connect(`${uri}`, options);
+ 	connection = mongoose.connection;
+ 	connection.on('connected', function () {
+ 		logger.info(`MongoDB connected ${this.name}`);

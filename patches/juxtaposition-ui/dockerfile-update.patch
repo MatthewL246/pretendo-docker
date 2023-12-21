@@ -1,0 +1,27 @@
+diff --git i/Dockerfile w/Dockerfile
+index be1b7af..9340a30 100644
+--- i/Dockerfile
++++ w/Dockerfile
+@@ -1,15 +1,17 @@
+-FROM node:18-alpine
++# https://github.com/nodejs/docker-node/issues/2009
++FROM node:18-alpine3.18
+ 
+-RUN apk add --no-cache python3 make gcc g++ 
+ WORKDIR /app
+ 
+ COPY "docker/entrypoint.sh" ./
+ 
+ COPY package*.json ./
++# For the config.js hack
++RUN npm install module-alias
+ RUN npm install
+ 
+ COPY . ./
++# There is an npm run build task in the package.json, and it runs tsc, but there
++# is no TypeScript at all in the source code. Weird.
+ 
+-VOLUME [ "/app/config.json", "/app/certs" ]
+-
+-CMD ["sh", "entrypoint.sh"]
++CMD ["node", "--inspect=0.0.0.0:9232", "./src/server.js"]

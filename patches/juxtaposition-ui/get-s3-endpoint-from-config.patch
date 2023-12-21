@@ -1,0 +1,13 @@
+diff --git i/src/util.js w/src/util.js
+index 9d1dc82..158fe7e 100644
+--- i/src/util.js
++++ w/src/util.js
+@@ -34,7 +34,7 @@ const apiClient = grpc.createClient(APIDefinition, apiChannel);
+ const accountChannel = grpc.createChannel(`${apiIP}:${apiPort}`);
+ const accountClient = grpc.createClient(AccountDefinition, accountChannel);
+ 
+-const spacesEndpoint = new aws.Endpoint('nyc3.digitaloceanspaces.com');
++const spacesEndpoint = new aws.Endpoint(config.aws.spaces.endpoint);
+ const s3 = new aws.S3({
+ 	endpoint: spacesEndpoint,
+ 	accessKeyId: config.aws.spaces.key,
