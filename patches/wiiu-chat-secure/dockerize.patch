@@ -1,11 +1,16 @@
 diff --git c/Dockerfile i/Dockerfile
 new file mode 100644
-index 0000000..0f18fe9
+index 0000000..842a502
 --- /dev/null
 +++ i/Dockerfile
-@@ -0,0 +1,14 @@
+@@ -0,0 +1,19 @@
 +FROM golang:alpine AS builder
 +WORKDIR /build
++
++RUN apk add git
++RUN git clone --depth 1 --branch v1.0.22 https://github.com/PretendoNetwork/nex-protocols-common-go
++# Terrible hack to work around the issue where the ticket timestamp is 0
++RUN sed -i 's/ticket\.Timestamp()\.Standard()/time\.Now()\.UTC()/g' nex-protocols-common-go/secure-connection/connect.go
 +
 +COPY go.* ./
 +RUN go mod download
