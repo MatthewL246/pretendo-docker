@@ -225,6 +225,34 @@ services:
         networks:
             internal:
 
+    wiiu-chat-authentication:
+        build: ./repos/wiiu-chat-authentication
+        depends_on:
+            - account
+            - mongodb
+        ports:
+            - 6002:6002/udp
+        env_file:
+            - ./environment/wiiu-chat.env
+            - ./environment/wiiu-chat.local.env
+        dns: 172.20.0.2
+        networks:
+            internal:
+
+    wiiu-chat-secure:
+        build: ./repos/wiiu-chat-secure
+        depends_on:
+            - account
+            - mongodb
+        ports:
+            - 6003:6003/udp
+        env_file:
+            - ./environment/wiiu-chat.env
+            - ./environment/wiiu-chat.local.env
+        dns: 172.20.0.2
+        networks:
+            internal:
+
 volumes:
     mitmproxy-pretendo-data:
     mongodb-database:

@@ -1,0 +1,20 @@
+diff --git c/Dockerfile i/Dockerfile
+new file mode 100644
+index 0000000..0f18fe9
+--- /dev/null
++++ i/Dockerfile
+@@ -0,0 +1,14 @@
++FROM golang:alpine AS builder
++WORKDIR /build
++
++COPY go.* ./
++RUN go mod download
++
++COPY . ./
++RUN go build -v -o server
++
++FROM alpine:latest AS runner
++WORKDIR /app
++
++COPY --from=builder /build/server /app/server
++CMD ["/app/server"]

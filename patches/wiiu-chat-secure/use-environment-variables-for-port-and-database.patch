@@ -1,0 +1,24 @@
+diff --git i/nex/server.go w/nex/server.go
+index 3d15725..03531d1 100644
+--- i/nex/server.go
++++ w/nex/server.go
+@@ -35,5 +35,5 @@ func StartNEXServer() {
+ 	registerCommonProtocols()
+ 	registerNEXProtocols()
+ 
+-	globals.NEXServer.Listen(":60005")
++	globals.NEXServer.Listen(":" + os.Getenv("PN_WIIU_CHAT_SECURE_SERVER_PORT"))
+ }
+diff --git i/database/connect_mongo.go w/database/connect_mongo.go
+index 580fa98..1090679 100644
+--- i/database/connect_mongo.go
++++ w/database/connect_mongo.go
+@@ -27,7 +27,7 @@ func connectMongo() {
+ 	mongoContext, _ = context.WithTimeout(context.Background(), 10*time.Second)
+ 	_ = mongoClient.Connect(mongoContext)
+ 
+-	accountDatabase = mongoClient.Database("pretendo")
++	accountDatabase = mongoClient.Database(os.Getenv("PN_WIIU_CHAT_MONGO_DATABASE"))
+ 	pnidCollection = accountDatabase.Collection("pnids")
+ 	nexAccountsCollection = accountDatabase.Collection("nexaccounts")
+ 

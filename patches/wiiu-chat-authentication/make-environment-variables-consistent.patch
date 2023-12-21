@@ -1,0 +1,49 @@
+diff --git i/main.go w/main.go
+index 97dcb04..7dcb42d 100644
+--- i/main.go
++++ w/main.go
+@@ -18,7 +18,7 @@ func main() {
+ 		Minor: 4,
+ 		Patch: 2,
+ 	})
+-	nexServer.SetKerberosPassword(os.Getenv("KERBEROS_PASSWORD"))
++	nexServer.SetKerberosPassword(os.Getenv("PN_WIIU_CHAT_KERBEROS_PASSWORD"))
+ 	nexServer.SetAccessKey("e7a47214")
+ 
+ 	nexServer.On("Data", func(packet *nex.PacketV1) {
+@@ -34,8 +34,8 @@ func main() {
+ 
+ 	secureStationURL := nex.NewStationURL("")
+ 	secureStationURL.SetScheme("prudps")
+-	secureStationURL.SetAddress(os.Getenv("SECURE_SERVER_LOCATION"))
+-	secureStationURL.SetPort(os.Getenv("SECURE_SERVER_PORT"))
++	secureStationURL.SetAddress(os.Getenv("PN_WIIU_CHAT_SECURE_SERVER_LOCATION"))
++	secureStationURL.SetPort(os.Getenv("PN_WIIU_CHAT_SECURE_SERVER_PORT"))
+ 	secureStationURL.SetCID("1")
+ 	secureStationURL.SetPID("2")
+ 	secureStationURL.SetSID("1")
+@@ -46,5 +46,5 @@ func main() {
+ 	authenticationProtocol.SetBuildName("Pretendo WiiU Chat Auth")
+ 	authenticationProtocol.SetPasswordFromPIDFunction(passwordFromPID)
+ 
+-	nexServer.Listen(":60004")
++	nexServer.Listen(":" + os.Getenv("PN_WIIU_CHAT_AUTHENTICATION_SERVER_PORT"))
+ }
+diff --git i/database.go w/database.go
+index abae4c2..05f1527 100644
+--- i/database.go
++++ w/database.go
+@@ -16,11 +16,11 @@ var mongoDatabase *mongo.Database
+ var mongoCollection *mongo.Collection
+ 
+ func connectMongo() {
+-	mongoClient, _ = mongo.NewClient(options.Client().ApplyURI(os.Getenv("MONGO_URI")))
++	mongoClient, _ = mongo.NewClient(options.Client().ApplyURI(os.Getenv("PN_WIIU_CHAT_MONGO_URI")))
+ 	mongoContext, _ = context.WithTimeout(context.Background(), 10*time.Second)
+ 	_ = mongoClient.Connect(mongoContext)
+ 
+-	mongoDatabase = mongoClient.Database("pretendo")
++	mongoDatabase = mongoClient.Database(os.Getenv("PN_WIIU_CHAT_MONGO_DATABASE"))
+ 	mongoCollection = mongoDatabase.Collection("nexaccounts")
+ }
+ 

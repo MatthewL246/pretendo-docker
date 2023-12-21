@@ -52,14 +52,20 @@ friends_kerberos_password=$(generate_password 32)
 echo "PN_FRIENDS_CONFIG_KERBEROS_PASSWORD=$friends_kerberos_password" >>./friends.local.env
 friends_api_key=$(generate_password 32)
 echo "PN_FRIENDS_CONFIG_GRPC_API_KEY=$friends_api_key" >>./friends.local.env
+echo "PN_WIIU_CHAT_FRIENDS_GRPC_API_KEY=$friends_api_key" >>./wiiu-chat.local.env
 friends_aes_key=$(generate_hex 64)
 echo "PN_FRIENDS_CONFIG_AES_KEY=$friends_aes_key" >>./friends.local.env
+
+# Generate a Kerberos password for the Wii U Chat server
+chat_kerberos_password=$(generate_password 32)
+echo "PN_WIIU_CHAT_KERBEROS_PASSWORD=$chat_kerberos_password" >>./wiiu-chat.local.env
 
 # Get the computer IP address
 printf "What is your computer's IP address? It must be accessible to your consoles: "
 read -r computer_ip
 echo "COMPUTER_IP=$computer_ip" >>./system.local.env
 echo "PN_FRIENDS_SECURE_SERVER_HOST=$computer_ip" >>./friends.local.env
+echo "PN_WIIU_CHAT_SECURE_SERVER_LOCATION=$computer_ip" >>./wiiu-chat.local.env
 
 # Get the Wii U IP address
 printf "Enter your Wii U's IP address: "
