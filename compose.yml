@@ -83,7 +83,7 @@ services:
         restart: unless-stopped
         ports:
             # Web interface
-            - 127.0.0.1:8090:8081
+            - 127.0.0.1:8082:8081
         networks:
             internal:
         dns: 172.20.0.200
@@ -98,7 +98,7 @@ services:
         restart: unless-stopped
         ports:
             # Web console
-            - 127.0.0.1:9090:9090
+            - 127.0.0.1:8083:8083
         volumes:
             - type: volume
               source: minio-s3-data
@@ -109,7 +109,7 @@ services:
         env_file:
             - ./environment/minio.env
             - ./environment/minio.local.env
-        command: server /data --console-address ":9090"
+        command: server --console-address ":8083"
 
     redis:
         image: redis:alpine
@@ -135,7 +135,7 @@ services:
         restart: unless-stopped
         ports:
             # MailDev web UI
-            - 127.0.0.1:1080:1080
+            - 127.0.0.1:8084:8084
         volumes:
             - type: volume
               source: maildev-mail
@@ -175,7 +175,7 @@ services:
         restart: unless-stopped
         ports:
             # For the Adminer web interface
-            - 127.0.0.1:8091:8080
+            - 127.0.0.1:8085:8080
         networks:
             internal:
         dns: 172.20.0.200
