@@ -18,3 +18,11 @@ branch = dev
 path = repos/friends
 url = https://github.com/PretendoNetwork/friends.git
 branch = dev
+[submodule "repos/wiiu-chat-authentication"]
+path = repos/wiiu-chat-authentication
+url = https://github.com/PretendoNetwork/wiiu-chat-authentication.git
+branch = master
+[submodule "repos/wiiu-chat-secure"]
+path = repos/wiiu-chat-secure
+url = https://github.com/PretendoNetwork/wiiu-chat-secure.git
+branch = master
