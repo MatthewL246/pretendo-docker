@@ -2,22 +2,36 @@
 path = repos/mitmproxy-pretendo
 url = https://github.com/MatthewL246/mitmproxy-pretendo.git
 branch = main
+
 [submodule "repos/Inkay"]
 path = repos/Inkay
 url = https://github.com/PretendoNetwork/Inkay.git
 branch = main
+
 [submodule "repos/account"]
 path = repos/account
 url = https://github.com/PretendoNetwork/account.git
 branch = dev
+
 [submodule "repos/website"]
 path = repos/website
 url = https://github.com/PretendoNetwork/website.git
 branch = dev
+
+[submodule "repos/miiverse-api"]
+path = repos/miiverse-api
+url = https://github.com/PretendoNetwork/miiverse-api.git
+branch = dev
+[submodule "repos/juxtaposition-ui"]
+path = repos/juxtaposition-ui
+url = https://github.com/PretendoNetwork/juxtaposition-ui.git
+branch = dev
+
 [submodule "repos/friends"]
 path = repos/friends
 url = https://github.com/PretendoNetwork/friends.git
 branch = dev
+
 [submodule "repos/wiiu-chat-authentication"]
 path = repos/wiiu-chat-authentication
 url = https://github.com/PretendoNetwork/wiiu-chat-authentication.git
