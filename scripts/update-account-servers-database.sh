@@ -14,4 +14,3 @@ docker compose exec account node /app/dist/create-server-in-database.js nex \
     "Friend List" "00003200" "0005001010001C00" "$COMPUTER_IP" \
     "$PN_FRIENDS_AUTHENTICATION_SERVER_PORT" "prod" "$PN_FRIENDS_CONFIG_AES_KEY"
 
-docker compose down

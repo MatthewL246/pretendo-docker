@@ -2,7 +2,7 @@
 
 set -eu
 
-# Stop all running containers so the new environment variable can be applied
+# Stop all running containers so the new environment variables can be applied
 docker compose down
 
 generate_password() {
@@ -72,3 +72,5 @@ echo "Successfully set up environment."
 echo "Running necessary scripts..."
 "$git_base"/scripts/update-postgres-password.sh
 "$git_base"/scripts/update-account-servers-database.sh
+
+docker compose down
