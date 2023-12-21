@@ -38,7 +38,9 @@ services:
             - coredns
         restart: unless-stopped
         ports:
+            # HTTP
             - 80:80
+            # HTTPS (currently unused)
             - 443:443
         volumes:
             - type: bind
@@ -47,10 +49,10 @@ services:
             - type: bind
               source: ./config/nginx
               target: /etc/nginx/conf.d/
-        dns: 172.20.0.200
         networks:
             default:
             internal:
+        dns: 172.20.0.200
 
     mongodb:
         # TODO: Set up authentication
@@ -68,25 +70,26 @@ services:
             - type: volume
               source: mongodb-database
               target: /data/db
-        dns: 172.20.0.200
         networks:
             internal:
+        dns: 172.20.0.200
         command: --config "/etc/mongod.conf" --replSet rs
 
     mongo-express:
         image: mongo-express:latest
         depends_on:
             - coredns
+            - mongodb
         restart: unless-stopped
         ports:
             # Web interface
             - 127.0.0.1:8090:8081
+        networks:
+            internal:
+        dns: 172.20.0.200
         env_file:
             - ./environment/mongo-express.env
             - ./environment/mongo-express.local.env
-        dns: 172.20.0.200
-        networks:
-            internal:
 
     minio:
         image: minio/minio:latest
@@ -96,17 +99,17 @@ services:
         ports:
             # Web console
             - 127.0.0.1:9090:9090
-        env_file:
-            - ./environment/minio.env
-            - ./environment/minio.local.env
         volumes:
             - type: volume
               source: minio-s3-data
               target: /data
-        command: server /data --console-address ":9090"
-        dns: 172.20.0.200
         networks:
             internal:
+        dns: 172.20.0.200
+        env_file:
+            - ./environment/minio.env
+            - ./environment/minio.local.env
+        command: server /data --console-address ":9090"
 
     redis:
         image: redis:alpine
@@ -117,10 +120,10 @@ services:
             - type: volume
               source: redis-data
               target: /data
-        command: redis-server --save 60 1 --appendonly yes
-        dns: 172.20.0.200
         networks:
             internal:
+        dns: 172.20.0.200
+        command: redis-server --save 60 1 --appendonly yes
 
     # TODO: MailDev appears to be unmaintained and has security vulnerabilities.
     # Find an alternative. MailCatcher doesn't support persistance, and MailHog
@@ -137,13 +140,13 @@ services:
             - type: volume
               source: maildev-mail
               target: /data
-        # We need to set the user to root so that MailDev can write to the volume.
-        user: root
-        env_file:
-            - ./environment/maildev.env
-        dns: 172.20.0.200
         networks:
             internal:
+        dns: 172.20.0.200
+        env_file:
+            - ./environment/maildev.env
+        # We need to set the user to root so that MailDev can write to the volume.
+        user: root
 
     postgres:
         image: postgres:alpine
@@ -157,12 +160,12 @@ services:
             - type: bind
               source: ./config/postgres-init.sh
               target: /docker-entrypoint-initdb.d/postgres-init.sh
+        networks:
+            internal:
+        dns: 172.20.0.200
         env_file:
             - ./environment/postgres.env
             - ./environment/postgres.local.env
-        dns: 172.20.0.200
-        networks:
-            internal:
 
     adminer:
         image: adminer:latest
@@ -173,11 +176,11 @@ services:
         ports:
             # For the Adminer web interface
             - 127.0.0.1:8091:8080
-        env_file:
-            - ./environment/adminer.env
-        dns: 172.20.0.200
         networks:
             internal:
+        dns: 172.20.0.200
+        env_file:
+            - ./environment/adminer.env
 
     account:
         build: ./repos/account
@@ -192,22 +195,22 @@ services:
         ports:
             # For the Node.js debugger
             - 127.0.0.1:9229:9229
-        env_file:
-            - ./environment/account.env
-            - ./environment/account.local.env
         volumes:
             - type: volume
               source: account-certificates
               target: /app/certs
-        dns: 172.20.0.200
         networks:
             internal:
+        dns: 172.20.0.200
+        env_file:
+            - ./environment/account.env
+            - ./environment/account.local.env
 
     website:
         build: ./repos/website
         depends_on:
-            - mongodb
             - account
+            - mongodb
         restart: unless-stopped
         ports:
             # For the Node.js debugger
@@ -216,9 +219,9 @@ services:
             - type: bind
               source: ./config/website-config.json
               target: /app/config.json
-        dns: 172.20.0.200
         networks:
             internal:
+        dns: 172.20.0.200
 
     friends:
         build: ./repos/friends
@@ -231,12 +234,12 @@ services:
             - 6000:6000/udp
             # Secure server
             - 6001:6001/udp
+        networks:
+            internal:
+        dns: 172.20.0.200
         env_file:
             - ./environment/friends.env
             - ./environment/friends.local.env
-        dns: 172.20.0.200
-        networks:
-            internal:
 
     wiiu-chat-authentication:
         build: ./repos/wiiu-chat-authentication
@@ -245,13 +248,14 @@ services:
             - mongodb
         restart: unless-stopped
         ports:
+            # Authentication server
             - 6002:6002/udp
+        networks:
+            internal:
+        dns: 172.20.0.200
         env_file:
             - ./environment/wiiu-chat.env
             - ./environment/wiiu-chat.local.env
-        dns: 172.20.0.200
-        networks:
-            internal:
 
     wiiu-chat-secure:
         build: ./repos/wiiu-chat-secure
@@ -260,13 +264,14 @@ services:
             - mongodb
         restart: unless-stopped
         ports:
+            # Secure server
             - 6003:6003/udp
+        networks:
+            internal:
+        dns: 172.20.0.200
         env_file:
             - ./environment/wiiu-chat.env
             - ./environment/wiiu-chat.local.env
-        dns: 172.20.0.200
-        networks:
-            internal:
 
 volumes:
     mitmproxy-pretendo-data:
@@ -283,5 +288,6 @@ networks:
     internal:
         driver: bridge
         ipam:
+            driver: default
             config:
                 - subnet: 172.20.0.0/24
