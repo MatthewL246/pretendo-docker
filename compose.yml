@@ -29,7 +29,7 @@ services:
               target: /etc/coredns/Corefile
         networks:
             internal:
-                ipv4_address: 172.20.0.2
+                ipv4_address: 172.20.0.200
         command: -conf /etc/coredns/Corefile
 
     nginx:
@@ -47,7 +47,7 @@ services:
             - type: bind
               source: ./config/nginx
               target: /etc/nginx/conf.d/
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             default:
             internal:
@@ -68,7 +68,7 @@ services:
             - type: volume
               source: mongodb-database
               target: /data/db
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             internal:
         command: --config "/etc/mongod.conf" --replSet rs
@@ -84,7 +84,7 @@ services:
         env_file:
             - ./environment/mongo-express.env
             - ./environment/mongo-express.local.env
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             internal:
 
@@ -104,7 +104,7 @@ services:
               source: minio-s3-data
               target: /data
         command: server /data --console-address ":9090"
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             internal:
 
@@ -118,7 +118,7 @@ services:
               source: redis-data
               target: /data
         command: redis-server --save 60 1 --appendonly yes
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             internal:
 
@@ -141,7 +141,7 @@ services:
         user: root
         env_file:
             - ./environment/maildev.env
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             internal:
 
@@ -160,7 +160,7 @@ services:
         env_file:
             - ./environment/postgres.env
             - ./environment/postgres.local.env
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             internal:
 
@@ -175,7 +175,7 @@ services:
             - 127.0.0.1:8091:8080
         env_file:
             - ./environment/adminer.env
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             internal:
 
@@ -199,7 +199,7 @@ services:
             - type: volume
               source: account-certificates
               target: /app/certs
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             internal:
 
@@ -216,7 +216,7 @@ services:
             - type: bind
               source: ./config/website-config.json
               target: /app/config.json
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             internal:
 
@@ -234,7 +234,7 @@ services:
         env_file:
             - ./environment/friends.env
             - ./environment/friends.local.env
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             internal:
 
@@ -249,7 +249,7 @@ services:
         env_file:
             - ./environment/wiiu-chat.env
             - ./environment/wiiu-chat.local.env
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             internal:
 
@@ -264,7 +264,7 @@ services:
         env_file:
             - ./environment/wiiu-chat.env
             - ./environment/wiiu-chat.local.env
-        dns: 172.20.0.2
+        dns: 172.20.0.200
         networks:
             internal:
 
@@ -284,4 +284,4 @@ networks:
         driver: bridge
         ipam:
             config:
-                - subnet: 172.20.0.0/16
+                - subnet: 172.20.0.0/24
