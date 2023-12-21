@@ -158,7 +158,7 @@ services:
               source: postgres-database
               target: /var/lib/postgresql/data
             - type: bind
-              source: ./config/postgres-init.sh
+              source: ./scripts/run-in-container/postgres-init.sh
               target: /docker-entrypoint-initdb.d/postgres-init.sh
         networks:
             internal:
