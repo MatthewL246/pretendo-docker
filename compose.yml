@@ -4,6 +4,7 @@ services:
     mitmproxy-pretendo:
         image: ghcr.io/matthewl246/mitmproxy-pretendo:main
         # build: ./repos/mitmproxy-pretendo
+        restart: unless-stopped
         ports:
             # Proxy server
             - 8080:8080
@@ -21,6 +22,7 @@ services:
 
     coredns:
         image: coredns/coredns:latest
+        restart: unless-stopped
         volumes:
             - type: bind
               source: ./config/Corefile
@@ -34,6 +36,7 @@ services:
         image: nginx:mainline-alpine
         depends_on:
             - coredns
+        restart: unless-stopped
         ports:
             - 80:80
             - 443:443
@@ -54,6 +57,7 @@ services:
         image: mongo:latest
         depends_on:
             - coredns
+        restart: unless-stopped
         ports:
             # For connecting with mongosh or MongoDB Compass
             - 127.0.0.1:27017:27017
@@ -73,6 +77,7 @@ services:
         image: mongo-express:latest
         depends_on:
             - coredns
+        restart: unless-stopped
         ports:
             # Web interface
             - 127.0.0.1:8090:8081
@@ -87,6 +92,7 @@ services:
         image: minio/minio:latest
         depends_on:
             - coredns
+        restart: unless-stopped
         ports:
             # Web console
             - 127.0.0.1:9090:9090
@@ -106,6 +112,7 @@ services:
         image: redis:alpine
         depends_on:
             - coredns
+        restart: unless-stopped
         volumes:
             - type: volume
               source: redis-data
@@ -122,6 +129,7 @@ services:
         image: maildev/maildev:latest
         depends_on:
             - coredns
+        restart: unless-stopped
         ports:
             # MailDev web UI
             - 127.0.0.1:1080:1080
@@ -141,6 +149,7 @@ services:
         image: postgres:alpine
         depends_on:
             - coredns
+        restart: unless-stopped
         volumes:
             - type: volume
               source: postgres-database
@@ -160,6 +169,7 @@ services:
         depends_on:
             - coredns
             - postgres
+        restart: unless-stopped
         ports:
             # For the Adminer web interface
             - 127.0.0.1:8091:8080
@@ -178,6 +188,7 @@ services:
             - minio
             - redis
             - maildev
+        restart: unless-stopped
         ports:
             # For the Node.js debugger
             - 127.0.0.1:9229:9229
@@ -197,6 +208,7 @@ services:
         depends_on:
             - mongodb
             - account
+        restart: unless-stopped
         ports:
             # For the Node.js debugger
             - 127.0.0.1:9230:9230
@@ -213,6 +225,7 @@ services:
         depends_on:
             - account
             - postgres
+        restart: unless-stopped
         ports:
             # Authentication server
             - 6000:6000/udp
@@ -230,6 +243,7 @@ services:
         depends_on:
             - account
             - mongodb
+        restart: unless-stopped
         ports:
             - 6002:6002/udp
         env_file:
@@ -244,6 +258,7 @@ services:
         depends_on:
             - account
             - mongodb
+        restart: unless-stopped
         ports:
             - 6003:6003/udp
         env_file:
