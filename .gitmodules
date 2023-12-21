@@ -18,24 +18,26 @@ path = repos/website
 url = https://github.com/PretendoNetwork/website.git
 branch = dev
 
+[submodule "repos/friends"]
+path = repos/friends
+url = https://github.com/PretendoNetwork/friends.git
+branch = dev
+
 [submodule "repos/miiverse-api"]
 path = repos/miiverse-api
 url = https://github.com/PretendoNetwork/miiverse-api.git
 branch = dev
+
 [submodule "repos/juxtaposition-ui"]
 path = repos/juxtaposition-ui
 url = https://github.com/PretendoNetwork/juxtaposition-ui.git
-branch = dev
-
-[submodule "repos/friends"]
-path = repos/friends
-url = https://github.com/PretendoNetwork/friends.git
 branch = dev
 
 [submodule "repos/wiiu-chat-authentication"]
 path = repos/wiiu-chat-authentication
 url = https://github.com/PretendoNetwork/wiiu-chat-authentication.git
 branch = master
+
 [submodule "repos/wiiu-chat-secure"]
 path = repos/wiiu-chat-secure
 url = https://github.com/PretendoNetwork/wiiu-chat-secure.git
