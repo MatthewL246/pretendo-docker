@@ -176,6 +176,10 @@ services:
         ports:
             # For the Adminer web interface
             - 127.0.0.1:8085:8080
+        volumes:
+            - type: bind
+              source: ./config/adminer-login-servers.php
+              target: /var/www/html/plugins-enabled/login-servers.php
         networks:
             internal:
         dns: 172.20.0.200
