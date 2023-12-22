@@ -1,8 +1,10 @@
 . {
     log
-    rewrite name regex .*pretendo\.cc nginx
-    rewrite name regex .*pretendo\.network nginx
-    rewrite name regex .*pretendo-cdn\.b-cdn\.net nginx
-    rewrite name regex .*minio minio
+    rewrite name regex (.*\.)?nintendo\.net nginx
+    rewrite name regex (.*\.)?nintendowifi\.net nginx
+    rewrite name regex (.*\.)?pretendo\.cc nginx
+    rewrite name regex (.*\.)?pretendo\.network nginx
+    rewrite name regex (.*\.)?pretendo-cdn\.b-cdn\.net nginx
+    rewrite name regex (.*\.)?minio minio
     forward . /etc/resolv.conf
 }
