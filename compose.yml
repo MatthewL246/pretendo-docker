@@ -266,7 +266,6 @@ services:
             - ./environment/miiverse-api.local.env
 
     juxtaposition-ui:
-        # TODO: Figure out how to create communities
         build: ./repos/juxtaposition-ui
         depends_on:
             - account
