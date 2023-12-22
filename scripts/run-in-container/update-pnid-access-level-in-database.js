@@ -6,14 +6,14 @@ const { PNID } = require("./dist/models/pnid");
 async function runAsync() {
     await connect();
 
-    if (process.env.PNID) {
+    if (process.argv[1]) {
         const pnid = await PNID.findOne({
-            usernameLower: process.env.PNID.toLowerCase(),
+            usernameLower: process.argv[1].toLowerCase(),
         });
         if (pnid) {
             await updatePnidAccessLevel(pnid, 3, "dev");
         } else {
-            console.log(`No PNID found for username ${process.env.PNID}.`);
+            console.log(`No PNID found for username ${process.argv[1]}.`);
         }
     } else {
         console.log("No username given, skipping update.");
