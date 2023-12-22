@@ -10,6 +10,7 @@ done
 git_base=$(git rev-parse --show-toplevel)
 create_server_script=$(cat "$git_base/scripts/run-in-container/create-server-in-database.js")
 create_endpoint_script=$(cat "$git_base/scripts/run-in-container/create-endpoint-in-database.js")
+update_pnid_access_level_script=$(cat "$git_base/scripts/run-in-container/update-pnid-access-level-in-database.js")
 
 necessary_environment="friends miiverse-api wiiu-chat"
 . "$git_base/environment/system.local.env"
@@ -27,9 +28,10 @@ docker compose exec -e COMPUTER_IP="$COMPUTER_IP" \
     -e WIIU_CHAT_PORT="$PN_WIIU_CHAT_AUTHENTICATION_SERVER_PORT" \
     account node -e "$create_server_script"
 
+printf "Enter the PNID you want to give dev access to: "
+read -r dev_pnid
+docker compose exec -e PNID="$dev_pnid" account node -e "$update_pnid_access_level_script"
+
 docker compose up -d miiverse-api
 
 docker compose exec miiverse-api node -e "$create_endpoint_script"
-
-# TODO: Script should a PNID's access_level to 3 and server_access_level to dev
-# so users can access the servers
