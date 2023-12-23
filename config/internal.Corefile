@@ -1,0 +1,10 @@
+. {
+    log
+    rewrite name regex (.*\.)?nintendo\.net nginx answer auto
+    rewrite name regex (.*\.)?nintendowifi\.net nginx answer auto
+    rewrite name regex (.*\.)?pretendo\.cc nginx answer auto
+    rewrite name regex (.*\.)?pretendo\.network nginx answer auto
+    rewrite name regex (.*\.)?pretendo-cdn\.b-cdn\.net nginx answer auto
+    rewrite name regex (.*\.)?minio minio answer auto
+    forward . /etc/resolv.conf
+}

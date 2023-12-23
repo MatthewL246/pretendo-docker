@@ -1,0 +1,13 @@
+. {
+    log
+    rewrite name regex (.*\.)?nintendo\.net server.local answer auto
+    rewrite name regex (.*\.)?nintendowifi\.net server.local answer auto
+    rewrite name regex (.*\.)?pretendo\.cc server.local answer auto
+    rewrite name regex (.*\.)?pretendo\.network server.local answer auto
+    rewrite name regex (.*\.)?pretendo-cdn\.b-cdn\.net server.local answer auto
+    hosts {
+        {$SERVER_IP} server.local
+        fallthrough
+    }
+    forward . /etc/resolv.conf
+}

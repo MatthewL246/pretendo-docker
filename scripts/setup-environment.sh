@@ -73,11 +73,11 @@ echo "PN_MIIVERSE_API_CONFIG_AES_KEY=$miiverse_aes_key" >>./miiverse-api.local.e
 echo "JUXT_CONFIG_AES_KEY=$miiverse_aes_key" >>./juxtaposition-ui.local.env
 
 # Get the computer IP address
-printf "What is your computer's IP address? It must be accessible to your consoles: "
-read -r computer_ip
-echo "COMPUTER_IP=$computer_ip" >>./system.local.env
-echo "PN_FRIENDS_SECURE_SERVER_HOST=$computer_ip" >>./friends.local.env
-echo "PN_WIIU_CHAT_SECURE_SERVER_LOCATION=$computer_ip" >>./wiiu-chat.local.env
+printf "What is your server's IP address? It must be accessible to your consoles: "
+read -r server_ip
+echo "SERVER_IP=$server_ip" >>./system.local.env
+echo "PN_FRIENDS_SECURE_SERVER_HOST=$server_ip" >>./friends.local.env
+echo "PN_WIIU_CHAT_SECURE_SERVER_LOCATION=$server_ip" >>./wiiu-chat.local.env
 
 # Get the Wii U IP address
 printf "Enter your Wii U's IP address: "

@@ -14,19 +14,40 @@ services:
             - type: bind
               source: ./config/mitmproxy.yaml
               target: /home/mitmproxy/mitmproxy-config.yaml
+              read_only: true
             - type: volume
               source: mitmproxy-pretendo-data
               target: /home/mitmproxy/.mitmproxy
         command: mitmweb --web-host 0.0.0.0
         tty: true
 
-    coredns:
+    coredns-public:
+        # This responds to DNS queries from the console, redirecting them to
+        # the host machine. Note that this causes them skip mitmproxy and go
+        # straight to nginx.
+        image: coredns/coredns:latest
+        restart: unless-stopped
+        ports:
+            - 53:53/udp
+        volumes:
+            - type: bind
+              source: ./config/public.Corefile
+              target: /etc/coredns/Corefile
+              read_only: true
+        env_file:
+            - ./environment/system.local.env
+        command: -conf /etc/coredns/Corefile
+
+    coredns-internal:
+        # This responds to DNS queries from the internal network of containers,
+        # redirecting them to the nginx container
         image: coredns/coredns:latest
         restart: unless-stopped
         volumes:
             - type: bind
-              source: ./config/Corefile
+              source: ./config/internal.Corefile
               target: /etc/coredns/Corefile
+              read_only: true
         networks:
             internal:
                 ipv4_address: 172.20.0.200
@@ -35,20 +56,27 @@ services:
     nginx:
         image: nginx:mainline-alpine
         depends_on:
-            - coredns
+            - coredns-internal
+            - mitmproxy-pretendo
         restart: unless-stopped
         ports:
             # HTTP
             - 80:80
-            # HTTPS (currently unused)
+            # HTTPS (supports TLSv1.0 for Wii U)
             - 443:443
         volumes:
             - type: bind
               source: ./config/nginx.conf
               target: /etc/nginx/nginx.conf
+              read_only: true
             - type: bind
               source: ./config/nginx
               target: /etc/nginx/conf.d/
+              read_only: true
+            - type: volume
+              source: mitmproxy-pretendo-data
+              target: /etc/nginx/mitmproxy-certs
+              read_only: true
         networks:
             default:
             internal:
@@ -58,7 +86,7 @@ services:
         # TODO: Set up authentication
         image: mongo:latest
         depends_on:
-            - coredns
+            - coredns-internal
         restart: unless-stopped
         ports:
             # For connecting with mongosh or MongoDB Compass
@@ -67,6 +95,7 @@ services:
             - type: bind
               source: ./config/mongod.conf
               target: /etc/mongod.conf
+              read_only: true
             - type: volume
               source: mongodb-database
               target: /data/db
@@ -78,7 +107,7 @@ services:
     mongo-express:
         image: mongo-express:latest
         depends_on:
-            - coredns
+            - coredns-internal
             - mongodb
         restart: unless-stopped
         ports:
@@ -94,7 +123,7 @@ services:
     minio:
         image: minio/minio:latest
         depends_on:
-            - coredns
+            - coredns-internal
         restart: unless-stopped
         ports:
             # Web console
@@ -114,7 +143,7 @@ services:
     redis:
         image: redis:alpine
         depends_on:
-            - coredns
+            - coredns-internal
         restart: unless-stopped
         volumes:
             - type: volume
@@ -131,7 +160,7 @@ services:
     maildev:
         image: maildev/maildev:latest
         depends_on:
-            - coredns
+            - coredns-internal
         restart: unless-stopped
         ports:
             # MailDev web UI
@@ -151,7 +180,7 @@ services:
     postgres:
         image: postgres:alpine
         depends_on:
-            - coredns
+            - coredns-internal
         restart: unless-stopped
         ports:
             # For connecting with pgAdmin
@@ -163,6 +192,7 @@ services:
             - type: bind
               source: ./scripts/run-in-container/postgres-init.sh
               target: /docker-entrypoint-initdb.d/postgres-init.sh
+              read_only: true
         networks:
             internal:
         dns: 172.20.0.200
@@ -173,7 +203,7 @@ services:
     adminer:
         image: adminer:latest
         depends_on:
-            - coredns
+            - coredns-internal
             - postgres
         restart: unless-stopped
         ports:
@@ -183,6 +213,7 @@ services:
             - type: bind
               source: ./config/adminer-login-servers.php
               target: /var/www/html/plugins-enabled/login-servers.php
+              read_only: true
         networks:
             internal:
         dns: 172.20.0.200
@@ -192,7 +223,7 @@ services:
     account:
         build: ./repos/account
         depends_on:
-            - coredns
+            - coredns-internal
             - nginx
             - mongodb
             - minio
@@ -226,6 +257,7 @@ services:
             - type: bind
               source: ./config/website-config.json
               target: /app/config.json
+              read_only: true
         networks:
             internal:
         dns: 172.20.0.200
@@ -279,6 +311,7 @@ services:
             - type: bind
               source: ./config/juxtaposition-config.js
               target: /app/config.js
+              read_only: true
         networks:
             internal:
         dns: 172.20.0.200

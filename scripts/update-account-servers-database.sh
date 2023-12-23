@@ -21,7 +21,7 @@ done
 
 docker compose up -d account
 
-docker compose exec -e COMPUTER_IP="$COMPUTER_IP" \
+docker compose exec -e SERVER_IP="$SERVER_IP" \
     -e FRIENDS_PORT="$PN_FRIENDS_AUTHENTICATION_SERVER_PORT" \
     -e FRIENDS_AES_KEY="$PN_FRIENDS_CONFIG_AES_KEY" \
     -e MIIVERSE_AES_KEY="$PN_MIIVERSE_API_CONFIG_AES_KEY" \
