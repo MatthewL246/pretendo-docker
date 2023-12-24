@@ -1,4 +1,4 @@
-// This  should run in the miiverse-api container
+// This should be evaled in the miiverse-api container
 const mongoose = require("mongoose");
 const { connect } = require("./dist/database");
 const { Endpoint } = require("./dist/models/endpoint");
@@ -7,6 +7,7 @@ async function runAsync() {
     await connect();
     await resetEndpoints();
 
+    // These are static and always use the same domains
     await createEndpoint(
         0,
         "dev",
@@ -41,10 +42,8 @@ async function createEndpoint(
     const newEndpoint = new Endpoint({
         status: status,
         server_access_level: server_access_level,
-        // Unused
-        topics: true,
-        // Unused
-        guest_access: true,
+        topics: true, // Unused
+        guest_access: true, // Unused
         host: host,
         api_host: api_host,
         portal_host: portal_host,

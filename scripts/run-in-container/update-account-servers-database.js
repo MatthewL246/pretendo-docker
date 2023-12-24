@@ -1,4 +1,4 @@
-// This should run in the account container
+// This should be evaled in the account container
 const mongoose = require("mongoose");
 const { connect } = require("./dist/database");
 const { Server } = require("./dist/models/server");

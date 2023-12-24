@@ -1,22 +1,25 @@
-// This  should run in the account container
+// This should be evaled in the account container
 const mongoose = require("mongoose");
 const { connect } = require("./dist/database");
 const { PNID } = require("./dist/models/pnid");
 
 async function runAsync() {
+    if (process.argv.length < 2) {
+        console.log("Usage: <PNID username>");
+        process.exit(1);
+    }
+
     await connect();
 
-    if (process.argv[1]) {
-        const pnid = await PNID.findOne({
-            usernameLower: process.argv[1].toLowerCase(),
-        });
-        if (pnid) {
-            await updatePnidAccessLevel(pnid, 3, "dev");
-        } else {
-            console.log(`No PNID found for username ${process.argv[1]}.`);
-        }
+    const pnid = await PNID.findOne({
+        usernameLower: process.argv[1].toLowerCase(),
+    });
+    if (pnid) {
+        await updatePnidAccessLevel(pnid, 3, "dev");
     } else {
-        console.log("No username given, skipping update.");
+        console.log(`No PNID found for username ${process.argv[1]}.`);
+        await mongoose.connection.close();
+        process.exit(2);
     }
 
     await mongoose.connection.close();

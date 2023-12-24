@@ -18,8 +18,8 @@ for dir in "$git_base/patches/"*; do
         cd "$git_base/repos/$subdir"
 
         for patch in "$git_base/patches/$subdir"/*; do
-            echo "Applying patch $patch..."
-            git apply "$patch" -v
+            echo "Applying patch $subdir/$(basename "$patch")..."
+            git apply "$patch"
             git add .
             num_patches=$((num_patches + 1))
         done

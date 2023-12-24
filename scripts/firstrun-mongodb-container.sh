@@ -12,9 +12,9 @@ docker compose up -d mongodb
 # This needs to be run after it initializes.
 # https://github.com/docker-library/mongo/issues/339
 
-while ! docker compose exec mongodb mongosh --eval "db.adminCommand('ping')"; do
+while ! docker compose exec mongodb mongosh --eval "db.adminCommand('ping')" >/dev/null 2>&1; do
     echo "Waiting for mongodb to be ready..."
-    sleep 1
+    sleep 2
 done
 
 docker compose exec mongodb mongosh --eval "$mongodb_init_script"

@@ -2,25 +2,46 @@
 
 set -eu
 
-# Stop all running containers so the new environment variables can be applied
-docker compose down
-
 generate_password() {
     length=$1
-    tr -dc 'a-zA-Z0-9' </dev/urandom | fold -w "$length" | head -n 1
+    tr -dc "a-zA-Z0-9" </dev/urandom | fold -w "$length" | head -n 1
 }
 
 generate_hex() {
     length=$1
-    tr -dc 'A-F0-9' </dev/urandom | fold -w "$length" | head -n 1
+    tr -dc "A-F0-9" </dev/urandom | fold -w "$length" | head -n 1
 }
+
+# Validate arguments
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 <server IP address> [Wii U IP address]"
+    exit 1
+fi
+server_ip=$1
+wiiu_ip=
+if [ "$#" -ge 2 ]; then
+    wiiu_ip=$2
+fi
 
 echo "Setting up local environment variables..."
 
 git_base=$(git rev-parse --show-toplevel)
 cd "$git_base/environment"
 
-rm ./*.local.env || true
+firstrun=true
+if ls ./*.local.env 1>/dev/null 2>&1; then
+    echo "Local environment files already exist. They will be overwritten if you continue."
+    printf "Continue? [y/N] "
+    read -r continue
+    if [ "$continue" != "Y" ] && [ "$continue" != "y" ]; then
+        echo "Aborting."
+        exit 1
+    fi
+
+    docker compose down
+    rm ./*.local.env
+    firstrun=false
+fi
 
 # Generate an AES-256-CBC key for account server tokens
 account_aes_key=$(generate_hex 64)
@@ -36,7 +57,7 @@ echo "PN_FRIENDS_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./friends.local.e
 echo "PN_MIIVERSE_API_CONFIG_GRPC_ACCOUNT_API_KEY=$account_grpc_api_key" >>./miiverse-api.local.env
 echo "JUXT_CONFIG_GRPC_ACCOUNT_API_KEY=$account_grpc_api_key" >>./juxtaposition-ui.local.env
 
-# Generate secret key for MinIO
+# Generate a secret key for MinIO
 minio_secret_key=$(generate_password 32)
 echo "MINIO_ROOT_PASSWORD=$minio_secret_key" >>./minio.local.env
 echo "PN_ACT_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./account.local.env
@@ -52,7 +73,8 @@ postgres_password=$(generate_password 32)
 echo "POSTGRES_PASSWORD=$postgres_password" >>./postgres.local.env
 echo "PN_FRIENDS_CONFIG_DATABASE_URI=postgres://postgres_pretendo:$postgres_password@postgres/friends?sslmode=disable" >>./friends.local.env
 
-# Generate a Kerberos password and a gRPC API key for the friends server
+# Generate a Kerberos password, a gRPC API key, and an AES key for the friends
+# server
 friends_kerberos_password=$(generate_password 32)
 echo "PN_FRIENDS_CONFIG_KERBEROS_PASSWORD=$friends_kerberos_password" >>./friends.local.env
 friends_api_key=$(generate_password 32)
@@ -72,23 +94,26 @@ miiverse_aes_key=$(generate_hex 64)
 echo "PN_MIIVERSE_API_CONFIG_AES_KEY=$miiverse_aes_key" >>./miiverse-api.local.env
 echo "JUXT_CONFIG_AES_KEY=$miiverse_aes_key" >>./juxtaposition-ui.local.env
 
-# Get the computer IP address
-printf "What is your server's IP address? It must be accessible to your consoles: "
-read -r server_ip
+# Set up the server IP address
+echo "Using server IP address $server_ip."
 echo "SERVER_IP=$server_ip" >>./system.local.env
 echo "PN_FRIENDS_SECURE_SERVER_HOST=$server_ip" >>./friends.local.env
 echo "PN_WIIU_CHAT_SECURE_SERVER_LOCATION=$server_ip" >>./wiiu-chat.local.env
 
 # Get the Wii U IP address
-printf "Enter your Wii U's IP address: "
-read -r wiiu_ip
-echo "WIIU_IP=$wiiu_ip" >>./system.local.env
+if [ -n "$wiiu_ip" ]; then
+    echo "Using Wii U IP address $wiiu_ip."
+    echo "WIIU_IP=$wiiu_ip" >>./system.local.env
+else
+    echo "Skipping Wii U IP address."
+fi
 
 echo "Successfully set up environment."
 
 # Some things need to be updated with the new environment variables and secrets
-echo "Running necessary scripts..."
-"$git_base"/scripts/update-postgres-password.sh
-"$git_base"/scripts/update-account-servers-database.sh
-
-docker compose down
+if [ "$firstrun" = false ]; then
+    echo "Running necessary container update scripts..."
+    "$git_base"/scripts/update-postgres-password.sh
+    "$git_base"/scripts/update-account-servers-database.sh
+    docker compose down
+fi

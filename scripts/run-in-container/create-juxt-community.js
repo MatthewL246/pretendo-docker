@@ -1,4 +1,4 @@
-// This  should run in the juxtaposition-ui container
+// This should be evaled in the juxtaposition-ui container
 const mongoose = require("mongoose");
 const { COMMUNITY } = require("./src/models/communities");
 const fs = require("fs").promises;
@@ -12,19 +12,22 @@ const s3 = new S3({
 });
 
 async function runAsync() {
-    await connect();
-
-    if (process.argv.length !== 4) {
-        console.log("<name> <description> <comma-separated title IDs>");
+    if (process.argv.length < 4) {
+        console.log(
+            "Usage: <name> <description> <comma-separated title IDs> [icon image path] [banner image path]"
+        );
+        process.exit(1);
     }
+
+    await connect();
 
     await createMainCommunity(
         1,
         process.argv[1],
         process.argv[2],
         process.argv[3].split(","),
-        "/tmp/icon",
-        "/tmp/banner"
+        process.argv[4],
+        process.argv[5]
     );
 
     await mongoose.connection.close();
@@ -86,45 +89,55 @@ async function createMainCommunity(
 
 async function uploadAssets(community_id, iconPath, bannerPath) {
     console.log("Uploading assets for community " + community_id);
-    const sizes = [32, 64, 128];
-    const iconBuffer = await fs.readFile(iconPath);
-    for (const size of sizes) {
-        const resizedIconBuffer = await sharp(iconBuffer)
-            .resize(size, size, {
-                fit: "cover",
-                position: "center",
-            })
-            .png({ quality: 80 })
-            .toBuffer();
+    if (iconPath) {
+        console.log("Uploading icon from " + iconPath);
+        const sizes = [32, 64, 128];
+        const iconBuffer = await fs.readFile(iconPath);
+        for (const size of sizes) {
+            const resizedIconBuffer = await sharp(iconBuffer)
+                .resize(size, size, {
+                    fit: "cover",
+                    position: "center",
+                })
+                .png({ quality: 80 })
+                .toBuffer();
 
-        const uploadParams = {
-            Bucket: "pn-cdn",
-            Key: `icons/${community_id}/${size}.png`,
-            Body: resizedIconBuffer,
-            ACL: "public-read",
-            ContentType: "image/png",
-        };
-        await s3.putObject(uploadParams).promise();
+            const uploadParams = {
+                Bucket: "pn-cdn",
+                Key: `icons/${community_id}/${size}.png`,
+                Body: resizedIconBuffer,
+                ACL: "public-read",
+                ContentType: "image/png",
+            };
+            await s3.putObject(uploadParams).promise();
+        }
+    } else {
+        console.log("No icon path specified, skipping icon upload.");
     }
 
-    const consoles = ["WiiU", "3DS"];
-    const bannerBuffer = await fs.readFile(bannerPath);
-    for (const console of consoles) {
-        const resizedBannerBuffer = await sharp(bannerBuffer)
-            .resize(1280, 180, {
-                fit: "cover",
-                position: "center",
-            })
-            .png({ quality: 80 })
-            .toBuffer();
+    if (bannerPath) {
+        console.log("Uploading banner from " + bannerPath);
+        const consoles = ["WiiU", "3DS"];
+        const bannerBuffer = await fs.readFile(bannerPath);
+        for (const console of consoles) {
+            const resizedBannerBuffer = await sharp(bannerBuffer)
+                .resize(1280, 180, {
+                    fit: "cover",
+                    position: "center",
+                })
+                .png({ quality: 80 })
+                .toBuffer();
 
-        const uploadParams = {
-            Bucket: "pn-cdn",
-            Key: `headers/${community_id}/${console}.png`,
-            Body: resizedBannerBuffer,
-            ACL: "public-read",
-            ContentType: "image/png",
-        };
-        await s3.putObject(uploadParams).promise();
+            const uploadParams = {
+                Bucket: "pn-cdn",
+                Key: `headers/${community_id}/${console}.png`,
+                Body: resizedBannerBuffer,
+                ACL: "public-read",
+                ContentType: "image/png",
+            };
+            await s3.putObject(uploadParams).promise();
+        }
+    } else {
+        console.log("No banner path specified, skipping banner upload.");
     }
 }
