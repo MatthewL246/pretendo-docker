@@ -80,7 +80,9 @@ info "Setting up Pretendo account servers database..."
 ./scripts/update-account-servers-database.sh
 info "Setting up Pretendo Miiverse endpoints database..."
 ./scripts/update-miiverse-endpoints.sh
-info "Stopping containers..."
+info "Updating Postgres password..."
+./scripts/update-postgres-password.sh
+info "Stopping containers after initial setup..."
 docker compose down
 
 success "Setup completed! You can now start your Pretendo Network server with \"docker compose up -d\"."
