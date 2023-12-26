@@ -65,10 +65,10 @@ echo "Enter the IP address of your Wii U (optional). It is only used for automat
 read -r wiiu_ip
 ./scripts/setup-environment.sh "$server_ip" "$wiiu_ip"
 
-stage "Pulling Docker images. This may take a while."
+stage "Pulling Docker images."
 docker compose pull
 
-stage "Building Docker images. This may take a while."
+stage "Building Docker images."
 docker compose build
 
 stage "Setting up containers with first-run scripts."
