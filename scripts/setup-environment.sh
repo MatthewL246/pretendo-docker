@@ -109,6 +109,21 @@ else
     info "Skipping Wii U IP address."
 fi
 
+# Create a list of important secrets
+cat >"$git_base/secrets.txt" <<EOF
+Pretendo Network server secrets
+===============================
+
+MinIO root username: minio_pretendo
+MinIO root password: $minio_secret_key
+Mongo Express username: mongo_express_pretendo
+Mongo Express password: $mongo_express_password
+Postgres username: postgres_pretendo
+Postgres password: $postgres_password
+Server IP address: $server_ip
+Wii U IP address: ${wiiu_ip:-(not set)}
+EOF
+
 success "Successfully set up environment."
 
 # Some things need to be updated with the new environment variables and secrets,
