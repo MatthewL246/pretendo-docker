@@ -340,6 +340,7 @@ services:
         depends_on:
             - account
             - mongodb
+            - wiiu-chat-authentication
         restart: unless-stopped
         ports:
             # Secure server
