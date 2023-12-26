@@ -23,14 +23,15 @@ if [ "$#" -ge 2 ]; then
     wiiu_ip=$2
 fi
 
-echo "Setting up local environment variables..."
-
 git_base=$(git rev-parse --show-toplevel)
+. "$git_base/scripts/.function-lib.sh"
 cd "$git_base/environment"
+
+info "Setting up local environment variables..."
 
 firstrun=true
 if ls ./*.local.env 1>/dev/null 2>&1; then
-    echo "Local environment files already exist. They will be overwritten if you continue."
+    warning "Local environment files already exist. They will be overwritten if you continue."
     printf "Continue? [y/N] "
     read -r continue
     if [ "$continue" != "Y" ] && [ "$continue" != "y" ]; then
@@ -95,25 +96,29 @@ echo "PN_MIIVERSE_API_CONFIG_AES_KEY=$miiverse_aes_key" >>./miiverse-api.local.e
 echo "JUXT_CONFIG_AES_KEY=$miiverse_aes_key" >>./juxtaposition-ui.local.env
 
 # Set up the server IP address
-echo "Using server IP address $server_ip."
+info "Using server IP address $server_ip."
 echo "SERVER_IP=$server_ip" >>./system.local.env
 echo "PN_FRIENDS_SECURE_SERVER_HOST=$server_ip" >>./friends.local.env
 echo "PN_WIIU_CHAT_SECURE_SERVER_LOCATION=$server_ip" >>./wiiu-chat.local.env
 
 # Get the Wii U IP address
 if [ -n "$wiiu_ip" ]; then
-    echo "Using Wii U IP address $wiiu_ip."
+    info "Using Wii U IP address $wiiu_ip."
     echo "WIIU_IP=$wiiu_ip" >>./system.local.env
 else
-    echo "Skipping Wii U IP address."
+    info "Skipping Wii U IP address."
 fi
 
-echo "Successfully set up environment."
+success "Successfully set up environment."
 
-# Some things need to be updated with the new environment variables and secrets
-if [ "$firstrun" = false ]; then
-    echo "Running necessary container update scripts..."
+# Some things need to be updated with the new environment variables and secrets,
+# but only if this isn't the first run and the setup script isn't in progress.
+# The MongoDB container replica set won't be configured during initial setup,
+# and the scripts will fail.
+if [ "$firstrun" = false ] && [ -z "${PRETENDO_SETUP_IN_PROGRESS+x}" ]; then
+    info "Running necessary container update scripts..."
     "$git_base"/scripts/update-postgres-password.sh
     "$git_base"/scripts/update-account-servers-database.sh
     docker compose down
+    success "Successfully updated containers with new environment variables."
 fi

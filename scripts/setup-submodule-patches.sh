@@ -2,14 +2,15 @@
 
 set -eu
 
-echo "Resetting all submodules..."
+git_base=$(git rev-parse --show-toplevel)
+. "$git_base/scripts/.function-lib.sh"
+
+info "Resetting all submodules..."
 git submodule sync --recursive
 git submodule foreach --recursive "git reset --hard"
 git submodule update --init --recursive --checkout --force
 
-git_base=$(git rev-parse --show-toplevel)
-
-echo "Applying patches..."
+info "Applying patches to submodules..."
 num_patches=0
 for dir in "$git_base/patches/"*; do
     if [ -d "$dir" ]; then
@@ -25,4 +26,4 @@ for dir in "$git_base/patches/"*; do
         done
     fi
 done
-echo "Successfully applied $num_patches patches."
+success "Successfully applied $num_patches patches."

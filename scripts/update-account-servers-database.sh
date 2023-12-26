@@ -3,10 +3,11 @@
 set -eu
 
 git_base=$(git rev-parse --show-toplevel)
+. "$git_base/scripts/.function-lib.sh"
 create_server_script=$(cat "$git_base/scripts/run-in-container/update-account-servers-database.js")
 
 if [ ! -f "$git_base/environment/system.local.env" ]; then
-    echo "Missing environment file system.local.env. Did you run setup-environment.sh?"
+    error "Missing environment file system.local.env. Did you run setup-environment.sh?"
     exit 1
 fi
 . "$git_base/environment/system.local.env"
@@ -14,7 +15,7 @@ fi
 necessary_environment_files="friends miiverse-api wiiu-chat"
 for environment in $necessary_environment_files; do
     if [ ! -f "$git_base/environment/$environment.local.env" ]; then
-        echo "Missing environment file $environment.local.env. Did you run setup-environment.sh?"
+        error "Missing environment file $environment.local.env. Did you run setup-environment.sh?"
         exit 1
     fi
     . "$git_base/environment/$environment.env"

@@ -3,6 +3,7 @@
 set -eu
 
 git_base=$(git rev-parse --show-toplevel)
+. "$git_base/scripts/.function-lib.sh"
 mongodb_init_script=$(cat "$git_base/scripts/run-in-container/mongodb-init.js")
 
 docker compose up -d mongodb
@@ -13,10 +14,8 @@ docker compose up -d mongodb
 # https://github.com/docker-library/mongo/issues/339
 
 while ! docker compose exec mongodb mongosh --eval "db.adminCommand('ping')" >/dev/null 2>&1; do
-    echo "Waiting for mongodb to be ready..."
+    info "Waiting for mongodb to be ready..."
     sleep 2
 done
 
 docker compose exec mongodb mongosh --eval "$mongodb_init_script"
-
-docker compose down

@@ -3,6 +3,7 @@
 set -eu
 
 git_base=$(git rev-parse --show-toplevel)
+. "$git_base/scripts/.function-lib.sh"
 create_endpoint_script=$(cat "$git_base/scripts/run-in-container/update-miiverse-endpoints.js")
 
 docker compose up -d miiverse-api
