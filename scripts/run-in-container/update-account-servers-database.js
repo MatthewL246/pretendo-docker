@@ -9,7 +9,7 @@ async function runAsync() {
 
     await createNexServer(
         "Friend List",
-        "0003200",
+        "00003200",
         ["0005001010001C00"],
         process.env.SERVER_IP,
         process.env.FRIENDS_PORT,
