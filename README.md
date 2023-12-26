@@ -8,9 +8,9 @@ server (because there is no official self-hosting setup).
 ### Hardware
 
 - A decent CPU (must be capable of
-    [running MongoDB](https://www.mongodb.com/docs/ops-manager/current/tutorial/provisioning-prep/))
-- At least 12 GB of free storage for Docker images and build cache (using a
-    SSD is strongly recommended, as it will also be used for database storage)
+  [running MongoDB](https://www.mongodb.com/docs/ops-manager/current/tutorial/provisioning-prep/))
+- At least 12 GB of free storage for Docker images and build cache (using a SSD
+  is strongly recommended, as it will also be used for database storage)
 - At least 1GB of free RAM for the Docker containers, 2GB recommended
 - Network connectivity to the client console
 
@@ -50,18 +50,18 @@ line and have a basic understanding of Docker.
    software.
 2. Clone this repo with Git. Make sure to recursively checkout submodules:
    `git clone --recurse-submodules https://github.com/MatthewL246/pretendo-docker.git`
-    - **Note:** Downloading this repo as a ZIP file from GitHub will **not**
-      work because it uses
-      [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) for
-      the Pretendo Network repos.
-    - If you are using Windows, you should clone the repo **inside your WSL
-      distro** for maximum performance.
+   - **Note:** Downloading this repo as a ZIP file from GitHub will **not** work
+     because it uses
+     [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) for
+     the Pretendo Network repos.
+   - If you are using Windows, you should clone the repo **inside your WSL
+     distro** for maximum performance.
 3. Run the initial setup script (`./setup.sh`) and follow its instructions.
-    - **Note:** This will take some time to build the required Docker images,
-      and it will use up to 8GB of bandwidth to download images.
-    - After initial setup, use `docker compose up -d` to start the containers.
-    - You might need to re-run the setup script if this repo is updated with
-      more servers.
+   - **Note:** This will take some time to build the required Docker images, and
+     it will use up to 8GB of bandwidth to download images.
+   - After initial setup, use `docker compose up -d` to start the containers.
+   - You might need to re-run the setup script if this repo is updated with more
+     servers.
 4. Open <http://127.0.0.1:8081> in your browser to view a live list of HTTP
    requests from client devices.
 5. Connect your console to your Pretendo Network server and create a PNID (see
@@ -77,6 +77,24 @@ line and have a basic understanding of Docker.
 3. Read through the [containers section](#containers) to learn more about
    adminstering the servers. Also check out the [scripts directory](./scripts/).
 
+## Safety
+
+- **Back up your MongoDB database!** If you lose it, you will lose all of your
+  PNIDs and Juxt posts. You will also be **stuck with a useless account on your
+  console that you can't delete** because deleting an account requires a server
+  to authenticate the password. Creating a new account on your server with the
+  same PNID won't work because each PNID has a numerical ID that is appended to
+  the end of the password before hashing, so your console will not authenticate
+  with the new PNID. Use `mongodump`
+  ([docs](https://www.mongodb.com/docs/manual/tutorial/backup-and-restore-tools/)).
+- **Don't delete the `pretendo-network-*` Docker volumes**. You will permanently
+  lose your database (see above) and all of your Pretendo server data.
+- **Don't use the same P/NNID username on multiple servers.** This applies to
+  NNIDs and PNIDs on the official Pretendo Network server.
+- **Always verify that you are actually connecting to your own server.** The
+  easiest way is to check the mitmproxy logs to see if you are getting the
+  expected HTTP requests.
+
 ## Connecting
 
 ### Web
@@ -84,17 +102,17 @@ line and have a basic understanding of Docker.
 1. Start a web browser using `127.0.0.1:8080` as a proxy server. For example,
    use `chrome.exe --proxy-server="127.0.0.1:8080"` or the Firefox network
    settings page.
-    - I don't recommend using the same browser as the one you use for normal web
-      browsing because you will get a lot of irrelevant noise in the mitmproxy
-      logs. Consider downloading
-      [Chrome Beta](https://www.google.com/chrome/beta/) or
-      [Firefox Beta](https://www.mozilla.org/en-US/firefox/channel/desktop/) to
-      have an isolated browser for this.
-    - If you don't want to deal with the security warnings on every page from
-      being MITMed, go to <http://mitm.it> in your proxied browser and follow
-      the instructions there to trust the mitmproxy certificate. This is secure
-      because mitmproxy generates a random certificate on first run, so nobody
-      else could MITM your traffic except you.
+   - I don't recommend using the same browser as the one you use for normal web
+     browsing because you will get a lot of irrelevant noise in the mitmproxy
+     logs. Consider downloading
+     [Chrome Beta](https://www.google.com/chrome/beta/) or
+     [Firefox Beta](https://www.mozilla.org/en-US/firefox/channel/desktop/) to
+     have an isolated browser for this.
+   - If you don't want to deal with the security warnings on every page from
+     being MITMed, go to <http://mitm.it> in your proxied browser and follow the
+     instructions there to trust the mitmproxy certificate. This is secure
+     because mitmproxy generates a random certificate on first run, so nobody
+     else could MITM your traffic except you.
 2. Open <https://pretendo.network/account> in your proxied browser. **Make sure
    that there is a big red banner stating "This is an unofficial Pretendo
    Network server!"** If there is not, your proxy settings did not apply
@@ -124,12 +142,12 @@ line and have a basic understanding of Docker.
 6. Start a FTPiiU server on your console and run
    `./scripts/compile-custom-inkay.sh` to compile a custom version of the Inkay
    patches that uses your own mitmproxy certificate.
-    - If you didn't set a Wii U IP address when running the setup script, you
-      will need to use a FTP client to manually upload
-      `repos/Inkay/Inkay-pretendo.wps` to your console at
-      `/fs/vol/external01/wiiu/environments/aroma/plugins/`, replacing the
-      original Inkay patcher there. You could also re-run
-      `./scripts/setup-environment.sh` with a Wii U IP address.
+   - If you didn't set a Wii U IP address when running the setup script, you
+     will need to use a FTP client to manually upload
+     `repos/Inkay/Inkay-pretendo.wps` to your console at
+     `/fs/vol/external01/wiiu/environments/aroma/plugins/`, replacing the
+     original Inkay patcher there. You could also re-run
+     `./scripts/setup-environment.sh` with a Wii U IP address.
 7. Finally, create a new PNID on your console from the users page.
 8. Go back to [after creating a PNID](#after-creating-a-pnid).
 
@@ -176,25 +194,24 @@ here.
 - [BOSS (SpotPass)](https://github.com/PretendoNetwork/BOSS)
 - [Mario Kart 7](https://github.com/PretendoNetwork/mario-kart-7)
 - Mario Kart 8
-    ([authentication](https://github.com/PretendoNetwork/mario-kart-8-authentication)
-    and [secure](https://github.com/PretendoNetwork/mario-kart-8-secure))
+  ([authentication](https://github.com/PretendoNetwork/mario-kart-8-authentication)
+  and [secure](https://github.com/PretendoNetwork/mario-kart-8-secure))
 - [Super Mario Maker](https://github.com/PretendoNetwork/super-mario-maker)
 - [Pokkén Tournament](https://github.com/PretendoNetwork/pokken-tournament)
 - A bunch more of the individual game servers.
 - [Grove](https://github.com/PretendoNetwork/Grove) (Interesting but not
-    particularly useful in its current state.)
-- [SOAP (NUS)](https://github.com/PretendoNetwork/SOAP) (It would be cool to
-    run a full local eShop server.)
+  particularly useful in its current state.)
+- [SOAP (NUS)](https://github.com/PretendoNetwork/SOAP) (It would be cool to run
+  a full local eShop server.)
 
 ## Learn more
 
-- Each of the main subdirectories in this repository contain a README file
-    that explains their contents ([config](./config/),
-    [environment](./environment/), [patches](./patches/), [repos](./repos/), and
-    [scripts](./scripts/)).
+- Each of the main subdirectories in this repository contain a README file that
+  explains their contents ([config](./config/), [environment](./environment/),
+  [patches](./patches/), [repos](./repos/), and [scripts](./scripts/)).
 - Check the [compose.yml](./compose.yml) file for more information on how the
-    server containers are run.
+  server containers are run.
 - Read the source code in the
-    [Pretendo Network GitHub repositories](https://github.com/orgs/PretendoNetwork/repositories).
-- Join the [Pretendo Network Discord server](https://invite.gg/pretendo) and
-    ask questions.
+  [Pretendo Network GitHub repositories](https://github.com/orgs/PretendoNetwork/repositories).
+- Join the [Pretendo Network Discord server](https://invite.gg/pretendo) and ask
+  questions.
