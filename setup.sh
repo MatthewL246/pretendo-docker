@@ -28,7 +28,7 @@ check_prerequisites() {
     prerequisites_failed=false
     if ! docker version; then
         error "Docker is not installed. Please install it: https://docs.docker.com/get-docker/"
-        echo "If you see a \"Permission denied while trying to connect to the Docker daemon\" error, you need to run this script with sudo."
+        info "If you see a \"Permission denied while trying to connect to the Docker daemon\" error, you need to run this script with sudo."
         prerequisites_failed=true
     fi
     if ! docker compose version; then
