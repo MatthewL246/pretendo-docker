@@ -11,11 +11,11 @@ fi
 . "$git_base/environment/postgres.env"
 . "$git_base/environment/postgres.local.env"
 
+docker compose up -d postgres
+
 while ! docker compose exec postgres psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -c "\l"; do
     echo "Waiting for PostgreSQL to start..."
     sleep 1
 done
-
-docker compose up -d postgres
 
 docker compose exec postgres psql -U "$POSTGRES_USER" -c "ALTER USER $POSTGRES_USER PASSWORD '$POSTGRES_PASSWORD';"
