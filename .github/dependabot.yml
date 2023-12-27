@@ -8,7 +8,7 @@ updates:
           - MatthewL246
 
     - package-ecosystem: gitsubmodule
-      directory: /repos/
+      directory: /
       schedule:
           interval: daily
       assignees:
