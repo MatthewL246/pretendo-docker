@@ -3,3 +3,6 @@
 
 # Important secrets
 /secrets.txt
+
+# Log files
+/logs/
