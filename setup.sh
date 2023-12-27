@@ -8,7 +8,7 @@ check_git_repository() {
         echo "$(tput bold)$(tput setaf 1)Error: ${*}$(tput sgr0)" >&2
     }
 
-    if ! git --version >/dev/null 2>&1; then
+    if ! git --version; then
         error "Git is not installed. Please install it: https://git-scm.com/downloads/"
         exit 1
     fi
@@ -26,11 +26,12 @@ check_git_repository() {
 
 check_prerequisites() {
     prerequisites_failed=false
-    if ! docker version >/dev/null 2>&1; then
+    if ! docker version; then
         error "Docker is not installed. Please install it: https://docs.docker.com/get-docker/"
+        echo "If you see a \"Permission denied while trying to connect to the Docker daemon\" error, you need to run this script with sudo."
         prerequisites_failed=true
     fi
-    if ! docker compose version >/dev/null 2>&1; then
+    if ! docker compose version; then
         error "Docker Compose is not installed. Please install it: https://docs.docker.com/compose/install/"
         prerequisites_failed=true
     fi
@@ -73,9 +74,9 @@ docker compose build
 
 stage "Setting up containers with first-run scripts."
 info "Setting up MongoDB container..."
-./scripts/firstrun-mongodb-container.sh
+./scripts/firstrun-mongodb-container.sh || warning "MongoDB container is already set up."
 info "Setting up MinIO container..."
-./scripts/firstrun-minio-container.sh
+./scripts/firstrun-minio-container.sh || warning "MinIO container is already set up."
 info "Setting up Pretendo account servers database..."
 ./scripts/update-account-servers-database.sh
 info "Setting up Pretendo Miiverse endpoints database..."
