@@ -1,4 +1,4 @@
-name: Test scripts and Docker Compose
+name: Test scripts and Docker image build
 
 on:
     push:
@@ -6,7 +6,7 @@ on:
     workflow_dispatch:
 
 jobs:
-    test:
+    build-test:
         runs-on: ubuntu-latest
         steps:
             - name: Set up Docker Buildx
@@ -29,7 +29,7 @@ jobs:
             - name: Upload environment files
               uses: actions/upload-artifact@v4
               with:
-                  name: environment-setup
+                  name: environment
                   path: ./environment/
 
             - name: Validate Docker Compose file
