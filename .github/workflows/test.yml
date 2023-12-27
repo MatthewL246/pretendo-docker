@@ -41,3 +41,6 @@ jobs:
                   pull: true
                   load: true
                   push: false
+                  set: |
+                      *.cache-from=type=gha
+                      *.cache-to=type=gha,mode=max
