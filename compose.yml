@@ -362,6 +362,7 @@ volumes:
     account-certificates:
 
 networks:
+    default:
     # We need to use a custom network so that we can set a static IP address for
     # CoreDNS and use it as a DNS server for the other containers.
     internal:

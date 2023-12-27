@@ -9,6 +9,9 @@ jobs:
     test:
         runs-on: ubuntu-latest
         steps:
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
             - name: Checkout repository
               uses: actions/checkout@v4
               with:
@@ -23,7 +26,7 @@ jobs:
             - name: Test environment setup script
               run: ./scripts/setup-environment.sh 1.1.1.1 2.2.2.2
 
-            - name: Upload environment setup script logs
+            - name: Upload environment files
               uses: actions/upload-artifact@v4
               with:
                   name: environment-setup
@@ -32,8 +35,9 @@ jobs:
             - name: Validate Docker Compose file
               run: docker compose config
 
-            - name: Pull Docker images
-              run: docker compose pull
-
             - name: Build Docker images
-              run: docker compose build
+              uses: docker/bake-action@v4
+              with:
+                  pull: true
+                  load: true
+                  push: false
