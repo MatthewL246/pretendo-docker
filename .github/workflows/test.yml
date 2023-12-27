@@ -1,0 +1,36 @@
+name: Test scripts and Docker Compose
+
+on:
+    push:
+    pull_request:
+    workflow_dispatch:
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  submodules: true
+
+            - name: Validate Docker Compose file
+              run: docker compose config
+
+            - name: Test submodule patches script
+              run: ./scripts/setup-submodule-patches.sh
+
+            - name: Test environment setup script
+              run: ./scripts/setup-environment.sh 1.1.1.1 2.2.2.2
+
+            - name: Upload environment setup script logs
+              uses: actions/upload-artifact@v4
+              with:
+                  name: environment-setup
+                  path: ./environment/
+
+            - name: Pull Docker images
+              run: docker compose pull
+
+            - name: Build Docker images
+              run: docker compose build
