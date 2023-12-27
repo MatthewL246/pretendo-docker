@@ -14,9 +14,6 @@ jobs:
               with:
                   submodules: true
 
-            - name: Validate Docker Compose file
-              run: docker compose config
-
             - name: Test submodule patches script
               run: ./scripts/setup-submodule-patches.sh
 
@@ -28,6 +25,9 @@ jobs:
               with:
                   name: environment-setup
                   path: ./environment/
+
+            - name: Validate Docker Compose file
+              run: docker compose config
 
             - name: Pull Docker images
               run: docker compose pull
