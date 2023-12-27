@@ -60,6 +60,8 @@ line and have a basic understanding of Docker.
 3. Run the initial setup script (`./setup.sh`) and follow its instructions.
    - **Note:** This will take some time to build the required Docker images, and
      it will use up to 8GB of bandwidth to download images.
+   - You might need to run it with `sudo` if you are using the Docker Engine on
+     Linux.
    - After initial setup, use `docker compose up -d` to start the containers.
    - You might need to re-run the setup script if this repo is updated with more
      servers.
