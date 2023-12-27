@@ -152,6 +152,10 @@ line and have a basic understanding of Docker.
      original Inkay patcher there. You could also re-run
      `./scripts/setup-environment.sh` with a Wii U IP address.
 7. Finally, create a new PNID on your console from the users page.
+   - Make sure that the license agreement has the custom text "Welcome to your
+     selfhosted Pretendo Network server!". If it talks about the "Pretendo
+     public beta", you are still connected to the official Pretendo Network
+     server and your proxy settings did not apply correctly.
 8. Go back to [after creating a PNID](#after-creating-a-pnid).
 
 ### 3DS
