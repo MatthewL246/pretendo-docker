@@ -4,12 +4,12 @@ set -eu
 
 generate_password() {
     length=$1
-    tr -dc "a-zA-Z0-9" </dev/urandom | fold -w "$length" | head -n 1
+    head /dev/urandom | tr -dc "a-zA-Z0-9" | head -c "$length"
 }
 
 generate_hex() {
     length=$1
-    tr -dc "A-F0-9" </dev/urandom | fold -w "$length" | head -n 1
+    head /dev/urandom | tr -dc "a-zA-Z0-9" | head -c "$length"
 }
 
 # Validate arguments
