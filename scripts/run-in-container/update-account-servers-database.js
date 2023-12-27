@@ -13,7 +13,6 @@ async function runAsync() {
         ["0005001010001C00"],
         process.env.SERVER_IP,
         process.env.FRIENDS_PORT,
-        "dev",
         1,
         process.env.FRIENDS_AES_KEY
     );
@@ -21,7 +20,6 @@ async function runAsync() {
         "Miiverse",
         "87cd32617f1985439ea608c2746e4610",
         ["000500301001610A"],
-        "dev",
         1,
         process.env.MIIVERSE_AES_KEY
     );
@@ -31,7 +29,6 @@ async function runAsync() {
         ["000500101005A100"],
         process.env.SERVER_IP,
         process.env.WIIU_CHAT_PORT,
-        "dev",
         1,
         // Wii U Chat server doesn't seem to care about the AES key
         "0".repeat(64)
@@ -57,7 +54,6 @@ async function createNexServer(
     title_ids,
     ip,
     port,
-    access_mode,
     device,
     aes_key
 ) {
@@ -73,30 +69,31 @@ async function createNexServer(
         }
     }
 
-    const newServer = new Server({
-        service_name: service_name,
-        service_type: "nex",
-        game_server_id: game_server_id,
-        title_ids: title_ids,
-        ip: ip,
-        port: port,
-        access_mode: access_mode,
-        maintenance_mode: false,
-        device: device,
-        aes_key: aes_key,
-    });
+    for (const access_level of ["prod", "test", "dev"]) {
+        const newServer = new Server({
+            service_name: service_name,
+            service_type: "nex",
+            game_server_id: game_server_id,
+            title_ids: title_ids,
+            ip: ip,
+            port: port,
+            access_mode: access_level,
+            maintenance_mode: false,
+            device: device,
+            aes_key: aes_key,
+        });
 
-    console.log("Saving new nex server:");
-    console.log(newServer);
+        console.log("Saving new nex server:");
+        console.log(newServer);
 
-    await newServer.save();
+        await newServer.save();
+    }
 }
 
 async function createServiceServer(
     service_name,
     client_id,
     title_ids,
-    access_mode,
     device,
     aes_key
 ) {
@@ -112,21 +109,23 @@ async function createServiceServer(
         }
     }
 
-    const newServer = new Server({
-        service_name: service_name,
-        service_type: "service",
-        client_id: client_id,
-        title_ids: title_ids,
-        access_mode: access_mode,
-        maintenance_mode: false,
-        device: device,
-        aes_key: aes_key,
-    });
+    for (const access_level of ["prod", "test", "dev"]) {
+        const newServer = new Server({
+            service_name: service_name,
+            service_type: "service",
+            client_id: client_id,
+            title_ids: title_ids,
+            access_mode: access_level,
+            maintenance_mode: false,
+            device: device,
+            aes_key: aes_key,
+        });
 
-    console.log("Saving new service server:");
-    console.log(newServer);
+        console.log("Saving new service server:");
+        console.log(newServer);
 
-    await newServer.save();
+        await newServer.save();
+    }
 }
 
 /* Notes:

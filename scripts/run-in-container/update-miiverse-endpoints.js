@@ -10,7 +10,6 @@ async function runAsync() {
     // These are static and always use the same domains
     await createEndpoint(
         0,
-        "dev",
         "api.olv.pretendo.cc",
         "api.olv.pretendo.cc",
         "portal.olv.pretendo.cc",
@@ -31,27 +30,22 @@ async function resetEndpoints() {
     console.log("Endpoint collection reset.");
 }
 
-async function createEndpoint(
-    status,
-    server_access_level,
-    host,
-    api_host,
-    portal_host,
-    n3ds_host
-) {
-    const newEndpoint = new Endpoint({
-        status: status,
-        server_access_level: server_access_level,
-        topics: true, // Unused
-        guest_access: true, // Unused
-        host: host,
-        api_host: api_host,
-        portal_host: portal_host,
-        n3ds_host: n3ds_host,
-    });
+async function createEndpoint(status, host, api_host, portal_host, n3ds_host) {
+    for (const access_level of ["prod", "test", "dev"]) {
+        const newEndpoint = new Endpoint({
+            status: status,
+            server_access_level: access_level,
+            topics: true, // Unused
+            guest_access: true, // Unused
+            host: host,
+            api_host: api_host,
+            portal_host: portal_host,
+            n3ds_host: n3ds_host,
+        });
 
-    console.log("Saving new endpoint:");
-    console.log(newEndpoint);
+        console.log("Saving new endpoint:");
+        console.log(newEndpoint);
 
-    await newEndpoint.save();
+        await newEndpoint.save();
+    }
 }
