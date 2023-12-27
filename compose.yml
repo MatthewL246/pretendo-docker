@@ -1,373 +1,373 @@
 name: pretendo-network
 version: "3.8"
 services:
-    mitmproxy-pretendo:
-        image: ghcr.io/matthewl246/mitmproxy-pretendo:main
-        # build: ./repos/mitmproxy-pretendo
-        restart: unless-stopped
-        ports:
-            # Proxy server
-            - 8080:8080
-            # Mitmweb interface
-            - 127.0.0.1:8081:8081
-        volumes:
-            - type: bind
-              source: ./config/mitmproxy.yaml
-              target: /home/mitmproxy/mitmproxy-config.yaml
-              read_only: true
-            - type: volume
-              source: mitmproxy-pretendo-data
-              target: /home/mitmproxy/.mitmproxy
-        command: mitmweb --web-host 0.0.0.0
-        tty: true
+  mitmproxy-pretendo:
+    image: ghcr.io/matthewl246/mitmproxy-pretendo:main
+    # build: ./repos/mitmproxy-pretendo
+    restart: unless-stopped
+    ports:
+      # Proxy server
+      - 8080:8080
+      # Mitmweb interface
+      - 127.0.0.1:8081:8081
+    volumes:
+      - type: bind
+        source: ./config/mitmproxy.yaml
+        target: /home/mitmproxy/mitmproxy-config.yaml
+        read_only: true
+      - type: volume
+        source: mitmproxy-pretendo-data
+        target: /home/mitmproxy/.mitmproxy
+    command: mitmweb --web-host 0.0.0.0
+    tty: true
 
-    coredns-public:
-        # This responds to DNS queries from the console, redirecting them to
-        # the host machine. Note that this causes them skip mitmproxy and go
-        # straight to nginx.
-        image: coredns/coredns:latest
-        restart: unless-stopped
-        ports:
-            - 53:53/udp
-        volumes:
-            - type: bind
-              source: ./config/public.Corefile
-              target: /etc/coredns/Corefile
-              read_only: true
-        env_file:
-            - ./environment/system.local.env
-        command: -conf /etc/coredns/Corefile
+  coredns-public:
+    # This responds to DNS queries from the console, redirecting them to
+    # the host machine. Note that this causes them skip mitmproxy and go
+    # straight to nginx.
+    image: coredns/coredns:latest
+    restart: unless-stopped
+    ports:
+      - 53:53/udp
+    volumes:
+      - type: bind
+        source: ./config/public.Corefile
+        target: /etc/coredns/Corefile
+        read_only: true
+    env_file:
+      - ./environment/system.local.env
+    command: -conf /etc/coredns/Corefile
 
-    coredns-internal:
-        # This responds to DNS queries from the internal network of containers,
-        # redirecting them to the nginx container
-        image: coredns/coredns:latest
-        restart: unless-stopped
-        volumes:
-            - type: bind
-              source: ./config/internal.Corefile
-              target: /etc/coredns/Corefile
-              read_only: true
-        networks:
-            internal:
-                ipv4_address: 172.20.0.200
-        command: -conf /etc/coredns/Corefile
+  coredns-internal:
+    # This responds to DNS queries from the internal network of containers,
+    # redirecting them to the nginx container
+    image: coredns/coredns:latest
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: ./config/internal.Corefile
+        target: /etc/coredns/Corefile
+        read_only: true
+    networks:
+      internal:
+        ipv4_address: 172.20.0.200
+    command: -conf /etc/coredns/Corefile
 
-    nginx:
-        image: nginx:mainline-alpine
-        depends_on:
-            - coredns-internal
-            - mitmproxy-pretendo
-        restart: unless-stopped
-        ports:
-            # HTTP
-            - 80:80
-            # HTTPS (supports TLSv1.0 for Wii U)
-            - 443:443
-        volumes:
-            - type: bind
-              source: ./config/nginx.conf
-              target: /etc/nginx/nginx.conf
-              read_only: true
-            - type: bind
-              source: ./config/nginx
-              target: /etc/nginx/conf.d/
-              read_only: true
-            - type: volume
-              source: mitmproxy-pretendo-data
-              target: /etc/nginx/mitmproxy-certs
-              read_only: true
-        networks:
-            default:
-            internal:
-        dns: 172.20.0.200
+  nginx:
+    image: nginx:mainline-alpine
+    depends_on:
+      - coredns-internal
+      - mitmproxy-pretendo
+    restart: unless-stopped
+    ports:
+      # HTTP
+      - 80:80
+      # HTTPS (supports TLSv1.0 for Wii U)
+      - 443:443
+    volumes:
+      - type: bind
+        source: ./config/nginx.conf
+        target: /etc/nginx/nginx.conf
+        read_only: true
+      - type: bind
+        source: ./config/nginx
+        target: /etc/nginx/conf.d/
+        read_only: true
+      - type: volume
+        source: mitmproxy-pretendo-data
+        target: /etc/nginx/mitmproxy-certs
+        read_only: true
+    networks:
+      default:
+      internal:
+    dns: 172.20.0.200
 
-    mongodb:
-        # TODO: Set up authentication
-        image: mongo:latest
-        depends_on:
-            - coredns-internal
-        restart: unless-stopped
-        ports:
-            # For connecting with mongosh or MongoDB Compass
-            - 127.0.0.1:27017:27017
-        volumes:
-            - type: bind
-              source: ./config/mongod.conf
-              target: /etc/mongod.conf
-              read_only: true
-            - type: volume
-              source: mongodb-database
-              target: /data/db
-        networks:
-            internal:
-        dns: 172.20.0.200
-        command: --config "/etc/mongod.conf" --replSet rs
+  mongodb:
+    # TODO: Set up authentication
+    image: mongo:latest
+    depends_on:
+      - coredns-internal
+    restart: unless-stopped
+    ports:
+      # For connecting with mongosh or MongoDB Compass
+      - 127.0.0.1:27017:27017
+    volumes:
+      - type: bind
+        source: ./config/mongod.conf
+        target: /etc/mongod.conf
+        read_only: true
+      - type: volume
+        source: mongodb-database
+        target: /data/db
+    networks:
+      internal:
+    dns: 172.20.0.200
+    command: --config "/etc/mongod.conf" --replSet rs
 
-    mongo-express:
-        image: mongo-express:latest
-        depends_on:
-            - coredns-internal
-            - mongodb
-        restart: unless-stopped
-        ports:
-            # Web interface
-            - 127.0.0.1:8082:8081
-        networks:
-            internal:
-        dns: 172.20.0.200
-        env_file:
-            - ./environment/mongo-express.env
-            - ./environment/mongo-express.local.env
+  mongo-express:
+    image: mongo-express:latest
+    depends_on:
+      - coredns-internal
+      - mongodb
+    restart: unless-stopped
+    ports:
+      # Web interface
+      - 127.0.0.1:8082:8081
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/mongo-express.env
+      - ./environment/mongo-express.local.env
 
-    minio:
-        image: minio/minio:latest
-        depends_on:
-            - coredns-internal
-        restart: unless-stopped
-        ports:
-            # Web console
-            - 127.0.0.1:8083:8083
-        volumes:
-            - type: volume
-              source: minio-s3-data
-              target: /data
-        networks:
-            internal:
-        dns: 172.20.0.200
-        env_file:
-            - ./environment/minio.env
-            - ./environment/minio.local.env
-        command: server --console-address ":8083"
+  minio:
+    image: minio/minio:latest
+    depends_on:
+      - coredns-internal
+    restart: unless-stopped
+    ports:
+      # Web console
+      - 127.0.0.1:8083:8083
+    volumes:
+      - type: volume
+        source: minio-s3-data
+        target: /data
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/minio.env
+      - ./environment/minio.local.env
+    command: server --console-address ":8083"
 
-    redis:
-        image: redis:alpine
-        depends_on:
-            - coredns-internal
-        restart: unless-stopped
-        volumes:
-            - type: volume
-              source: redis-data
-              target: /data
-        networks:
-            internal:
-        dns: 172.20.0.200
-        command: redis-server --save 60 1 --appendonly yes
+  redis:
+    image: redis:alpine
+    depends_on:
+      - coredns-internal
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: redis-data
+        target: /data
+    networks:
+      internal:
+    dns: 172.20.0.200
+    command: redis-server --save 60 1 --appendonly yes
 
-    # TODO: MailDev appears to be unmaintained and has security vulnerabilities.
-    # Find an alternative. MailCatcher doesn't support persistance, and MailHog
-    # also seems unmaintained.
-    maildev:
-        image: maildev/maildev:latest
-        depends_on:
-            - coredns-internal
-        restart: unless-stopped
-        ports:
-            # MailDev web UI
-            - 127.0.0.1:8084:8084
-        volumes:
-            - type: volume
-              source: maildev-mail
-              target: /data
-        networks:
-            internal:
-        dns: 172.20.0.200
-        env_file:
-            - ./environment/maildev.env
-        # We need to set the user to root so that MailDev can write to the volume.
-        user: root
+  # TODO: MailDev appears to be unmaintained and has security vulnerabilities.
+  # Find an alternative. MailCatcher doesn't support persistance, and MailHog
+  # also seems unmaintained.
+  maildev:
+    image: maildev/maildev:latest
+    depends_on:
+      - coredns-internal
+    restart: unless-stopped
+    ports:
+      # MailDev web UI
+      - 127.0.0.1:8084:8084
+    volumes:
+      - type: volume
+        source: maildev-mail
+        target: /data
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/maildev.env
+    # We need to set the user to root so that MailDev can write to the volume.
+    user: root
 
-    postgres:
-        image: postgres:alpine
-        depends_on:
-            - coredns-internal
-        restart: unless-stopped
-        ports:
-            # For connecting with pgAdmin
-            - 127.0.0.1:5432:5432
-        volumes:
-            - type: volume
-              source: postgres-database
-              target: /var/lib/postgresql/data
-            - type: bind
-              source: ./scripts/run-in-container/postgres-init.sh
-              target: /docker-entrypoint-initdb.d/postgres-init.sh
-              read_only: true
-        networks:
-            internal:
-        dns: 172.20.0.200
-        env_file:
-            - ./environment/postgres.env
-            - ./environment/postgres.local.env
+  postgres:
+    image: postgres:alpine
+    depends_on:
+      - coredns-internal
+    restart: unless-stopped
+    ports:
+      # For connecting with pgAdmin
+      - 127.0.0.1:5432:5432
+    volumes:
+      - type: volume
+        source: postgres-database
+        target: /var/lib/postgresql/data
+      - type: bind
+        source: ./scripts/run-in-container/postgres-init.sh
+        target: /docker-entrypoint-initdb.d/postgres-init.sh
+        read_only: true
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/postgres.env
+      - ./environment/postgres.local.env
 
-    adminer:
-        image: adminer:latest
-        depends_on:
-            - coredns-internal
-            - postgres
-        restart: unless-stopped
-        ports:
-            # For the Adminer web interface
-            - 127.0.0.1:8085:8080
-        volumes:
-            - type: bind
-              source: ./config/adminer-login-servers.php
-              target: /var/www/html/plugins-enabled/login-servers.php
-              read_only: true
-        networks:
-            internal:
-        dns: 172.20.0.200
-        env_file:
-            - ./environment/adminer.env
+  adminer:
+    image: adminer:latest
+    depends_on:
+      - coredns-internal
+      - postgres
+    restart: unless-stopped
+    ports:
+      # For the Adminer web interface
+      - 127.0.0.1:8085:8080
+    volumes:
+      - type: bind
+        source: ./config/adminer-login-servers.php
+        target: /var/www/html/plugins-enabled/login-servers.php
+        read_only: true
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/adminer.env
 
-    account:
-        build: ./repos/account
-        depends_on:
-            - coredns-internal
-            - nginx
-            - mongodb
-            - minio
-            - redis
-            - maildev
-        restart: unless-stopped
-        ports:
-            # For the Node.js debugger
-            - 127.0.0.1:9229:9229
-        volumes:
-            - type: volume
-              source: account-certificates
-              target: /app/certs
-        networks:
-            internal:
-        dns: 172.20.0.200
-        env_file:
-            - ./environment/account.env
-            - ./environment/account.local.env
+  account:
+    build: ./repos/account
+    depends_on:
+      - coredns-internal
+      - nginx
+      - mongodb
+      - minio
+      - redis
+      - maildev
+    restart: unless-stopped
+    ports:
+      # For the Node.js debugger
+      - 127.0.0.1:9229:9229
+    volumes:
+      - type: volume
+        source: account-certificates
+        target: /app/certs
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/account.env
+      - ./environment/account.local.env
 
-    website:
-        build: ./repos/website
-        depends_on:
-            - account
-            - mongodb
-        restart: unless-stopped
-        ports:
-            # For the Node.js debugger
-            - 127.0.0.1:9230:9230
-        volumes:
-            - type: bind
-              source: ./config/website-config.json
-              target: /app/config.json
-              read_only: true
-        networks:
-            internal:
-        dns: 172.20.0.200
+  website:
+    build: ./repos/website
+    depends_on:
+      - account
+      - mongodb
+    restart: unless-stopped
+    ports:
+      # For the Node.js debugger
+      - 127.0.0.1:9230:9230
+    volumes:
+      - type: bind
+        source: ./config/website-config.json
+        target: /app/config.json
+        read_only: true
+    networks:
+      internal:
+    dns: 172.20.0.200
 
-    friends:
-        build: ./repos/friends
-        depends_on:
-            - account
-            - postgres
-        restart: unless-stopped
-        ports:
-            # Authentication server
-            - 6000:6000/udp
-            # Secure server
-            - 6001:6001/udp
-        networks:
-            internal:
-        dns: 172.20.0.200
-        env_file:
-            - ./environment/friends.env
-            - ./environment/friends.local.env
+  friends:
+    build: ./repos/friends
+    depends_on:
+      - account
+      - postgres
+    restart: unless-stopped
+    ports:
+      # Authentication server
+      - 6000:6000/udp
+      # Secure server
+      - 6001:6001/udp
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/friends.env
+      - ./environment/friends.local.env
 
-    miiverse-api:
-        build: ./repos/miiverse-api
-        depends_on:
-            - account
-            - mongodb
-            - friends
-        restart: unless-stopped
-        ports:
-            # For the Node.js debugger
-            - 127.0.0.1:9231:9231
-        networks:
-            internal:
-        dns: 172.20.0.200
-        env_file:
-            - ./environment/miiverse-api.env
-            - ./environment/miiverse-api.local.env
+  miiverse-api:
+    build: ./repos/miiverse-api
+    depends_on:
+      - account
+      - mongodb
+      - friends
+    restart: unless-stopped
+    ports:
+      # For the Node.js debugger
+      - 127.0.0.1:9231:9231
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/miiverse-api.env
+      - ./environment/miiverse-api.local.env
 
-    juxtaposition-ui:
-        build: ./repos/juxtaposition-ui
-        depends_on:
-            - account
-            - mongodb
-            - friends
-        restart: unless-stopped
-        ports:
-            # For the Node.js debugger
-            - 127.0.0.1:9232:9232
-        volumes:
-            - type: bind
-              source: ./config/juxtaposition-config.js
-              target: /app/config.js
-              read_only: true
-        networks:
-            internal:
-        dns: 172.20.0.200
-        env_file:
-            - ./environment/juxtaposition-ui.env
-            - ./environment/juxtaposition-ui.local.env
+  juxtaposition-ui:
+    build: ./repos/juxtaposition-ui
+    depends_on:
+      - account
+      - mongodb
+      - friends
+    restart: unless-stopped
+    ports:
+      # For the Node.js debugger
+      - 127.0.0.1:9232:9232
+    volumes:
+      - type: bind
+        source: ./config/juxtaposition-config.js
+        target: /app/config.js
+        read_only: true
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/juxtaposition-ui.env
+      - ./environment/juxtaposition-ui.local.env
 
-    wiiu-chat-authentication:
-        build: ./repos/wiiu-chat-authentication
-        depends_on:
-            - account
-            - mongodb
-        restart: unless-stopped
-        ports:
-            # Authentication server
-            - 6002:6002/udp
-        networks:
-            internal:
-        dns: 172.20.0.200
-        env_file:
-            - ./environment/wiiu-chat.env
-            - ./environment/wiiu-chat.local.env
+  wiiu-chat-authentication:
+    build: ./repos/wiiu-chat-authentication
+    depends_on:
+      - account
+      - mongodb
+    restart: unless-stopped
+    ports:
+      # Authentication server
+      - 6002:6002/udp
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/wiiu-chat.env
+      - ./environment/wiiu-chat.local.env
 
-    wiiu-chat-secure:
-        build: ./repos/wiiu-chat-secure
-        depends_on:
-            - account
-            - mongodb
-            - wiiu-chat-authentication
-        restart: unless-stopped
-        ports:
-            # Secure server
-            - 6003:6003/udp
-        networks:
-            internal:
-        dns: 172.20.0.200
-        env_file:
-            - ./environment/wiiu-chat.env
-            - ./environment/wiiu-chat.local.env
+  wiiu-chat-secure:
+    build: ./repos/wiiu-chat-secure
+    depends_on:
+      - account
+      - mongodb
+      - wiiu-chat-authentication
+    restart: unless-stopped
+    ports:
+      # Secure server
+      - 6003:6003/udp
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/wiiu-chat.env
+      - ./environment/wiiu-chat.local.env
 
 volumes:
-    mitmproxy-pretendo-data:
-    mongodb-database:
-    minio-s3-data:
-    redis-data:
-    maildev-mail:
-    postgres-database:
-    account-certificates:
+  mitmproxy-pretendo-data:
+  mongodb-database:
+  minio-s3-data:
+  redis-data:
+  maildev-mail:
+  postgres-database:
+  account-certificates:
 
 networks:
-    default:
-    # We need to use a custom network so that we can set a static IP address for
-    # CoreDNS and use it as a DNS server for the other containers.
-    internal:
-        driver: bridge
-        ipam:
-            driver: default
-            config:
-                - subnet: 172.20.0.0/24
+  default:
+  # We need to use a custom network so that we can set a static IP address for
+  # CoreDNS and use it as a DNS server for the other containers.
+  internal:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24

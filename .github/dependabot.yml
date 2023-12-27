@@ -1,15 +1,15 @@
 version: 2
 updates:
-    - package-ecosystem: github-actions
-      directory: /
-      schedule:
-          interval: daily
-      assignees:
-          - MatthewL246
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+    assignees:
+      - MatthewL246
 
-    - package-ecosystem: gitsubmodule
-      directory: /
-      schedule:
-          interval: daily
-      assignees:
-          - MatthewL246
+  - package-ecosystem: gitsubmodule
+    directory: /
+    schedule:
+      interval: daily
+    assignees:
+      - MatthewL246
