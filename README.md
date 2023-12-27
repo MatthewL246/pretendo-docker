@@ -7,20 +7,21 @@ server (because there is no official self-hosting setup).
 
 ### Hardware
 
-- A decent CPU (must be capable of
+- A decent CPU (at least 4 cores recommended, must be capable of
   [running MongoDB](https://www.mongodb.com/docs/ops-manager/current/tutorial/provisioning-prep/))
-- At least 12 GB of free storage for Docker images and build cache (using a SSD
+- At least 10 GB of free storage for Docker images and build cache (using an SSD
   is strongly recommended, as it will also be used for database storage)
-- At least 1GB of free RAM for the Docker containers, 2GB recommended
+- At least 4GB of free RAM while building the Docker containers; the servers
+  themselves uses about 1GB of RAM while running
 - Network connectivity to the client console
 
 ### Operating system
 
-| OS                                | Testing status              |
-| --------------------------------- | --------------------------- |
-| Windows (Docker Desktop on WSL 2) | ✅ Working                  |
-| Linux (Docker Engine)             | ℹ️ Untested but should work |
-| macOS (Docker Desktop)            | ❓ Untested                 |
+| OS                                | Testing status |
+| --------------------------------- | -------------- |
+| Windows (Docker Desktop on WSL 2) | ✅ Working     |
+| Linux (Docker Engine)             | ✅ Working     |
+| macOS (Docker Desktop)            | ❓ Untested    |
 
 ### Software
 
