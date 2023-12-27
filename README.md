@@ -156,6 +156,26 @@ line and have a basic understanding of Docker.
 
 - Currently untested
 
+## Uninstalling
+
+1. ⚠️ **_EXTREMELY IMPORTANT:_ Delete your selfhosted PNID from your console
+   _or_ back up your MongoDB database now!** See the
+   [safety section above](#safety) for more information. **If you don't do this,
+   you will be stuck with a useless account on your console that you can't
+   delete!**
+2. Revert [the steps you did when connecting](#connecting).
+   - Disable the custom DNS and proxy settings on your console.
+   - Replace `Inkay-pretendo.wps` with the original Inkay patcher.
+   - Make sure your console still works when connecting to the official Pretendo
+     Network servers.
+3. Run `docker compose down` to stop the containers.
+4. Delete this repository.
+5. Run `docker system prune -a` to delete the Docker images and build cache.
+6. _Optional:_ delete the `pretendo-network-*` Docker volumes and run
+   `docker volume prune`. Again, **double check that you deleted your selfhosted
+   PNID from your console now** or made a backup of your MongoDB database that
+   you will restore when you start selfhosting a Pretendo server again.
+
 ## Containers
 
 ### Infrastructure
