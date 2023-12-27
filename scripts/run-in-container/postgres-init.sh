@@ -2,11 +2,6 @@
 
 set -eu
 
-while ! psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -c '\l'; do
-    echo "Waiting for PostgreSQL to start..."
-    sleep 1
-done
-
 databases="friends"
 
 for database in $databases; do
