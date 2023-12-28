@@ -11,8 +11,12 @@ mc admin info minio
 
 buckets="pn-cdn"
 
-# Create buckets allow public access
+# Create buckets and allow public access
 for bucket in $buckets; do
-    mc mb "minio/$bucket"
-    mc anonymous set download "minio/$bucket"
+    if ! mc ls "minio/$bucket"; then
+        mc mb "minio/$bucket"
+        mc anonymous set download "minio/$bucket"
+    else
+        echo "Bucket $bucket already exists. Skipping..."
+    fi
 done

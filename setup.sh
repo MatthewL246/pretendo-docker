@@ -74,9 +74,9 @@ docker compose build
 
 stage "Setting up containers with first-run scripts."
 info "Setting up MongoDB container..."
-./scripts/firstrun-mongodb-container.sh || warning "MongoDB container is already set up."
+./scripts/firstrun-mongodb-container.sh
 info "Setting up MinIO container..."
-./scripts/firstrun-minio-container.sh || warning "MinIO container is already set up."
+./scripts/firstrun-minio-container.sh
 info "Setting up Pretendo account servers database..."
 ./scripts/update-account-servers-database.sh
 info "Setting up Pretendo Miiverse endpoints database..."
