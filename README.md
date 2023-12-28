@@ -162,6 +162,14 @@ line and have a basic understanding of Docker.
 
 - Currently untested
 
+### Changing which server you are connected to
+
+- To connect to your selfhosted Pretendo server, use the custom Inkay build and
+  enable the proxy settings.
+- To connect to the official Pretendo servers, use the official Inkay build and
+  disable the proxy settings.
+- To connect to Nintendo's servers, disable Inkay and the proxy settings.
+
 ## Uninstalling
 
 1. ⚠️ **_EXTREMELY IMPORTANT:_ Delete your selfhosted PNID from your console
