@@ -158,17 +158,19 @@ line and have a basic understanding of Docker.
      server and your proxy settings did not apply correctly.
 8. Go back to [after creating a PNID](#after-creating-a-pnid).
 
+#### Changing which server you are connected to (Wii U)
+
+- To connect to your selfhosted Pretendo server, use a custom Inkay build by
+  running `./scripts/compile-custom-inkay.sh` and enable the custom DNS and
+  proxy settings on the console.
+- To connect to the official Pretendo servers, use an unmodified Inkay build by
+  running `./scripts/compile-custom-inkay.sh --reset` and disable the custom DNS
+  and proxy settings on the console.
+- To connect to Nintendo's servers, disable Inkay and the proxy settings.
+
 ### 3DS
 
 - Currently untested
-
-### Changing which server you are connected to
-
-- To connect to your selfhosted Pretendo server, use the custom Inkay build and
-  enable the proxy settings.
-- To connect to the official Pretendo servers, use the official Inkay build and
-  disable the proxy settings.
-- To connect to Nintendo's servers, disable Inkay and the proxy settings.
 
 ## Uninstalling
 

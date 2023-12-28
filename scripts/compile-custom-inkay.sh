@@ -2,6 +2,11 @@
 
 set -eu
 
+should_reset=false
+if [ "${1-}" = "--reset" ]; then
+    should_reset=true
+fi
+
 git_base=$(git rev-parse --show-toplevel)
 . "$git_base/scripts/.function-lib.sh"
 
@@ -17,14 +22,21 @@ fi
 
 cd "$git_base/repos/Inkay"
 
-docker compose up -d mitmproxy-pretendo
-while ! docker compose exec mitmproxy-pretendo ls /home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem >/dev/null; do
-    info "Waiting for mitmproxy to generate a certificate..."
-    sleep 1
-done
+if [ "$should_reset" = false ]; then
+    docker compose up -d mitmproxy-pretendo
+    while ! docker compose exec mitmproxy-pretendo ls /home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem >/dev/null; do
+        info "Waiting for mitmproxy to generate a certificate..."
+        sleep 1
+    done
 
-# Get the current certificate
-docker compose cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem ./data/ca.pem
+    # Get the current certificate
+    docker compose cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem ./data/ca.pem
+else
+    git restore ./data/ca.pem
+    info "Reset Inkay CA certificate."
+fi
+
+rm ./*.elf ./*.wps || true
 
 # Set up the Inkay build environment and then build the patches
 docker build . -t inkay-build
