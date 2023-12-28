@@ -1,0 +1,19 @@
+diff --git i/src/services/nasc/routes/ac.ts w/src/services/nasc/routes/ac.ts
+index e556434..07bbba6 100644
+--- i/src/services/nasc/routes/ac.ts
++++ w/src/services/nasc/routes/ac.ts
+@@ -25,13 +25,7 @@ router.post('/', async (request: express.Request, response: express.Response): P
+ 		return;
+ 	}
+ 
+-	// TODO: REMOVE AFTER PUBLIC LAUNCH
+-	// * LET EVERYONE IN THE `test` FRIENDS SERVER
+-	// * THAT WAY EVERYONE CAN GET AN ASSIGNED PID
+-	let serverAccessLevel: string = 'test';
+-	if (titleID !== '0004013000003202') {
+-		serverAccessLevel = nexAccount.server_access_level;
+-	}
++	const serverAccessLevel: string = nexAccount.server_access_level;
+ 
+ 	const server: HydratedServerDocument | null = await getServerByTitleID(titleID, serverAccessLevel);
+ 
