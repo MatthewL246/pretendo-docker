@@ -7,10 +7,29 @@ async function runAsync() {
     await connect();
     await resetServers();
 
+    // Wii U: https://wiiubrew.org/wiki/Title_database and https://yls8.mtheall.com/ninupdates/titlelist.php?sys=wup
+    // 3DS: https://www.3dbrew.org/wiki/Title_list and https://yls8.mtheall.com/ninupdates/titlelist.php?sys=ktr
     await createNexServer(
         "Friend List",
         "00003200",
-        ["0005001010001C00"],
+        [
+            // Not in the title database but seems to be what the Wii U sends
+            "0005001010001C00",
+
+            // Wii U Friend List
+            "000500301001500A",
+            "000500301001510A",
+            "000500301001520A",
+
+            // 3DS friends system-module
+            "0004013000003202",
+
+            // 3DS Friend List applet
+            "0004003000008D02",
+            "0004003000009602",
+            "0004003000009F02",
+            "000400300000AF02",
+        ],
         process.env.SERVER_IP,
         process.env.FRIENDS_PORT,
         1,
@@ -19,14 +38,24 @@ async function runAsync() {
     await createServiceServer(
         "Miiverse",
         "87cd32617f1985439ea608c2746e4610",
-        ["000500301001610A"],
+        [
+            // Wii U Miiverse
+            "000500301001600A",
+            "000500301001610A",
+            "000500301001620A",
+
+            // 3DS Miiverse applet
+            "000400300000BC02",
+            "000400300000BD02",
+            "000400300000BE02",
+        ],
         1,
         process.env.MIIVERSE_AES_KEY
     );
     await createNexServer(
         "Wii U Chat",
         "1005A000",
-        ["000500101005A100"],
+        ["000500101005A000", "000500101005A100", "000500101005A200"],
         process.env.SERVER_IP,
         process.env.WIIU_CHAT_PORT,
         1,
