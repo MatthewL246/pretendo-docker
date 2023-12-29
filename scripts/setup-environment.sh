@@ -127,8 +127,12 @@ else
     info "Skipping 3DS IP address."
 fi
 
-# Get the BOSS keys
-"$git_base"/scripts/get-boss-keys.sh
+# Get the BOSS keys (won't work in CI)
+if [ -z "${CI+x}" ]; then
+    "$git_base"/scripts/get-boss-keys.sh
+else
+    warning "Skipping BOSS keys because this script is running in CI."
+fi
 
 # Create a list of important secrets
 cat >"$git_base/secrets.txt" <<EOF
