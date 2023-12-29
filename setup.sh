@@ -26,6 +26,7 @@ check_git_repository() {
 
 check_prerequisites() {
     prerequisites_failed=false
+    prerequisites_warning=false
     if ! docker version; then
         error "Docker is not installed. Please install it: https://docs.docker.com/get-docker/"
         info "If you see a \"Permission denied while trying to connect to the Docker daemon\" error, you need to run this script with sudo."
@@ -35,13 +36,25 @@ check_prerequisites() {
         error "Docker Compose is not installed. Please install it: https://docs.docker.com/compose/install/"
         prerequisites_failed=true
     fi
+    if ! ftp -? >/dev/null; then
+        warning "FTP is not installed. You will not be able to upload files to your consoles automatically."
+        prerequisites_warning=true
+    fi
 
     if [ "$prerequisites_failed" = true ]; then
         error "Prerequisites check failed. Please install the missing prerequisites and try again."
         exit 1
+    elif [ "$prerequisites_warning" = true ]; then
+        warning "Prerequisites check completed with warnings."
+        printf "Do you want to continue anyway (y/N)? "
+        read -r continue_anyway
+        if [ "$continue_anyway" != "Y" ] && [ "$continue_anyway" != "y" ]; then
+            exit 1
+        fi
+    else
+        success "All prerequisites are installed."
     fi
 
-    success "All prerequisites are installed."
 }
 export PRETENDO_SETUP_IN_PROGRESS=true
 
