@@ -41,7 +41,7 @@ if find "$[save_slots_dir]/*" NULL
     if not find "$[current_save_dir]/*" current_save
         # Manually choose a save slot
         echo "Last-used save slot is not set."
-        dirsel "Which save slot do you want to save your current\nFriends and account modules save data to\nbefore loading another save slot?" "$[save_slots_dir]"
+        dirsel "Which save slot do you want to save your current\nFriends and account system modules save data to\nbefore loading another save slot?" "$[save_slots_dir]"
         current_save
     end
     strsplit current_save "$[current_save]" "/"
