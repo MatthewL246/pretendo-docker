@@ -42,3 +42,8 @@ branch = master
 path = repos/wiiu-chat-secure
 url = https://github.com/PretendoNetwork/wiiu-chat-secure.git
 branch = master
+
+[submodule "repos/BOSS"]
+path = repos/BOSS
+url = https://github.com/PretendoNetwork/BOSS
+branch = master
