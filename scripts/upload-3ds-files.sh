@@ -39,7 +39,7 @@ fi
 if [ -n "${DS_IP+x}" ]; then
     if [ "$should_reset" = false ]; then
         ftp -u "ftp://user:pass@$DS_IP:5000/3ds/juxt-prod.pem" ./console-files/mitmproxy-ca-cert.pem
-        ftp -u "ftp://user:pass@$DS_IP:5000/gm9/scripts/FriendsSaveSwitcher.gm9" ./console-files/FriendsSaveSwitcher.gm9
+        ftp -u "ftp://user:pass@$DS_IP:5000/gm9/scripts/FriendsAccountSwitcher.gm9" ./console-files/FriendsAccountSwitcher.gm9
         ftp -u "ftp://user:pass@$DS_IP:5000/3ds/ResetFriendsTestAccount.3dsx" ./console-files/ResetFriendsTestAccount.3dsx
     else
         ftp -u "ftp://user:pass@$DS_IP:5000/3ds/juxt-prod.pem" ./console-files/juxt-prod.pem

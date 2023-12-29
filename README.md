@@ -225,7 +225,7 @@ line and have a basic understanding of Docker.
    > released on the Pretendo Network Discord server as `manual_override.3dsx`)
    > **goes to Trace.**
    1. Reboot into GodMode9 and open the scripts menu.
-   2. Run the `FriendsSaveSwitcher` script and select "Create a new save slot".
+   2. Run the `FriendsAccountSwitcher` script and select "Create a new save slot".
       Name the slot something descriptive like `pretendo_official`.
    3. Reboot into the Home Menu and open the Homebrew Launcher. From there, run
       the `ResetFriendsTestAccount.3dsx` app and press A when a white line
@@ -233,11 +233,11 @@ line and have a basic understanding of Docker.
    4. Open the Friend List applet. You should be "online" and have a new friend
       code that is different from your friend code on the official servers.
    5. Reboot into GodMode9 and open the scripts menu again.
-   6. Run the `FriendsSaveSwitcher` script and select "Create a new save slot"
+   6. Run the `FriendsAccountSwitcher` script and select "Create a new save slot"
       again. Name the slot something descriptive like `local_server`.
    7. You now have multiple test Friends accounts saved on your SD card at
       `sd:/gm9/out/friends_accounts/`. You can switch between them by running
-      the `FriendsSaveSwitcher` script, selecting "Create a new save slot", and
+      the `FriendsAccountSwitcher` script, selecting "Create a new save slot", and
       following the instructions.
       - Pay careful attention to the script's instructions. When loading a save
         slot, it will first save the current Friends and account system modules
@@ -253,13 +253,13 @@ line and have a basic understanding of Docker.
     `./scripts/upload-3ds-files.sh`.
   - Enable the custom DNS and proxy settings on the console.
   - Switch to your local server Friends account by running the
-    `FriendsSaveSwitcher` script in GodMode9.
+    `FriendsAccountSwitcher` script in GodMode9.
 - To connect to the official Pretendo servers:
   - Use the official certificate for Juxt by running
     `./scripts/upload-3ds-files.sh --reset`
   - Disable the custom DNS and proxy settings on the console.
   - Switch to your official Pretendo Friends account by running the
-    `FriendsSaveSwitcher` script in GodMode9.
+    `FriendsAccountSwitcher` script in GodMode9.
 - To connect to Nintendo's servers, use Nimbus to switch to Nintendo Network and
   disable the proxy settings.
 
@@ -277,11 +277,11 @@ line and have a basic understanding of Docker.
    - On 3DS, replace your custom Juxt certificate with the original one by
      re-downloading Nimbus from GitHub.
    - On 3DS, switch to your official Pretendo Friends account by running the
-     `FriendsSaveSwitcher` script in GodMode9 and loading the
+     `FriendsAccountSwitcher` script in GodMode9 and loading the
      `pretendo_official` slot you made.
      - You may now delete the `sd:/gm9/out/friends_accounts` directory from your
        SD card, as well as `sd:/3ds/ResetFriendsTestAccount.3dsx` and
-       `sd:/gm9/scripts/FriendsSaveSwitcher.gm9` if you will no longer be using
+       `sd:/gm9/scripts/FriendsAccountSwitcher.gm9` if you will no longer be using
        multiple Friends accounts.
    - Make sure your console still works when connecting to the official Pretendo
      Network servers.
