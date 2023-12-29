@@ -83,12 +83,13 @@ line and have a basic understanding of Docker.
 ## Safety
 
 - **Back up your MongoDB database!** If you lose it, you will lose all of your
-  PNIDs and Juxt posts. You will also be **stuck with a useless account on your
-  console that you can't delete** because deleting an account requires a server
-  to authenticate the password. Creating a new account on your server with the
-  same PNID won't work because each PNID has a numerical ID that is appended to
-  the end of the password before hashing, so your console will not authenticate
-  with the new PNID. Use `mongodump`
+  PNIDs and Juxt posts. If you have a PNID signed in on a Wii U, you will also
+  be **stuck with a useless account on your console that you can't delete**
+  because deleting an account requires a server to authenticate the password.
+  Creating a new account on your server with the same PNID won't work because
+  each PNID has a numerical ID that is appended to the end of the password
+  before hashing, so your console will not authenticate with the new PNID. Use
+  `mongodump`
   ([docs](https://www.mongodb.com/docs/manual/tutorial/backup-and-restore-tools/)).
 - **Don't delete the `pretendo-network-*` Docker volumes**. You will permanently
   lose your database (see above) and all of your Pretendo server data.
@@ -182,7 +183,9 @@ line and have a basic understanding of Docker.
 
 > **Warning:** Due to the 3DS's account system, using a local Pretendo Network
 > server with it requires some potentially dangerous modifications to the
-> CTRNAND. **Create a NAND backup before proceeding.**
+> CTRNAND.
+> **[Create a NAND backup](https://3ds.hacks.guide/godmode9-usage#creating-a-nand-backup)
+> before proceeding.**
 
 1. Follow the
    [official Pretendo Network installation guide](https://pretendo.network/docs/install/3ds)
@@ -201,39 +204,49 @@ line and have a basic understanding of Docker.
    through your proxy.
    - If you open the Friends List now, you might get a message that "This
      device's access to online services has been restricted by Nintendo." **Your
-     3DS is not banned. This is expected.** Your 3DS is trying to log into your
-     local Pretendo server using a NEX account that doesn't exist in the
-     server's database.
+     3DS is not banned. This is expected.** The console is trying to log into
+     your local Pretendo server using a NEX account that doesn't exist in the
+     server's database because it already created that NEX account on the
+     official servers.
 6. Start ftpd on your console and run `./scripts/upload-3ds-files.sh` to upload
    the required files to your console.
 7. **This is the potentially dangerous part that modifies your CTRNAND.** As the
    official Pretendo docs explain, Nimbus works by setting up a second Friends
    account using a test environment instead of prod. On the first run, it
    creates this account, and on subsequent runs, it switches to the
-   already-existing one. Unfortunately, you cannot create a third test account,
-   but what you _can_ do is back up the save data for the Friends and account
-   system modules and then reset the test account.
+   already-existing test account. Unfortunately, you cannot create a third test
+   account, but what you _can_ do is back up the save data for the Friends and
+   account system modules and then reset the test account.
    [Trace](https://github.com/TraceEntertains) (`traceentertains` on Discord)
    created a modified version of Nimbus that resets the Friends test
    environment, and I created a GodMode9 script to automate save backups and
    switching save slots for the system modules.
    > **All credit for the Friends test account reset program** (originally
-   > released on the Pretendo Network Discord server as
-   > "`manual_override.3dsx`") **goes to Trace.**
+   > released on the Pretendo Network Discord server as `manual_override.3dsx`)
+   > **goes to Trace.**
    1. Reboot into GodMode9 and open the scripts menu.
    2. Run the `FriendsSaveSwitcher` script and select "Save new slot". Name the
-      slot something descriptive like "pretendo_official".
+      slot something descriptive like `pretendo_official`.
    3. Reboot into the Home Menu and open the Homebrew Launcher. From there, run
-      the `ResetFriendsTestAccount.3dsx` program.
-   4. Reboot into GodMode9 and open the scripts menu again.
-   5. Run the `FriendsSaveSwitcher` script and select "Save new slot" again.
-      Name the slot something descriptive like "local_server".
-   6. You now have multiple test Friends accounts saved on your SD card at
+      the `ResetFriendsTestAccount.3dsx` app and press A when a white line
+      appears at the top of the screen (the Nimbus GUI was removed).
+   4. Open the Friend List applet. You should be "online" and have a new friend
+      code that is different from your friend code on the official servers.
+   5. Reboot into GodMode9 and open the scripts menu again.
+   6. Run the `FriendsSaveSwitcher` script and select "Save new slot" again.
+      Name the slot something descriptive like `local_server`.
+   7. You now have multiple test Friends accounts saved on your SD card at
       `sd:/gm9/out/friends_accounts/`. You can switch between them by running
       the `FriendsSaveSwitcher` script, selecting "Load save slot", and
-      following the instructions (it's not very user-friendly yet).
-8. Open System Settings using your local server Friends test account and create
-   a new local PNID or sign in to one you created on a Wii U or website.
+      following the instructions.
+      - Pay careful attention to the script's instructions. Make sure that you
+        first save your current save data to the active save slot when prompted
+        and then load the other save slot. For example, when switching from
+        `local_server` to `pretendo_official`: start the script, select
+        `Load save slot`, save the current save data to the `local_server` slot,
+        and then load the `pretendo_official` slot.
+8. Open System Settings using your `local_server` Friends test account and
+   create a new PNID or sign in to one you created on your Wii U or website.
 
 #### Changing which server you are connected to (3DS)
 
@@ -254,14 +267,24 @@ line and have a basic understanding of Docker.
 
 ## Uninstalling
 
-1. ⚠️ **_EXTREMELY IMPORTANT:_ Delete your selfhosted PNID from your console
-   _or_ back up your MongoDB database now!** See the
+1. ⚠️ **_EXTREMELY IMPORTANT:_ If you use a Wii U, delete your selfhosted PNID
+   from your console _or_ back up your MongoDB database now!** See the
    [safety section above](#safety) for more information. **If you don't do this,
    you will be stuck with a useless account on your console that you can't
    delete!**
 2. Revert [the steps you did when connecting](#connecting).
    - Disable the custom DNS and proxy settings on your console.
-   - Replace `Inkay-pretendo.wps` with the original Inkay patcher.
+   - On Wii U, replace your custom Inkay patcher with the original Inkay by
+     re-downloading it from GitHub.
+   - On 3DS, replace your custom Juxt certificate with the original one by
+     re-downloading Nimbus from GitHub.
+   - On 3DS, switch to your official Pretendo Friends account by running the
+     `FriendsSaveSwitcher` script in GodMode9 and loading the
+     `pretendo_official` slot.
+     - You may now delete the `sd:/gm9/out/friends_accounts/` directory from
+       your SD card, as well as `sd:/3ds/ResetFriendsTestAccount.3dsx` and
+       `sd:/gm9/scripts/FriendsSaveSwitcher.gm9` if you will no longer be using
+       multiple Friends accounts.
    - Make sure your console still works when connecting to the official Pretendo
      Network servers.
 3. Run `docker compose down` to stop the containers.
@@ -269,8 +292,8 @@ line and have a basic understanding of Docker.
 5. Run `docker system prune -a` to delete the Docker images and build cache.
 6. _Optional:_ delete the `pretendo-network-*` Docker volumes and run
    `docker volume prune`. Again, **double check that you deleted your selfhosted
-   PNID from your console now** or made a backup of your MongoDB database that
-   you will restore when you start selfhosting a Pretendo server again.
+   PNID from your console now** or made a backup of your MongoDB database if you
+   intend to start selfhosting a Pretendo server again later.
 
 ## Containers
 
