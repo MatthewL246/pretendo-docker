@@ -146,14 +146,12 @@ line and have a basic understanding of Docker.
    when you are done.
 2. Open System Settings => Internet => Connect to the Internet => Connections =>
    (Your current internet connection) => Change Settings.
-3. Go to DNS => Don't Auto-obtain => (Set both the primary and secondary DNS to
-   your server's IP address) => Confirm.
-4. Go to Proxy Settings => Set => OK => (Set the proxy server to your server's
+3. Go to Proxy Settings => Set => OK => (Set the proxy server to your server's
    IP address and the port to 8080) => Confirm => Don't Use Authentication.
-5. Save the settings and go back to the Home Menu. Check your mitmproxy logs at
+4. Save the settings and go back to the Home Menu. Check your mitmproxy logs at
    <http://127.0.0.1:8081> to verify that the console is sending HTTP requests
    through your proxy.
-6. Start a FTPiiU server on your console and run
+5. Start a FTPiiU server on your console and run
    `./scripts/compile-custom-inkay.sh` to compile a custom version of the Inkay
    patches that uses your own mitmproxy certificate.
    - If you didn't set a Wii U IP address when running the setup script, you
@@ -162,21 +160,21 @@ line and have a basic understanding of Docker.
      `/fs/vol/external01/wiiu/environments/aroma/plugins/`, replacing the
      original Inkay patcher there. You could also re-run
      `./scripts/setup-environment.sh` with a Wii U IP address.
-7. Finally, create a new PNID on your console from the users page.
+6. Finally, create a new PNID on your console from the users page.
    - Make sure that the license agreement has the custom text "Welcome to your
      selfhosted Pretendo Network server!". If it talks about the "Pretendo
      public beta", you are still connected to the official Pretendo Network
      server and your proxy settings did not apply correctly.
-8. Go back to [after creating a PNID](#after-creating-a-pnid).
+7. Go back to [after creating a PNID](#after-creating-a-pnid).
 
 #### Changing which server you are connected to (Wii U)
 
 - To connect to your selfhosted Pretendo server, use a custom Inkay build by
-  running `./scripts/compile-custom-inkay.sh` and enable the custom DNS and
-  proxy settings on the console.
+  running `./scripts/compile-custom-inkay.sh` and enable the custom proxy
+  settings on the console.
 - To connect to the official Pretendo servers, use an unmodified Inkay build by
-  running `./scripts/compile-custom-inkay.sh --reset` and disable the custom DNS
-  and proxy settings on the console.
+  running `./scripts/compile-custom-inkay.sh --reset` and disable the custom
+  proxy settings on the console.
 - To connect to Nintendo's servers, disable Inkay and the proxy settings.
 
 ### 3DS
@@ -194,12 +192,10 @@ line and have a basic understanding of Docker.
    Settings is optional.
 2. Open System Settings => Internet Settings => Connection Settings => (Your
    current connection) => Change Settings.
-3. Go to DNS => No => Detailed Setup => (Set both the primary and secondary DNS
-   to your server's IP address) => OK.
-4. Go to Proxy Settings => Yes => Detailed Setup => (Set the proxy server to
+3. Go to Proxy Settings => Yes => Detailed Setup => (Set the proxy server to
    your server's IP address and the port to 8080) => OK => Don't Use
    Authentication.
-5. Save the settings and go back to the Home Menu. Check your mitmproxy logs at
+4. Save the settings and go back to the Home Menu. Check your mitmproxy logs at
    <http://127.0.0.1:8081> to verify that the console is sending HTTP requests
    through your proxy.
    - If you open the Friends List now, you might get a message that "This
@@ -208,9 +204,9 @@ line and have a basic understanding of Docker.
      your local Pretendo server using a NEX account that doesn't exist in the
      server's database because it already created that NEX account on the
      official servers.
-6. Start ftpd on your console and run `./scripts/upload-3ds-files.sh` to upload
+5. Start ftpd on your console and run `./scripts/upload-3ds-files.sh` to upload
    the required files to your console.
-7. **This is the potentially dangerous part that modifies your CTRNAND.** As the
+6. **This is the potentially dangerous part that modifies your CTRNAND.** As the
    official Pretendo docs explain, Nimbus works by setting up a second Friends
    account using a test environment instead of prod. On the first run, it
    creates this account, and on subsequent runs, it switches to the
@@ -243,7 +239,7 @@ line and have a basic understanding of Docker.
         slot, it will first save the current Friends and account system modules
         save data to the last-used save slot. Create a new slot if you don't
         want to overwrite your existing save data.
-8. Open System Settings using your `local_server` Friends test account and
+7. Open System Settings using your `local_server` Friends test account and
    create a new PNID or sign in to one you created on your Wii U or website.
 
 #### Changing which server you are connected to (3DS)
@@ -251,13 +247,13 @@ line and have a basic understanding of Docker.
 - To connect to your selfhosted Pretendo server:
   - Use the custom mitmproxy certificate for Juxt by running
     `./scripts/upload-3ds-files.sh`.
-  - Enable the custom DNS and proxy settings on the console.
+  - Enable the custom proxy settings on the console.
   - Switch to your local server Friends account by running the
     `FriendsAccountSwitcher` script in GodMode9.
 - To connect to the official Pretendo servers:
   - Use the official certificate for Juxt by running
     `./scripts/upload-3ds-files.sh --reset`
-  - Disable the custom DNS and proxy settings on the console.
+  - Disable the custom proxy settings on the console.
   - Switch to your official Pretendo Friends account by running the
     `FriendsAccountSwitcher` script in GodMode9.
 - To connect to Nintendo's servers, use Nimbus to switch to Nintendo Network and
@@ -271,7 +267,7 @@ line and have a basic understanding of Docker.
    you will be stuck with a useless account on your console that you can't
    delete!**
 2. Revert [the steps you did when connecting](#connecting).
-   - Disable the custom DNS and proxy settings on your console.
+   - Disable the custom proxy settings on your console.
    - On Wii U, replace your custom Inkay patcher with the original Inkay by
      re-downloading it from GitHub.
    - On 3DS, replace your custom Juxt certificate with the original one by

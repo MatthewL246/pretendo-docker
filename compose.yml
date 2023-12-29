@@ -21,23 +21,6 @@ services:
     command: mitmweb --web-host 0.0.0.0
     tty: true
 
-  coredns-public:
-    # This responds to DNS queries from the console, redirecting them to
-    # the host machine. Note that this causes them skip mitmproxy and go
-    # straight to nginx.
-    image: coredns/coredns:latest
-    restart: unless-stopped
-    ports:
-      - 53:53/udp
-    volumes:
-      - type: bind
-        source: ./config/public.Corefile
-        target: /etc/coredns/Corefile
-        read_only: true
-    env_file:
-      - ./environment/system.local.env
-    command: -conf /etc/coredns/Corefile
-
   coredns-internal:
     # This responds to DNS queries from the internal network of containers,
     # redirecting them to the nginx container
