@@ -73,6 +73,7 @@ stage "Setting up submodules and applying patches."
 ./scripts/setup-submodule-patches.sh
 
 stage "Setting up environment variables."
+./scripts/get-boss-keys.sh --check
 echo "Enter the IP address of your Pretendo Network server. It must be accessible to your console."
 read -r server_ip
 echo "Enter the IP address of your Wii U (optional). It is only used for automatic FTP uploads of modified Inkay patches."

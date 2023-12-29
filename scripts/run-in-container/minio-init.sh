@@ -9,7 +9,7 @@ done
 
 mc admin info minio
 
-buckets="pn-cdn"
+buckets="pn-cdn pn-boss"
 
 # Create buckets and allow public access
 for bucket in $buckets; do

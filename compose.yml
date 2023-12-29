@@ -322,6 +322,27 @@ services:
       - ./environment/juxtaposition-ui.env
       - ./environment/juxtaposition-ui.local.env
 
+  boss:
+    # TODO: Make dumping the BOSS keys optional
+    build: ./repos/BOSS
+    depends_on:
+      - account
+      - mongodb
+    restart: unless-stopped
+    ports:
+      # For the Node.js debugger
+      - 127.0.0.1:9233:9233
+    volumes:
+      - type: bind
+        source: ./logs/boss/
+        target: /app/logs/
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/boss.env
+      - ./environment/boss.local.env
+
   wiiu-chat-authentication:
     build: ./repos/wiiu-chat-authentication
     depends_on:

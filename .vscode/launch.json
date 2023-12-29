@@ -47,6 +47,20 @@
             "remoteRoot": "/app",
             "localRoot": "${workspaceFolder}/repos/juxtaposition-ui",
             "port": 9232
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Debug BOSS",
+            "preLaunchTask": "Build BOSS",
+            "remoteRoot": "/app",
+            "localRoot": "${workspaceFolder}/repos/BOSS",
+            "sourceMaps": true,
+            "resolveSourceMapLocations": [
+                "${workspaceFolder}/repos/BOSS/dist/**",
+                "!**/node_modules/**"
+            ],
+            "port": 9233
         }
     ]
 }

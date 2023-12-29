@@ -9,3 +9,7 @@
 
 # Mitmproxy CA certificate
 /console-files/mitmproxy-ca-cert.pem
+
+# Console BOSS keys
+/console-files/aes_keys.txt
+/console-files/boss_keys.bin

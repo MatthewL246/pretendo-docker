@@ -41,6 +41,14 @@
                 "cwd": "${workspaceFolder}/repos/juxtaposition-ui"
             },
             "command": "npm install"
+        },
+        {
+            "label": "Build BOSS",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/repos/BOSS"
+            },
+            "command": "npm install && npm run build"
         }
     ]
 }

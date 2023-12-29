@@ -61,6 +61,7 @@ echo "PN_ACT_CONFIG_GRPC_MASTER_API_KEY_API=$account_grpc_api_key" >>./account.l
 echo "PN_FRIENDS_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./friends.local.env
 echo "PN_MIIVERSE_API_CONFIG_GRPC_ACCOUNT_API_KEY=$account_grpc_api_key" >>./miiverse-api.local.env
 echo "JUXT_CONFIG_GRPC_ACCOUNT_API_KEY=$account_grpc_api_key" >>./juxtaposition-ui.local.env
+echo "PN_BOSS_CONFIG_GRPC_ACCOUNT_SERVER_API_KEY=$account_grpc_api_key" >>./boss.local.env
 
 # Generate a secret key for MinIO
 minio_secret_key=$(generate_password 32)
@@ -68,6 +69,7 @@ echo "MINIO_ROOT_PASSWORD=$minio_secret_key" >>./minio.local.env
 echo "PN_ACT_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./account.local.env
 echo "PN_MIIVERSE_API_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./miiverse-api.local.env
 echo "JUXT_CONFIG_AWS_SPACES_SECRET=$minio_secret_key" >>./juxtaposition-ui.local.env
+echo "PN_BOSS_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./boss.local.env
 
 # Generate a password for mongo-express
 mongo_express_password=$(generate_password 32)
@@ -99,6 +101,10 @@ miiverse_aes_key=$(generate_hex 64)
 echo "PN_MIIVERSE_API_CONFIG_AES_KEY=$miiverse_aes_key" >>./miiverse-api.local.env
 echo "JUXT_CONFIG_AES_KEY=$miiverse_aes_key" >>./juxtaposition-ui.local.env
 
+# Generate a gRPC API key for the BOSS server
+boss_api_key=$(generate_password 32)
+echo "PN_BOSS_CONFIG_GRPC_BOSS_SERVER_API_KEY=$boss_api_key" >>./boss.local.env
+
 # Set up the server IP address
 info "Using server IP address $server_ip."
 echo "SERVER_IP=$server_ip" >>./system.local.env
@@ -120,6 +126,9 @@ if [ -n "$ds_ip" ]; then
 else
     info "Skipping 3DS IP address."
 fi
+
+# Get the BOSS keys
+"$git_base"/scripts/get-boss-keys.sh
 
 # Create a list of important secrets
 cat >"$git_base/secrets.txt" <<EOF
