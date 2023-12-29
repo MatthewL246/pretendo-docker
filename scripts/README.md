@@ -16,6 +16,9 @@ administration. Here is a list of each one and what it does.
 - `firsrun-*.sh`: These are scripts that are run on the first run of certain
   containers. They are run automatically by the main setup script and shouldn't
   be used after that.
+- `get-boss-keys.sh [--write]`: This validates the BOSS keys from the dumped key
+  files in `console-files`. Run with `--write` to validate the keys and write
+  them to the BOSS server environment variables file.
 - `make-pnid-dev.sh`: This sets the access level of a PNID to developer, which
   gives it administrative permissions across the servers. For example, this
   makes the PNID's posts "verified" on Juxt. It should be run after creating a

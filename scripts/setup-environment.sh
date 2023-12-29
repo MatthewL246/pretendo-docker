@@ -128,7 +128,7 @@ else
 fi
 
 # Get the BOSS keys
-"$git_base"/scripts/get-boss-keys.sh
+"$git_base"/scripts/get-boss-keys.sh --write
 
 # Create a list of important secrets
 cat >"$git_base/secrets.txt" <<EOF

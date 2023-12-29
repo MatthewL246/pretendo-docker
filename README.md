@@ -57,7 +57,22 @@ line and have a basic understanding of Docker.
      the Pretendo Network repos.
    - If you are using Windows, you should clone the repo **inside your WSL
      distro** for maximum performance.
-3. Run the initial setup script (`./setup.sh`) and follow its instructions.
+3. Optionally, dump your console's BOSS keys for the BOSS (SpotPass) server.
+   These keys are required if you want to create new SpotPass content. These
+   steps are based on
+   [the guide from the boss-crypto repository](https://github.com/PretendoNetwork/boss-crypto/#dumping-crypto-keys).
+   - For the Wii U: Download
+     [Full_Key_Dumper](https://github.com/EpicUsername12/Full_Key_Dumper/releases)
+     and run the ELF from a Tiramisu (not Aroma) environment. Then, copy the
+     `sd:/boss_keys.bin` file from your SD card to the `console-files` directory
+     in this repo.
+   - For the 3DS: Download the
+     [Citra key dumper GodMode9 script](https://raw.githubusercontent.com/citra-emu/citra/master/dist/dumpkeys/DumpKeys.gm9)
+     and run it in GodMode9. Then, copy the `sd:/gm9/aes_keys.txt` file from
+     your SD card to the `console_files` directory in this repo.
+   - Finally, run `./scripts/get-boss-keys.sh` to validate the dumped keys. It
+     will show you if the keys are missing or incorrect.
+4. Run the initial setup script (`./setup.sh`) and follow its instructions.
    - **Note:** This will take some time to build the required Docker images, and
      it will use up to 8GB of bandwidth to download images.
    - You might need to run it with `sudo` if you are using the Docker Engine on
@@ -65,9 +80,9 @@ line and have a basic understanding of Docker.
    - After initial setup, use `docker compose up -d` to start the containers.
    - You might need to re-run the setup script if this repo is updated with more
      servers.
-4. Open <http://127.0.0.1:8081> in your browser to view a live list of HTTP
+5. Open <http://127.0.0.1:8081> in your browser to view a live list of HTTP
    requests from client devices.
-5. Connect your console to your Pretendo Network server and create a PNID (see
+6. Connect your console to your Pretendo Network server and create a PNID (see
    [Connecting](#connecting)).
 
 ### After creating a PNID
@@ -221,20 +236,20 @@ line and have a basic understanding of Docker.
    > released on the Pretendo Network Discord server as `manual_override.3dsx`)
    > **goes to Trace.**
    1. Reboot into GodMode9 and open the scripts menu.
-   2. Run the `FriendsAccountSwitcher` script and select "Create a new save slot".
-      Name the slot something descriptive like `pretendo_official`.
+   2. Run the `FriendsAccountSwitcher` script and select "Create a new save
+      slot". Name the slot something descriptive like `pretendo_official`.
    3. Reboot into the Home Menu and open the Homebrew Launcher. From there, run
       the `ResetFriendsTestAccount.3dsx` app and press A when a white line
       appears at the top of the screen (the Nimbus GUI was removed).
    4. Open the Friend List applet. You should be "online" and have a new friend
       code that is different from your friend code on the official servers.
    5. Reboot into GodMode9 and open the scripts menu again.
-   6. Run the `FriendsAccountSwitcher` script and select "Create a new save slot"
-      again. Name the slot something descriptive like `local_server`.
+   6. Run the `FriendsAccountSwitcher` script and select "Create a new save
+      slot" again. Name the slot something descriptive like `local_server`.
    7. You now have multiple test Friends accounts saved on your SD card at
       `sd:/gm9/out/friends_accounts/`. You can switch between them by running
-      the `FriendsAccountSwitcher` script, selecting "Create a new save slot", and
-      following the instructions.
+      the `FriendsAccountSwitcher` script, selecting "Create a new save slot",
+      and following the instructions.
       - Pay careful attention to the script's instructions. When loading a save
         slot, it will first save the current Friends and account system modules
         save data to the last-used save slot. Create a new slot if you don't
@@ -277,8 +292,8 @@ line and have a basic understanding of Docker.
      `pretendo_official` slot you made.
      - You may now delete the `sd:/gm9/out/friends_accounts` directory from your
        SD card, as well as `sd:/3ds/ResetFriendsTestAccount.3dsx` and
-       `sd:/gm9/scripts/FriendsAccountSwitcher.gm9` if you will no longer be using
-       multiple Friends accounts.
+       `sd:/gm9/scripts/FriendsAccountSwitcher.gm9` if you will no longer be
+       using multiple Friends accounts.
    - Make sure your console still works when connecting to the official Pretendo
      Network servers.
 3. Run `docker compose down` to stop the containers.

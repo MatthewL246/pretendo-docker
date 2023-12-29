@@ -2,9 +2,9 @@
 
 set -eu
 
-check_only=false
-if [ "${1-}" = "--check" ]; then
-    check_only=true
+write_keys=false
+if [ "${1-}" = "--write" ]; then
+    write_keys=true
 fi
 
 expected_ds_aes_key_hash="86fbc2bb4cb703b2a4c6cc9961319926"
@@ -23,16 +23,17 @@ if ls ./boss_keys.bin 1>/dev/null 2>&1; then
 
     if [ "$wiiu_aes_key_hash" = "$expected_wiiu_aes_key_hash" ]; then
         success "Found valid Wii U BOSS AES key."
-        if [ "$check_only" = false ]; then
+        if [ "$write_keys" = true ]; then
             echo "PN_BOSS_CONFIG_BOSS_WIIU_AES_KEY=$wiiu_aes_key" >>"$git_base/environment/boss.local.env"
         fi
     else
         error "Wii U BOSS AES key has the wrong hash! Try re-running full_keys_dumper."
+        exit 1
     fi
 
     if [ "$wiiu_hmac_key_hash" = "$expected_wiiu_hmac_key_hash" ]; then
         success "Found valid Wii U HMAC key."
-        if [ "$check_only" = false ]; then
+        if [ "$write_keys" = true ]; then
             echo "PN_BOSS_CONFIG_BOSS_WIIU_HMAC_KEY=$wiiu_hmac_key" >>"$git_base/environment/boss.local.env"
         fi
     else
@@ -50,7 +51,7 @@ if ls ./aes_keys.txt 1>/dev/null 2>&1; then
 
     if [ "$ds_aes_key_hash" = "$expected_ds_aes_key_hash" ]; then
         success "Found valid 3DS BOSS AES key."
-        if [ "$check_only" = false ]; then
+        if [ "$write_keys" = true ]; then
             echo "PN_BOSS_CONFIG_BOSS_3DS_AES_KEY=$ds_aes_key" >>"$git_base/environment/boss.local.env"
         fi
     else
