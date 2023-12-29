@@ -225,26 +225,24 @@ line and have a basic understanding of Docker.
    > released on the Pretendo Network Discord server as `manual_override.3dsx`)
    > **goes to Trace.**
    1. Reboot into GodMode9 and open the scripts menu.
-   2. Run the `FriendsSaveSwitcher` script and select "Save new slot". Name the
-      slot something descriptive like `pretendo_official`.
+   2. Run the `FriendsSaveSwitcher` script and select "Create a new save slot".
+      Name the slot something descriptive like `pretendo_official`.
    3. Reboot into the Home Menu and open the Homebrew Launcher. From there, run
       the `ResetFriendsTestAccount.3dsx` app and press A when a white line
       appears at the top of the screen (the Nimbus GUI was removed).
    4. Open the Friend List applet. You should be "online" and have a new friend
       code that is different from your friend code on the official servers.
    5. Reboot into GodMode9 and open the scripts menu again.
-   6. Run the `FriendsSaveSwitcher` script and select "Save new slot" again.
-      Name the slot something descriptive like `local_server`.
+   6. Run the `FriendsSaveSwitcher` script and select "Create a new save slot"
+      again. Name the slot something descriptive like `local_server`.
    7. You now have multiple test Friends accounts saved on your SD card at
       `sd:/gm9/out/friends_accounts/`. You can switch between them by running
-      the `FriendsSaveSwitcher` script, selecting "Load save slot", and
+      the `FriendsSaveSwitcher` script, selecting "Create a new save slot", and
       following the instructions.
-      - Pay careful attention to the script's instructions. Make sure that you
-        first save your current save data to the active save slot when prompted
-        and then load the other save slot. For example, when switching from
-        `local_server` to `pretendo_official`: start the script, select
-        `Load save slot`, save the current save data to the `local_server` slot,
-        and then load the `pretendo_official` slot.
+      - Pay careful attention to the script's instructions. When loading a save
+        slot, it will first save the current Friends and account system modules
+        save data to the last-used save slot. Create a new slot if you don't
+        want to overwrite your existing save data.
 8. Open System Settings using your `local_server` Friends test account and
    create a new PNID or sign in to one you created on your Wii U or website.
 
@@ -280,9 +278,9 @@ line and have a basic understanding of Docker.
      re-downloading Nimbus from GitHub.
    - On 3DS, switch to your official Pretendo Friends account by running the
      `FriendsSaveSwitcher` script in GodMode9 and loading the
-     `pretendo_official` slot.
-     - You may now delete the `sd:/gm9/out/friends_accounts/` directory from
-       your SD card, as well as `sd:/3ds/ResetFriendsTestAccount.3dsx` and
+     `pretendo_official` slot you made.
+     - You may now delete the `sd:/gm9/out/friends_accounts` directory from your
+       SD card, as well as `sd:/3ds/ResetFriendsTestAccount.3dsx` and
        `sd:/gm9/scripts/FriendsSaveSwitcher.gm9` if you will no longer be using
        multiple Friends accounts.
    - Make sure your console still works when connecting to the official Pretendo
