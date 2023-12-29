@@ -56,6 +56,32 @@ check_prerequisites() {
     fi
 
 }
+
+setup_environment_variables() {
+    echo "Enter the IP address of your Pretendo Network server. It must be accessible to your console."
+    read -r server_ip
+    echo "Enter the IP address of your Wii U (optional). It is only used for automatic FTP uploads of modified Inkay patches."
+    read -r wiiu_ip
+    echo "Enter the IP address of your 3DS (optional). It is only used for automatic FTP uploads."
+    read -r ds_ip
+    ./scripts/setup-environment.sh "$server_ip" "$wiiu_ip" "$ds_ip"
+}
+
+setup_containers() {
+    info "Setting up MongoDB container..."
+    ./scripts/firstrun-mongodb-container.sh
+    info "Setting up MinIO container..."
+    ./scripts/firstrun-minio-container.sh
+    info "Setting up Pretendo account servers database..."
+    ./scripts/update-account-servers-database.sh
+    info "Setting up Pretendo Miiverse endpoints database..."
+    ./scripts/update-miiverse-endpoints.sh
+    info "Updating Postgres password..."
+    ./scripts/update-postgres-password.sh
+    info "Stopping containers after initial setup..."
+    docker compose down
+}
+
 export PRETENDO_SETUP_IN_PROGRESS=true
 
 check_git_repository
@@ -73,14 +99,7 @@ stage "Setting up submodules and applying patches."
 ./scripts/setup-submodule-patches.sh
 
 stage "Setting up environment variables."
-./scripts/get-boss-keys.sh --check
-echo "Enter the IP address of your Pretendo Network server. It must be accessible to your console."
-read -r server_ip
-echo "Enter the IP address of your Wii U (optional). It is only used for automatic FTP uploads of modified Inkay patches."
-read -r wiiu_ip
-echo "Enter the IP address of your 3DS (optional). It is only used for automatic FTP uploads."
-read -r ds_ip
-./scripts/setup-environment.sh "$server_ip" "$wiiu_ip" "$ds_ip"
+setup_environment_variables
 
 stage "Pulling Docker images."
 docker compose pull
@@ -89,18 +108,7 @@ stage "Building Docker images."
 docker compose build
 
 stage "Setting up containers with first-run scripts."
-info "Setting up MongoDB container..."
-./scripts/firstrun-mongodb-container.sh
-info "Setting up MinIO container..."
-./scripts/firstrun-minio-container.sh
-info "Setting up Pretendo account servers database..."
-./scripts/update-account-servers-database.sh
-info "Setting up Pretendo Miiverse endpoints database..."
-./scripts/update-miiverse-endpoints.sh
-info "Updating Postgres password..."
-./scripts/update-postgres-password.sh
-info "Stopping containers after initial setup..."
-docker compose down
+setup_containers
 
 success "Setup completed! You can now start your Pretendo Network server with \"docker compose up -d\"."
 header "Pretendo setup script finished at $(date)."
