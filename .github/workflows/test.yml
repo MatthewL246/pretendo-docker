@@ -24,7 +24,7 @@ jobs:
         run: ./scripts/setup-submodule-patches.sh
 
       - name: Test environment setup script
-        run: ./scripts/setup-environment.sh 1.1.1.1 2.2.2.2
+        run: ./scripts/setup-environment.sh 1.1.1.1 2.2.2.2 3.3.3.3
 
       - name: Upload environment files
         uses: actions/upload-artifact@v4
