@@ -38,3 +38,5 @@ administration. Here is a list of each one and what it does.
 - `update-postgres-password.sh`: This updates the password for the PostgreSQL
   database. It should be run whenever the password is regenerated, and it is
   automatically run by `setup-environment.sh`.
+- `upload-3ds-files.sh`: This uploads required files from `/console-files` to
+  your 3DS to help with setting it up to connect to your local server.

@@ -64,7 +64,9 @@ echo "Enter the IP address of your Pretendo Network server. It must be accessibl
 read -r server_ip
 echo "Enter the IP address of your Wii U (optional). It is only used for automatic FTP uploads of modified Inkay patches."
 read -r wiiu_ip
-./scripts/setup-environment.sh "$server_ip" "$wiiu_ip"
+echo "Enter the IP address of your 3DS (optional). It is only used for automatic FTP uploads."
+read -r ds_ip
+./scripts/setup-environment.sh "$server_ip" "$wiiu_ip" "$ds_ip"
 
 stage "Pulling Docker images."
 docker compose pull

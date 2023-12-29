@@ -1,0 +1,60 @@
+# Very basic GodMode9 script to create, back up, and switch between save slots
+# for the Friends and account (NNID) system modules
+# Reference: https://3dbrew.org/wiki/System_SaveData
+
+set friends_save_data "1:/data/$[SYSID0]/sysdata/00010032/00000000"
+set account_save_data "1:/data/$[SYSID0]/sysdata/00010038/00000000"
+set save_slots_dir "$[GM9OUT]/friends_accounts"
+set current_save_file "$[save_slots_dir]/current_save.txt"
+
+labelsel "What do you want to do?" "menu_*"
+
+
+# Save the current Friends and account system modules save data to a new slot
+@menu_Save_new_slot
+
+echo "This script will save your current Friends and\naccount save data to a new save slot on your\nSD card at $[save_slots_dir]"
+input "What do you want to name your new save slot?" new_save_slot_name
+
+# Copy the current Friends and account saves to the new save slot
+set output_save_dir "$[save_slots_dir]/$[new_save_slot_name]"
+cp "$[friends_save_data]" "$[output_save_dir]/friends.bin"
+cp "$[account_save_data]" "$[output_save_dir]/account.bin"
+
+# Save the name of the current save slot
+dumptxt "$[current_save_file]" "$[output_save_dir]"
+echo "Successfully saved your current save data to\n$[output_save_dir]"
+
+goto end
+
+
+# Load a previously-saved Friends and account system modules save slot
+@menu_Load_save_slot
+
+# Save the old save data to the current save slot
+# I can't figure out how to read the file using fget, so just ask the user to
+# choose when saving the current slot before switching
+echo "This script will load your Friends and account\nsave data from a previously saved slot.\nFirst, select a slot to save your current data."
+echo "The next screen displays the last loaded slot.\nSave your current data to this slot\nbefore loading a different one."
+textview "$[current_save_file]"
+dirsel "Which save slot do you want to save to?" "$[save_slots_dir]" save_slot_save
+ask "Overwrite this save slot?\n$[save_slot_save]"
+cp -w "$[friends_save_data]" "$[save_slot_save]/friends.bin"
+cp -w "$[account_save_data]" "$[save_slot_save]/account.bin"
+
+# Load a new save slot
+allow "$[friends_save_data]"
+allow "$[account_save_data]"
+dirsel "Which save slot do you want to load?" "$[save_slots_dir]" save_slot_load
+cp -w -n "$[save_slot_load]/friends.bin" "$[friends_save_data]"
+cp -w -n "$[save_slot_load]/account.bin" "$[account_save_data]"
+
+# Save the name of the loaded save slot
+dumptxt "$[current_save_file]" "$[save_slot_load]"
+echo "Successfully loaded the save slot\n$[save_slot_load]"
+
+goto end
+
+
+@end
+# Exit the script

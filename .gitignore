@@ -6,3 +6,6 @@
 
 # Log files
 /logs/
+
+# Mitmproxy CA certificate
+/console-files/mitmproxy-ca-cert.pem

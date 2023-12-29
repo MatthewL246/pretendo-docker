@@ -14,13 +14,17 @@ generate_hex() {
 
 # Validate arguments
 if [ "$#" -lt 1 ]; then
-    echo "Usage: $0 <server IP address> [Wii U IP address]"
+    echo "Usage: $0 <server IP address> [Wii U IP address] [3DS IP address]"
     exit 1
 fi
 server_ip=$1
 wiiu_ip=
 if [ "$#" -ge 2 ]; then
     wiiu_ip=$2
+fi
+ds_ip=
+if [ "$#" -ge 3 ]; then
+    ds_ip=$3
 fi
 
 git_base=$(git rev-parse --show-toplevel)
@@ -109,6 +113,14 @@ else
     info "Skipping Wii U IP address."
 fi
 
+# Get the 3DS IP address
+if [ -n "$ds_ip" ]; then
+    info "Using 3DS IP address $ds_ip."
+    echo "DS_IP=$ds_ip" >>./system.local.env
+else
+    info "Skipping 3DS IP address."
+fi
+
 # Create a list of important secrets
 cat >"$git_base/secrets.txt" <<EOF
 Pretendo Network server secrets
@@ -122,6 +134,7 @@ Postgres username: postgres_pretendo
 Postgres password: $postgres_password
 Server IP address: $server_ip
 Wii U IP address: ${wiiu_ip:-(not set)}
+3DS IP address: ${ds_ip:-(not set)}
 EOF
 
 success "Successfully set up environment."

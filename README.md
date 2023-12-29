@@ -37,7 +37,7 @@ Everything else runs inside Docker containers.
 | ------------- | ---------------------------- |
 | Wii U         | ✅ Working                   |
 | Cemu emulator | ❓ Untested                  |
-| 3DS           | ❓ Untested                  |
+| 3DS           | ✅ Working                   |
 | Switch        | ❌ Not supported by Pretendo |
 
 ## Usage
@@ -127,12 +127,22 @@ line and have a basic understanding of Docker.
    Juxt posts.
 4. Go back to [after creating a PNID](#after-creating-a-pnid).
 
+#### Changing which server you are connected to (Web)
+
+- To connect to your selfhosted Pretendo server, create a shortcut to your web
+  browser with the proxy settings and use that to open the Pretendo Network
+  website.
+- To connect to the official Pretendo servers, use your regular web browser
+  without the proxy settings.
+
 ### Wii U
 
 1. Follow the
    [official Pretendo Network installation guide](https://pretendo.network/docs/install/wiiu)
    to install the patches. At this point, you should be connected to the
-   official Pretendo Network servers. **Don't create a new PNID yet.**
+   official Pretendo Network servers. **You may create a new PNID on the
+   official servers now if you wish.** If you do so, come back to this guide
+   when you are done.
 2. Open System Settings => Internet => Connect to the Internet => Connections =>
    (Your current internet connection) => Change Settings.
 3. Go to DNS => Don't Auto-obtain => (Set both the primary and secondary DNS to
@@ -170,7 +180,77 @@ line and have a basic understanding of Docker.
 
 ### 3DS
 
-- Currently untested
+> **Warning:** Due to the 3DS's account system, using a local Pretendo Network
+> server with it requires some potentially dangerous modifications to the
+> CTRNAND. **Create a NAND backup before proceeding.**
+
+1. Follow the
+   [official Pretendo Network installation guide](https://pretendo.network/docs/install/3ds)
+   to install the patches. At this point, you should be connected to the
+   official Pretendo Network servers. Linking your official PNID in System
+   Settings is optional.
+2. Open System Settings => Internet Settings => Connection Settings => (Your
+   current connection) => Change Settings.
+3. Go to DNS => No => Detailed Setup => (Set both the primary and secondary DNS
+   to your server's IP address) => OK.
+4. Go to Proxy Settings => Yes => Detailed Setup => (Set the proxy server to
+   your server's IP address and the port to 8080) => OK => Don't Use
+   Authentication.
+5. Save the settings and go back to the Home Menu. Check your mitmproxy logs at
+   <http://127.0.0.1:8081> to verify that the console is sending HTTP requests
+   through your proxy.
+   - If you open the Friends List now, you might get a message that "This
+     device's access to online services has been restricted by Nintendo." **Your
+     3DS is not banned. This is expected.** Your 3DS is trying to log into your
+     local Pretendo server using a NEX account that doesn't exist in the
+     server's database.
+6. Start ftpd on your console and run `./scripts/upload-3ds-files.sh` to upload
+   the required files to your console.
+7. **This is the potentially dangerous part that modifies your CTRNAND.** As the
+   official Pretendo docs explain, Nimbus works by setting up a second Friends
+   account using a test environment instead of prod. On the first run, it
+   creates this account, and on subsequent runs, it switches to the
+   already-existing one. Unfortunately, you cannot create a third test account,
+   but what you _can_ do is back up the save data for the Friends and account
+   system modules and then reset the test account.
+   [Trace](https://github.com/TraceEntertains) (`traceentertains` on Discord)
+   created a modified version of Nimbus that resets the Friends test
+   environment, and I created a GodMode9 script to automate save backups and
+   switching save slots for the system modules.
+   > **All credit for the Friends test account reset program** (originally
+   > released on the Pretendo Network Discord server as
+   > "`manual_override.3dsx`") **goes to Trace.**
+   1. Reboot into GodMode9 and open the scripts menu.
+   2. Run the `FriendsSaveSwitcher` script and select "Save new slot". Name the
+      slot something descriptive like "pretendo_official".
+   3. Reboot into the Home Menu and open the Homebrew Launcher. From there, run
+      the `ResetFriendsTestAccount.3dsx` program.
+   4. Reboot into GodMode9 and open the scripts menu again.
+   5. Run the `FriendsSaveSwitcher` script and select "Save new slot" again.
+      Name the slot something descriptive like "local_server".
+   6. You now have multiple test Friends accounts saved on your SD card at
+      `sd:/gm9/out/friends_accounts/`. You can switch between them by running
+      the `FriendsSaveSwitcher` script, selecting "Load save slot", and
+      following the instructions (it's not very user-friendly yet).
+8. Open System Settings using your local server Friends test account and create
+   a new local PNID or sign in to one you created on a Wii U or website.
+
+#### Changing which server you are connected to (3DS)
+
+- To connect to your selfhosted Pretendo server:
+  - Use the custom mitmproxy certificate for Juxt by running
+    `./scripts/upload-3ds-files.sh`.
+  - Enable the custom DNS and proxy settings on the console.
+  - Switch to your local server Friends account by running the
+    `FriendsSaveSwitcher` script in GodMode9.
+- To connect to the official Pretendo servers:
+  - Use the official certificate for Juxt by running
+    `./scripts/upload-3ds-files.sh --reset`
+  - Disable the custom DNS and proxy settings on the console.
+  - Switch to your official Pretendo Friends account by running the
+    `FriendsSaveSwitcher` script in GodMode9.
+- To connect to Nintendo's servers, use Nimbus to switch to Nintendo Network and
+  disable the proxy settings.
 
 ## Uninstalling
 
