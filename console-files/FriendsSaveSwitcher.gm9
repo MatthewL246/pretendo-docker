@@ -46,7 +46,7 @@ if find "$[save_slots_dir]/*" NULL
     end
     strsplit current_save "$[current_save]" "/"
 
-    echo "This script will load your Friends and account\nsave data from a previously saved slot.\nFirst, your current save data will be saved to the\nlast-used slot: $[current_save]."
+    echo "This script will load your Friends and account\nsystem modules save data from another save slot.\n\nFirst, your current save data will be saved to the\nlast-used slot: $[current_save]."
     set save_slot_save "$[save_slots_dir]/$[current_save]"
     ask "Overwrite this save slot?\n$[save_slot_save]"
 
