@@ -333,14 +333,14 @@ and randomly-generated passwords needed to authenticate with the servers.
 | [friends](https://github.com/PretendoNetwork/friends)                                                                                                        | Handles the Friend List applet and friendships. Juxt and other game servers use it to get friends.                                                                                 |
 | [miiverse-api](https://github.com/PretendoNetwork/miiverse-api)                                                                                              | Handles Miiverse API requests from games and Miiverse portal discovery.                                                                                                            |
 | [juxtaposition-ui](https://github.com/PretendoNetwork/juxtaposition-ui)                                                                                      | The Miiverse applet GUI, as well as the Juxt web interface.                                                                                                                        |
-| Wii U Chat ([authentication](https://github.com/PretendoNetwork/wiiu-chat-authentication) and [secure](https://github.com/PretendoNetwork/wiiu-chat-secure)) | Server for the Wii U Chat app.                                                                                                                                                     |
+| Wii U Chat ([authentication](https://github.com/PretendoNetwork/wiiu-chat-authentication) and [secure](https://github.com/PretendoNetwork/wiiu-chat-secure)) | Server for the Wii U Chat app. This is currently untested because I only have 1 Wii U.                                                                                             |
+| [BOSS](https://github.com/PretendoNetwork/BOSS)                                                                                                              | Server for BOSS (SpotPass) content. I do not yet understand how to create new BOSS content, so it currently just serves some premade content.                                      |
 
 #### Planned servers
 
 These are some other servers (mostly for individual games) that I want to set up
 here.
 
-- [BOSS (SpotPass)](https://github.com/PretendoNetwork/BOSS)
 - [Mario Kart 7](https://github.com/PretendoNetwork/mario-kart-7)
 - Mario Kart 8
   ([authentication](https://github.com/PretendoNetwork/mario-kart-8-authentication)

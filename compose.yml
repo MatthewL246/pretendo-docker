@@ -323,7 +323,6 @@ services:
       - ./environment/juxtaposition-ui.local.env
 
   boss:
-    # TODO: Make dumping the BOSS keys optional
     build: ./repos/BOSS
     depends_on:
       - account
