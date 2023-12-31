@@ -9,7 +9,7 @@ generate_password() {
 
 generate_hex() {
     length=$1
-    head /dev/urandom | tr -dc "a-zA-Z0-9" | head -c "$length"
+    head /dev/urandom | tr -dc "A-F0-9" | head -c "$length"
 }
 
 # Validate arguments
