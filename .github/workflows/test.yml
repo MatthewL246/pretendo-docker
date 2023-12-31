@@ -1,4 +1,4 @@
-name: Test scripts and Docker image build
+name: Test scripts and build Docker images
 
 on:
   push:
@@ -20,20 +20,8 @@ jobs:
       - name: Set TERM environment variable
         run: echo "TERM=xterm" >> $GITHUB_ENV
 
-      - name: Test submodule patches script
-        run: ./scripts/setup-submodule-patches.sh
-
-      - name: Test environment setup script
-        run: ./scripts/setup-environment.sh 1.1.1.1 2.2.2.2 3.3.3.3
-
-      - name: Upload environment files
-        uses: actions/upload-artifact@v4
-        with:
-          name: environment
-          path: ./environment/
-
-      - name: Validate Docker Compose file
-        run: docker compose config
+      - name: Run the setup script
+        run: ./setup.sh
 
       - name: Build Docker images
         uses: docker/bake-action@v4

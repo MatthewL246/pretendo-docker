@@ -57,6 +57,15 @@ check_prerequisites() {
 
 }
 
+ci_setup() {
+    warning "It looks like the script is running in CI. Only setup tasks required for building the Docker images will be performed."
+    stage "Setting up submodules and applying patches."
+    ./scripts/setup-submodule-patches.sh
+    stage "Setting up environment variables."
+    ./scripts/setup-environment.sh "1.1.1.1" "2.2.2.2" "3.3.3.3"
+    success "CI setup completed."
+}
+
 setup_environment_variables() {
     echo "Enter the IP address of your Pretendo Network server. It must be accessible to your console."
     read -r server_ip
@@ -92,6 +101,12 @@ cd "$git_base"
 
 title "Unofficial Pretendo Network setup script"
 header "Pretendo setup script started at $(date)."
+
+if [ -n "${CI+x}" ]; then
+    ci_setup
+    exit 0
+fi
+
 stage "Checking prerequisites."
 check_prerequisites
 
