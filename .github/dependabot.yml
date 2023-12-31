@@ -4,12 +4,8 @@ updates:
     directory: /
     schedule:
       interval: daily
-    assignees:
-      - MatthewL246
 
   - package-ecosystem: gitsubmodule
     directory: /
     schedule:
       interval: daily
-    assignees:
-      - MatthewL246
