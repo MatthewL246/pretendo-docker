@@ -33,7 +33,6 @@ cd "$git_base/environment"
 
 info "Setting up local environment variables..."
 
-firstrun=true
 if ls ./*.local.env 1>/dev/null 2>&1; then
     warning "Local environment files already exist. They will be overwritten if you continue."
     printf "Continue? [y/N] "
@@ -45,7 +44,6 @@ if ls ./*.local.env 1>/dev/null 2>&1; then
 
     docker compose down
     rm ./*.local.env
-    firstrun=false
 fi
 
 # Generate an AES-256-CBC key for account server tokens
@@ -149,10 +147,9 @@ EOF
 success "Successfully set up environment."
 
 # Some things need to be updated with the new environment variables and secrets,
-# but only if this isn't the first run and the setup script isn't in progress.
-# The MongoDB container replica set won't be configured during initial setup,
-# and the scripts will fail.
-if [ "$firstrun" = false ] && [ -z "${PRETENDO_SETUP_IN_PROGRESS+x}" ]; then
+# but only if the setup script isn't in progress. The MongoDB container replica
+# set won't be configured during initial setup, and the scripts will fail.
+if [ -z "${PRETENDO_SETUP_IN_PROGRESS+x}" ]; then
     info "Running necessary container update scripts..."
     "$git_base"/scripts/update-postgres-password.sh
     "$git_base"/scripts/update-account-servers-database.sh
