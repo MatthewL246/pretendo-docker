@@ -2,7 +2,7 @@ name: pretendo-network
 version: "3.8"
 services:
   mitmproxy-pretendo:
-    image: ghcr.io/matthewl246/mitmproxy-pretendo:main
+    image: ghcr.io/matthewl246/mitmproxy-pretendo:local
     # build: ./repos/mitmproxy-pretendo
     restart: unless-stopped
     ports:
