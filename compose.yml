@@ -11,10 +11,6 @@ services:
       # Mitmweb interface
       - 127.0.0.1:8081:8081
     volumes:
-      - type: bind
-        source: ./config/mitmproxy.yaml
-        target: /home/mitmproxy/mitmproxy-config.yaml
-        read_only: true
       - type: volume
         source: mitmproxy-pretendo-data
         target: /home/mitmproxy/.mitmproxy
