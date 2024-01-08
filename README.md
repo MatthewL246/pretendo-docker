@@ -69,7 +69,7 @@ line and have a basic understanding of Docker.
    - For the 3DS: Download the
      [Citra key dumper GodMode9 script](https://raw.githubusercontent.com/citra-emu/citra/master/dist/dumpkeys/DumpKeys.gm9)
      and run it in GodMode9. Then, copy the `sd:/gm9/aes_keys.txt` file from
-     your SD card to the `console_files` directory in this repo.
+     your SD card to the `console-files` directory in this repo.
    - Finally, run `./scripts/get-boss-keys.sh` to validate the dumped keys. It
      will show you if the keys are missing or incorrect.
 4. Run the initial setup script (`./setup.sh`) and follow its instructions.
