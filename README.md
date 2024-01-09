@@ -21,7 +21,9 @@ server (because there is no official self-hosting setup).
 | --------------------------------- | -------------- |
 | Windows (Docker Desktop on WSL 2) | ✅ Working     |
 | Linux (Docker Engine)             | ✅ Working     |
-| macOS (Docker Desktop)            | ❓ Untested    |
+| macOS (Docker Desktop)            | ❓ Untested\*  |
+
+_\*macOS is untested because I don't own a Mac. In theory, it should work._
 
 ### Software
 
@@ -33,12 +35,17 @@ Everything else runs inside Docker containers.
 
 ### Supported consoles
 
-| Console       | Testing status               |
-| ------------- | ---------------------------- |
-| Wii U         | ✅ Working                   |
-| Cemu emulator | ❓ Untested                  |
-| 3DS           | ✅ Working                   |
-| Switch        | ❌ Not supported by Pretendo |
+| Console        | Testing status     |
+| -------------- | ------------------ |
+| Wii U          | ✅ Working         |
+| Cemu emulator  | ✅ Working         |
+| 3DS            | ✅ Working         |
+| Citra emulator | ❌ Not working\*   |
+| Wii, Switch    | ⛔ Unsupported\*\* |
+
+_\*The 3DS emulator Citra does not currently support connecting to online
+services._\
+_\*\*The Pretendo Network servers only support the Wii U and 3DS consoles._
 
 ## Usage
 
@@ -191,6 +198,35 @@ line and have a basic understanding of Docker.
   running `./scripts/compile-custom-inkay.sh --reset` and disable the custom
   proxy settings on the console.
 - To connect to Nintendo's servers, disable Inkay and the proxy settings.
+
+### Cemu
+
+1. Follow the
+   [official Pretendo Network guide](https://pretendo.network/docs/install/cemu).
+   - This currently requires using a real Wii U console with your selfhosted
+     PNID signed in. It may be possible to patch out the legitimate device
+     checks from the account server, but this is not currently a priority.
+   - Use Dumpling to dump the online files for your selfhosted PNID from your
+     Wii U. If you are using multiple accounts, make sure to disable the "Merge
+     Account To Default Cemu User" setting.
+2. Use Dumpling to dump your system applications. Make sure to at least dump the
+   Friend List applet, but you might as well dump them all.
+   - Note: You can run the Miiverse applet by manually dumping it from your Wii
+     U with FTPiiU (as it is not currently listed in Dumpling). However, this
+     just crashes Cemu because it currently does not support Miiverse features.
+3. Open the `settings.xml` file in your Cemu data directory and set the
+   `<proxy_server>` value to `http://127.0.0.1:8080`.
+
+#### Changing which server you are connected to (Cemu)
+
+- To connect to your selfhosted Pretendo server, switch to your selfhosted PNID
+  in account settings, set the network service to Pretendo, and set the proxy
+  server setting.
+- To connect to the official Pretendo servers, switch to your official PNID in
+  account settings, set the network service to Pretendo, and clear the proxy
+  server setting.
+- To connect to Nintendo's servers, switch to your NNID in account settings, set
+  the network service to Nintendo, and clear the proxy server setting.
 
 ### 3DS
 
