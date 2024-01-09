@@ -94,13 +94,12 @@ services:
     restart: unless-stopped
     ports:
       # Web interface
-      - 127.0.0.1:8082:8081
+      - 127.0.0.1:8082:8082
     networks:
       internal:
     dns: 172.20.0.200
     env_file:
       - ./environment/mongo-express.env
-      - ./environment/mongo-express.local.env
 
   minio:
     image: minio/minio:latest

@@ -69,10 +69,6 @@ echo "PN_MIIVERSE_API_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./miiverse-ap
 echo "JUXT_CONFIG_AWS_SPACES_SECRET=$minio_secret_key" >>./juxtaposition-ui.local.env
 echo "PN_BOSS_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./boss.local.env
 
-# Generate a password for mongo-express
-mongo_express_password=$(generate_password 32)
-echo "ME_CONFIG_BASICAUTH_PASSWORD=$mongo_express_password" >>./mongo-express.local.env
-
 # Generate a password for Postgres
 postgres_password=$(generate_password 32)
 echo "POSTGRES_PASSWORD=$postgres_password" >>./postgres.local.env
@@ -135,8 +131,6 @@ Pretendo Network server secrets
 
 MinIO root username: minio_pretendo
 MinIO root password: $minio_secret_key
-Mongo Express username: mongo_express_pretendo
-Mongo Express password: $mongo_express_password
 Postgres username: postgres_pretendo
 Postgres password: $postgres_password
 Server IP address: $server_ip
