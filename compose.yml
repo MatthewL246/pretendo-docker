@@ -348,7 +348,7 @@ services:
       - 6002:6002/udp
     volumes:
       - type: bind
-        source: ./logs/friends/
+        source: ./logs/wiiu-chat-authentication/
         target: /app/log/
     networks:
       internal:
@@ -369,7 +369,7 @@ services:
       - 6003:6003/udp
     volumes:
       - type: bind
-        source: ./logs/friends/
+        source: ./logs/wiiu-chat-secure/
         target: /app/log/
     networks:
       internal:
