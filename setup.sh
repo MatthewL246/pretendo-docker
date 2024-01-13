@@ -46,10 +46,14 @@ check_prerequisites() {
         exit 1
     elif [ "$prerequisites_warning" = true ]; then
         warning "Prerequisites check completed with warnings."
-        printf "Do you want to continue anyway (y/N)? "
-        read -r continue_anyway
-        if [ "$continue_anyway" != "Y" ] && [ "$continue_anyway" != "y" ]; then
-            exit 1
+
+        if [ -z "${CI+x}" ]; then
+            # Optional prerequisites can be ignored in CI
+            printf "Do you want to continue anyway (y/N)? "
+            read -r continue_anyway
+            if [ "$continue_anyway" != "Y" ] && [ "$continue_anyway" != "y" ]; then
+                exit 1
+            fi
         fi
     else
         success "All prerequisites are installed."
@@ -57,22 +61,21 @@ check_prerequisites() {
 
 }
 
-ci_setup() {
-    warning "It looks like the script is running in CI. Only setup tasks required for building the Docker images will be performed."
-    stage "Setting up submodules and applying patches."
-    ./scripts/setup-submodule-patches.sh
-    stage "Setting up environment variables."
-    ./scripts/setup-environment.sh "1.1.1.1" "2.2.2.2" "3.3.3.3"
-    success "CI setup completed."
-}
-
 setup_environment_variables() {
-    echo "Enter the IP address of your Pretendo Network server. It must be accessible to your console."
-    read -r server_ip
-    echo "Enter the IP address of your Wii U (optional). It is only used for automatic FTP uploads of modified Inkay patches."
-    read -r wiiu_ip
-    echo "Enter the IP address of your 3DS (optional). It is only used for automatic FTP uploads."
-    read -r ds_ip
+    if [ -n "${CI+x}" ]; then
+        warning "It looks like the script is running in CI. Using test IP addresses."
+        server_ip="0.0.0.0"
+        wiiu_ip=""
+        ds_ip=""
+    else
+        echo "Enter the IP address of your Pretendo Network server. It must be accessible to your console."
+        read -r server_ip
+        echo "Enter the IP address of your Wii U (optional). It is only used for automatic FTP uploads of modified Inkay patches."
+        read -r wiiu_ip
+        echo "Enter the IP address of your 3DS (optional). It is only used for automatic FTP uploads."
+        read -r ds_ip
+    fi
+
     ./scripts/setup-environment.sh "$server_ip" "$wiiu_ip" "$ds_ip"
 }
 
@@ -101,11 +104,6 @@ cd "$git_base"
 
 title "Unofficial Pretendo Network setup script"
 header "Pretendo setup script started at $(date)."
-
-if [ -n "${CI+x}" ]; then
-    ci_setup
-    exit 0
-fi
 
 stage "Checking prerequisites."
 check_prerequisites
