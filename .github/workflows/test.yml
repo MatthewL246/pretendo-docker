@@ -27,6 +27,9 @@ jobs:
         run: |
           yq eval 'del(.services.*.ports)' -i compose.yml
           yq eval '.services.*.restart = "no"' -i compose.yml
+          # The databases seem to crash randomly sometimes in Actions
+          yq eval '.services.mongodb.restart = "unless-stopped"' -i compose.yml
+          yq eval '.services.postgres.restart = "unless-stopped"' -i compose.yml
 
       - name: Run the setup script
         run: ./setup.sh
