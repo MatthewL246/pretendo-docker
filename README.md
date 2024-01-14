@@ -3,6 +3,8 @@
 This is an unofficial Docker Compose setup for self-hosting a Pretendo Network
 server (because there is no official self-hosting setup).
 
+[![Test scripts and build Docker images](https://github.com/MatthewL246/pretendo-docker/actions/workflows/test.yml/badge.svg)](https://github.com/MatthewL246/pretendo-docker/actions/workflows/test.yml)
+
 ## System requirements
 
 ### Hardware
