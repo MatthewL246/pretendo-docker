@@ -67,14 +67,12 @@ async function runAsync() {
 }
 
 runAsync().then(() => {
-    console.log("Done creating servers.");
     process.exit(0);
 });
 
 async function resetServers() {
     console.log("Deleting all servers...");
     await Server.deleteMany({});
-    console.log("Servers collection reset.");
 }
 
 async function createNexServer(
@@ -112,8 +110,7 @@ async function createNexServer(
             aes_key: aes_key,
         });
 
-        console.log("Saving new nex server:");
-        console.log(newServer);
+        console.log(`Saving new nex server: ${newServer.service_name}:${newServer.access_mode}`);
 
         await newServer.save();
     }
@@ -150,8 +147,7 @@ async function createServiceServer(
             aes_key: aes_key,
         });
 
-        console.log("Saving new service server:");
-        console.log(newServer);
+        console.log(`Saving new service server: ${newServer.service_name}:${newServer.access_mode}`);
 
         await newServer.save();
     }

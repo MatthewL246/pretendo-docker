@@ -8,7 +8,7 @@ check_git_repository() {
         echo "$(tput bold)$(tput setaf 1)Error: ${*}$(tput sgr0)" >&2
     }
 
-    if ! git --version; then
+    if ! git --version >/dev/null; then
         error "Git is not installed. Please install it: https://git-scm.com/downloads/"
         exit 1
     fi
@@ -27,12 +27,12 @@ check_git_repository() {
 check_prerequisites() {
     prerequisites_failed=false
     prerequisites_warning=false
-    if ! docker version; then
+    if ! docker version >/dev/null; then
         error "Docker is not installed. Please install it: https://docs.docker.com/get-docker/"
         info "If you see a \"Permission denied while trying to connect to the Docker daemon\" error, you need to run this script with sudo."
         prerequisites_failed=true
     fi
-    if ! docker compose version; then
+    if ! docker compose version >/dev/null; then
         error "Docker Compose is not installed. Please install it: https://docs.docker.com/compose/install/"
         prerequisites_failed=true
     fi

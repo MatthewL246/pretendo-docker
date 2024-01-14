@@ -13,7 +13,7 @@ fi
 
 docker compose up -d postgres
 
-while ! docker compose exec postgres psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -c "\l"; do
+while ! docker compose exec postgres psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -c "\l" >/dev/null 2>&1; do
     echo "Waiting for PostgreSQL to start..."
     sleep 1
 done

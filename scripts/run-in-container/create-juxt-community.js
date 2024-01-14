@@ -34,7 +34,6 @@ async function runAsync() {
 }
 
 runAsync().then(() => {
-    console.log("Done creating community.");
     process.exit(0);
 });
 
@@ -80,17 +79,15 @@ async function createMainCommunity(
         olive_community_id: communityId,
     });
 
-    console.log("Saving new community:");
-    console.log(newCommunity);
+    console.log(`Saving new community "${newCommunity.name}"`);
 
     await newCommunity.save();
     await uploadAssets(communityId, iconPath, bannerPath);
 }
 
 async function uploadAssets(community_id, iconPath, bannerPath) {
-    console.log("Uploading assets for community " + community_id);
+    console.log(`Uploading assets for community ${community_id}`);
     if (iconPath) {
-        console.log("Uploading icon from " + iconPath);
         const sizes = [32, 64, 128];
         const iconBuffer = await fs.readFile(iconPath);
         for (const size of sizes) {
@@ -111,12 +108,9 @@ async function uploadAssets(community_id, iconPath, bannerPath) {
             };
             await s3.putObject(uploadParams).promise();
         }
-    } else {
-        console.log("No icon path specified, skipping icon upload.");
     }
 
     if (bannerPath) {
-        console.log("Uploading banner from " + bannerPath);
         const consoles = ["WiiU", "3DS"];
         const bannerBuffer = await fs.readFile(bannerPath);
         for (const console of consoles) {
@@ -137,7 +131,5 @@ async function uploadAssets(community_id, iconPath, bannerPath) {
             };
             await s3.putObject(uploadParams).promise();
         }
-    } else {
-        console.log("No banner path specified, skipping banner upload.");
     }
 }

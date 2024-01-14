@@ -24,7 +24,7 @@ cd "$git_base/repos/Inkay"
 
 if [ "$should_reset" = false ]; then
     docker compose up -d mitmproxy-pretendo
-    while ! docker compose exec mitmproxy-pretendo ls /home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem >/dev/null; do
+    while ! docker compose exec mitmproxy-pretendo ls /home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem >/dev/null 2>&1; do
         info "Waiting for mitmproxy to generate a certificate..."
         sleep 1
     done

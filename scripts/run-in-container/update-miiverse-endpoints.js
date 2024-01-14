@@ -20,14 +20,12 @@ async function runAsync() {
 }
 
 runAsync().then(() => {
-    console.log("Done creating endpoints.");
     process.exit(0);
 });
 
 async function resetEndpoints() {
     console.log("Deleting all endpoints...");
     await Endpoint.deleteMany({});
-    console.log("Endpoint collection reset.");
 }
 
 async function createEndpoint(status, host, api_host, portal_host, n3ds_host) {
@@ -43,8 +41,7 @@ async function createEndpoint(status, host, api_host, portal_host, n3ds_host) {
             n3ds_host: n3ds_host,
         });
 
-        console.log("Saving new endpoint:");
-        console.log(newEndpoint);
+        console.log(`Saving new endpoint: ${newEndpoint.server_access_level}`);
 
         await newEndpoint.save();
     }

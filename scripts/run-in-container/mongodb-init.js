@@ -5,7 +5,7 @@ try {
         quit();
     }
 } catch (error) {
-    print("Replica set not initiated. Proceeding with initiation...");
+    print("Replica set not initiated. Proceeding...");
 }
 
 // Initiate the replica set. We need to set up the members like this because, by
@@ -20,16 +20,3 @@ rs.initiate({
         },
     ],
 });
-
-// Wait for the replica set to initiate
-while (rs.status().hasOwnProperty("myState") && rs.status().myState != 1) {
-    print("Waiting for replica set to initiate...");
-    printjson(rs.status());
-    sleep(1000);
-}
-
-// Log replica set configuration
-print("Replica set configuration:");
-printjson(rs.conf());
-print("Replica set status:");
-printjson(rs.status());

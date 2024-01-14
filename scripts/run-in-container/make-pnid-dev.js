@@ -26,7 +26,6 @@ async function runAsync() {
 }
 
 runAsync().then(() => {
-    console.log("Done updating PNID access levels.");
     process.exit(0);
 });
 
