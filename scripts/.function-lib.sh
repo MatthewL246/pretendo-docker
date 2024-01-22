@@ -41,7 +41,7 @@ header() {
 }
 
 stage() {
-    echo "${bold}${blue}=> ${underline}Stage ${stage}: ${*}${reset}"
+    header "Stage ${stage}: ${*}"
     stage=$((stage + 1))
 }
 
