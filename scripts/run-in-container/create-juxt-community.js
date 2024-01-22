@@ -1,5 +1,7 @@
 // This should be evaled in the juxtaposition-ui container
+require("module-alias/register");
 const mongoose = require("mongoose");
+const { connect } = require("./src/database");
 const { COMMUNITY } = require("./src/models/communities");
 const fs = require("fs").promises;
 const sharp = require("sharp");
@@ -36,21 +38,6 @@ async function runAsync() {
 runAsync().then(() => {
     process.exit(0);
 });
-
-async function connect() {
-    await mongoose.connect(process.env.JUXT_CONFIG_MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-    const connection = mongoose.connection;
-    connection.on("connected", function () {
-        logger.info(`MongoDB connected ${this.name}`);
-    });
-    connection.on("error", console.error.bind(console, "connection error:"));
-    connection.on("close", () => {
-        connection.removeAllListeners();
-    });
-}
 
 async function createMainCommunity(
     platform_id,
