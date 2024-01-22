@@ -14,8 +14,13 @@ fi
 docker compose up -d postgres
 
 while ! docker compose exec postgres psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -c "\l" >/dev/null 2>&1; do
-    echo "Waiting for PostgreSQL to start..."
-    sleep 1
+    info "Waiting for PostgreSQL to start..."
+    sleep 2
 done
 
-docker compose exec postgres psql -U "$POSTGRES_USER" -c "ALTER USER $POSTGRES_USER PASSWORD '$POSTGRES_PASSWORD';"
+# During the first run, this sometimes fails because the entrypoint script
+# restarts the server after running the initdb scripts
+while ! docker compose exec postgres psql -U "$POSTGRES_USER" -c "ALTER USER $POSTGRES_USER PASSWORD '$POSTGRES_PASSWORD';"; do
+    warning "Failed to change Postgres password, retrying..."
+    sleep 2
+done
