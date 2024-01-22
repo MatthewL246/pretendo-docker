@@ -36,8 +36,10 @@ check_prerequisites() {
         error "Docker Compose is not installed. Please install it: https://docs.docker.com/compose/install/"
         prerequisites_failed=true
     fi
-    if ! ftp -? >/dev/null; then
-        warning "FTP is not installed. You will not be able to upload files to your consoles automatically."
+    # The tnftp "enhanced ftp client" has the -u option for direct uploads,
+    # unlike the netkit-ftp "classical ftp client"
+    if ! command -v tnftp >/dev/null; then
+        warning "tnftp is not installed. You will not be able to upload files to your consoles automatically."
         prerequisites_warning=true
     fi
 
