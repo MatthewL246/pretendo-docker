@@ -21,18 +21,16 @@ jobs:
         run: echo "TERM=xterm" >> "$GITHUB_ENV"
 
       # Trying to expose ports in GitHub Actions causes a "bind: address already
-      # in use" error. Also, restarting containers should be disabled for
-      # testing whether any exit.
-      - name: Remove exposed ports configuration and disable container restart
-        run: |
-          yq eval 'del(.services.*.ports)' -i compose.yml
-          yq eval '.services.*.restart = "no"' -i compose.yml
-          # The databases seem to crash randomly sometimes in Actions
-          yq eval '.services.mongodb.restart = "unless-stopped"' -i compose.yml
-          yq eval '.services.postgres.restart = "unless-stopped"' -i compose.yml
+      # in use" error
+      - name: Remove exposed ports configuration
+        run: yq eval "del(.services.*.ports)" -i compose.yml
 
       - name: Run the setup script
         run: ./setup.sh
+
+      # Testing whether any containers exit requires disabling restarts
+      - name: Remove container restart configuration
+        run: yq eval "del(.services.*.restart)" -i compose.yml
 
       - name: Test starting the servers
         run: |
