@@ -22,6 +22,8 @@ check_git_repository() {
         echo "It looks like you are running it from a different Git repository at $(pwd) from $(git config --get remote.origin.url)."
         exit 1
     fi
+
+    git config --local submodule.recurse true
 }
 
 check_prerequisites() {
