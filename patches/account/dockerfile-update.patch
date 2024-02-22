@@ -1,8 +1,8 @@
 diff --git i/Dockerfile w/Dockerfile
-index a810a90..49d3fa5 100644
+index a810a90..39fa5ad 100644
 --- i/Dockerfile
 +++ w/Dockerfile
-@@ -1,16 +1,14 @@
+@@ -1,16 +1,13 @@
 -FROM node:18-alpine
 +FROM node:20-alpine
  
@@ -17,7 +17,6 @@ index a810a90..49d3fa5 100644
  
  COPY . ./
 +RUN npm run build
-+RUN node generate-keys.js nex datastore
  
 -VOLUME [ "/app/config.json", "/app/certs" ]
 +VOLUME [ "/app/certs" ]

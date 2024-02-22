@@ -50,6 +50,10 @@ fi
 account_aes_key=$(generate_hex 64)
 echo "PN_ACT_CONFIG_AES_KEY=$account_aes_key" >>./account.local.env
 
+# Generate a secret key for account server datastore signatures
+account_datastore_secret=$(generate_hex 32)
+echo "PN_ACT_CONFIG_DATASTORE_SIGNATURE_SECRET=$account_datastore_secret" >>./account.local.env
+
 # Generate master API keys for the account gRPC server
 # The Juxtaposition UI uses the same API key for both the account and API
 # servers, so both keys need to be the same

@@ -218,9 +218,6 @@ services:
       - type: bind
         source: ./logs/account/
         target: /app/logs/
-      - type: volume
-        source: account-certificates
-        target: /app/certs
     networks:
       internal:
     dns: 172.20.0.200
