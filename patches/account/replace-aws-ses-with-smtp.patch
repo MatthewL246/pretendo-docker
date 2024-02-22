@@ -1,0 +1,112 @@
+diff --git i/src/config-manager.ts w/src/config-manager.ts
+index 09a2220..7bad4ac 100644
+--- i/src/config-manager.ts
++++ w/src/config-manager.ts
+@@ -42,10 +42,12 @@ export const config: Config = {
+ 		}
+ 	},
+ 	email: {
+-		ses: {
+-			region: process.env.PN_ACT_CONFIG_EMAIL_SES_REGION || '',
+-			key: process.env.PN_ACT_CONFIG_EMAIL_SES_ACCESS_KEY || '',
+-			secret: process.env.PN_ACT_CONFIG_EMAIL_SES_SECRET_KEY || ''
++		host: process.env.PN_ACT_CONFIG_EMAIL_HOST || '',
++		port: Number(process.env.PN_ACT_CONFIG_EMAIL_PORT || ''),
++		secure: (process.env.PN_ACT_CONFIG_EMAIL_SECURE || '') === 'true',
++		auth: {
++			user: process.env.PN_ACT_CONFIG_EMAIL_USERNAME || '',
++			pass: process.env.PN_ACT_CONFIG_EMAIL_PASSWORD || ''
+ 		},
+ 		from: process.env.PN_ACT_CONFIG_EMAIL_FROM || ''
+ 	},
+@@ -101,18 +103,28 @@ if (!config.redis.client.url) {
+ 	disabledFeatures.redis = true;
+ }
+ 
+-if (!config.email.ses.region) {
+-	LOG_WARN('Failed to find AWS SES region. Disabling feature. To enable feature set the PN_ACT_CONFIG_EMAIL_SES_REGION environment variable');
++if (!config.email.host) {
++	LOG_WARN('Failed to find email SMTP host. Disabling feature. To enable feature set the PN_ACT_CONFIG_EMAIL_HOST environment variable');
+ 	disabledFeatures.email = true;
+ }
+ 
+-if (!config.email.ses.key) {
+-	LOG_WARN('Failed to find AWS SES access key. Disabling feature. To enable feature set the PN_ACT_CONFIG_EMAIL_SES_ACCESS_KEY environment variable');
++if (!config.email.port) {
++	LOG_WARN('Failed to find email SMTP port. Disabling feature. To enable feature set the PN_ACT_CONFIG_EMAIL_PORT environment variable');
+ 	disabledFeatures.email = true;
+ }
+ 
+-if (!config.email.ses.secret) {
+-	LOG_WARN('Failed to find AWS SES secret key. Disabling feature. To enable feature set the PN_ACT_CONFIG_EMAIL_SES_SECRET_KEY environment variable');
++if (config.email.secure === undefined) {
++	LOG_WARN('Failed to find email SMTP secure flag. Disabling feature. To enable feature set the PN_ACT_CONFIG_EMAIL_SECURE environment variable');
++	disabledFeatures.email = true;
++}
++
++if (!config.email.auth.user) {
++	LOG_WARN('Failed to find email account username. Disabling feature. To enable feature set the auth.user environment variable');
++	disabledFeatures.email = true;
++}
++
++if (!config.email.auth.pass) {
++	LOG_WARN('Failed to find email account password. Disabling feature. To enable feature set the PN_ACT_CONFIG_EMAIL_PASSWORD environment variable');
+ 	disabledFeatures.email = true;
+ }
+ 
+diff --git i/src/mailer.ts w/src/mailer.ts
+index ea9a1cd..230d412 100644
+--- i/src/mailer.ts
++++ w/src/mailer.ts
+@@ -1,7 +1,6 @@
+ import path from 'node:path';
+ import fs from 'node:fs';
+ import nodemailer from 'nodemailer';
+-import * as aws from '@aws-sdk/client-ses';
+ import { config, disabledFeatures } from '@/config-manager';
+ import { MailerOptions } from '@/types/common/mailer-options';
+ 
+@@ -11,21 +10,7 @@ const confirmationEmailTemplate: string = fs.readFileSync(path.join(__dirname, '
+ let transporter: nodemailer.Transporter;
+ 
+ if (!disabledFeatures.email) {
+-	const ses = new aws.SES({
+-		apiVersion: '2010-12-01',
+-		region: config.email.ses.region,
+-		credentials: {
+-			accessKeyId: config.email.ses.key,
+-			secretAccessKey: config.email.ses.secret
+-		}
+-	});
+-
+-	transporter = transporter = nodemailer.createTransport({
+-		SES: {
+-			ses,
+-			aws
+-		}
+-	});
++	transporter = nodemailer.createTransport(config.email);
+ }
+ 
+ export async function sendMail(options: MailerOptions): Promise<void> {
+diff --git i/src/types/common/config.ts w/src/types/common/config.ts
+index 9c11436..ce328d9 100644
+--- i/src/types/common/config.ts
++++ w/src/types/common/config.ts
+@@ -14,10 +14,12 @@ export interface Config {
+ 		}
+ 	};
+ 	email: {
+-		ses: {
+-			region: string;
+-			key: string;
+-			secret: string;
++		host: string;
++		port: number;
++		secure: boolean;
++		auth: {
++			user: string;
++			pass: string;
+ 		};
+ 		from: string;
+ 	};

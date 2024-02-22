@@ -1,16 +1,16 @@
 diff --git i/package-lock.json w/package-lock.json
-index a906e87..aad1505 100644
+index bd4447e..c53bda4 100644
 --- i/package-lock.json
 +++ w/package-lock.json
-@@ -10,6 +10,7 @@
- 			"license": "ISC",
+@@ -11,6 +11,7 @@
  			"dependencies": {
+ 				"@aws-sdk/client-ses": "^3.515.0",
  				"@discordjs/rest": "^0.5.0",
 +				"adm-zip": "^0.5.9",
  				"browserify": "^17.0.0",
  				"colors": "^1.4.0",
  				"cookie-parser": "^1.4.5",
-@@ -28,7 +29,8 @@
+@@ -29,7 +30,8 @@
  				"mongoose": "^6.4.0",
  				"morgan": "^1.10.0",
  				"nodemailer": "^6.7.5",
@@ -20,7 +20,7 @@ index a906e87..aad1505 100644
  			},
  			"devDependencies": {
  				"eslint": "^7.32.0"
-@@ -1623,6 +1625,14 @@
+@@ -2094,6 +2096,14 @@
  				"node": ">=0.4.0"
  			}
  		},
@@ -35,7 +35,7 @@ index a906e87..aad1505 100644
  		"node_modules/ajv": {
  			"version": "6.12.6",
  			"resolved": "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz",
-@@ -7193,6 +7203,11 @@
+@@ -8049,6 +8059,11 @@
  			"resolved": "https://registry.npmjs.org/acorn-walk/-/acorn-walk-7.2.0.tgz",
  			"integrity": "sha512-OPdCF6GsMIP+Az+aWfAAOEt2/+iVDKE7oy6lJ098aoe59oAmK76qV6Gw60SbZ8jHuG2wH058GF4pLFbYamYrVA=="
  		},
@@ -48,18 +48,18 @@ index a906e87..aad1505 100644
  			"version": "6.12.6",
  			"resolved": "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz",
 diff --git i/package.json w/package.json
-index 7ec0e51..e85b107 100644
+index 6554906..17a84ae 100644
 --- i/package.json
 +++ w/package.json
-@@ -23,6 +23,7 @@
- 	"homepage": "https://github.com/PretendoNetwork/website#readme",
+@@ -24,6 +24,7 @@
  	"dependencies": {
+ 		"@aws-sdk/client-ses": "^3.515.0",
  		"@discordjs/rest": "^0.5.0",
 +		"adm-zip": "^0.5.9",
  		"browserify": "^17.0.0",
  		"colors": "^1.4.0",
  		"cookie-parser": "^1.4.5",
-@@ -41,7 +42,8 @@
+@@ -42,7 +43,8 @@
  		"mongoose": "^6.4.0",
  		"morgan": "^1.10.0",
  		"nodemailer": "^6.7.5",
