@@ -7,7 +7,7 @@ while ! mc alias set minio http://minio:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PAS
     sleep 1
 done
 
-buckets="pn-cdn pn-boss"
+buckets="pn-cdn pn-boss super-mario-maker"
 
 # Create buckets and allow public access
 for bucket in $buckets; do

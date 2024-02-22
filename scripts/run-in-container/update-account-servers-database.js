@@ -62,6 +62,15 @@ async function runAsync() {
         // Wii U Chat server doesn't seem to care about the AES key
         "0".repeat(64)
     );
+    await createNexServer(
+        "Super Mario Maker",
+        "1018DB00",
+        ["000500001018DB00", "000500001018DC00", "000500001018DD00"],
+        process.env.SERVER_IP,
+        process.env.SMM_PORT,
+        1,
+        "0".repeat(64)
+    );
 
     await mongoose.connection.close();
 }
@@ -75,24 +84,10 @@ async function resetServers() {
     await Server.deleteMany({});
 }
 
-async function createNexServer(
-    service_name,
-    game_server_id,
-    title_ids,
-    ip,
-    port,
-    device,
-    aes_key
-) {
+async function createNexServer(service_name, game_server_id, title_ids, ip, port, device, aes_key) {
     for (const arg of arguments) {
         if (!arg && arg !== 0 && arg !== false) {
-            throw new Error(
-                `Missing argument in new NEX server:\n${JSON.stringify(
-                    arguments,
-                    null,
-                    2
-                )}`
-            );
+            throw new Error(`Missing argument in new NEX server:\n${JSON.stringify(arguments, null, 2)}`);
         }
     }
 
@@ -116,22 +111,10 @@ async function createNexServer(
     }
 }
 
-async function createServiceServer(
-    service_name,
-    client_id,
-    title_ids,
-    device,
-    aes_key
-) {
+async function createServiceServer(service_name, client_id, title_ids, device, aes_key) {
     for (const arg of arguments) {
         if (!arg && arg !== 0 && arg !== false) {
-            throw new Error(
-                `Missing argument in new service server:\n${JSON.stringify(
-                    arguments,
-                    null,
-                    2
-                )}`
-            );
+            throw new Error(`Missing argument in new service server:\n${JSON.stringify(arguments, null, 2)}`);
         }
     }
 

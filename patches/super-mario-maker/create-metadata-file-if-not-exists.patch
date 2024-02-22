@@ -1,0 +1,33 @@
+diff --git i/database/init_postgres.go w/database/init_postgres.go
+index c211c98..3aaffcf 100644
+--- i/database/init_postgres.go
++++ w/database/init_postgres.go
+@@ -1,11 +1,14 @@
+ package database
+ 
+ import (
++	"context"
+ 	"os"
++	"strings"
+ 	"time"
+ 
+ 	"github.com/PretendoNetwork/super-mario-maker-secure/globals"
+ 	"github.com/lib/pq"
++	"github.com/minio/minio-go/v7"
+ )
+ 
+ func initPostgres() {
+@@ -162,8 +165,11 @@ func ensureEventCourseMetaDataFileExists() {
+ 
+ 	objectSizeS3, err := globals.S3ObjectSize(bucket, key)
+ 	if err != nil {
+-		globals.Logger.Errorf("Failed to stat event course metadata file. Ensure your S3 credentials are correct and the 900000.bin file is uploaded to your bucket. S3 error: %s", err.Error())
+-		os.Exit(0)
++		_, err = globals.MinIOClient.PutObject(context.TODO(), bucket, key, strings.NewReader(""), 0, minio.PutObjectOptions{ContentType: "application/octet-stream"})
++		if err != nil {
++			globals.Logger.Errorf("Failed to stat event course metadata file. Ensure your S3 credentials are correct and the 900000.bin file is uploaded to your bucket. S3 error: %s", err.Error())
++			os.Exit(0)
++		}
+ 	}
+ 
+ 	globals.Logger.Success("Event course metadata file found. Verifying database")

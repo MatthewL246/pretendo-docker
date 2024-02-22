@@ -375,6 +375,30 @@ services:
       - ./environment/wiiu-chat.env
       - ./environment/wiiu-chat.local.env
 
+  # WIP: Does not work yet
+  super-mario-maker:
+    build: ./repos/super-mario-maker
+    depends_on:
+      - account
+      - minio
+      - postgres
+    restart: unless-stopped
+    ports:
+      # Authentication server
+      - 6004:6004/udp
+      # Secure server
+      - 6005:6005/udp
+    volumes:
+      - type: bind
+        source: ./logs/super-mario-maker/
+        target: /app/log/
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/super-mario-maker.env
+      - ./environment/super-mario-maker.local.env
+
 volumes:
   mitmproxy-pretendo-data:
   mongodb-database:

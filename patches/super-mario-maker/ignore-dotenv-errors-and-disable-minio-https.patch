@@ -1,0 +1,22 @@
+diff --git i/init.go w/init.go
+index 07cd1aa..9209ef6 100644
+--- i/init.go
++++ w/init.go
+@@ -23,7 +23,7 @@ func init() {
+ 
+ 	err = godotenv.Load()
+ 	if err != nil {
+-		log.Fatal("Error loading .env file")
++		log.Println("Error loading .env file")
+ 	}
+ 
+ 	s3Endpoint := os.Getenv("PN_SMM_CONFIG_S3_ENDPOINT")
+@@ -118,7 +118,7 @@ func init() {
+ 
+ 	minIOClient, err := minio.New(s3Endpoint, &minio.Options{
+ 		Creds:  staticCredentials,
+-		Secure: true,
++		Secure: false,
+ 	})
+ 	if err != nil {
+ 		panic(err)
