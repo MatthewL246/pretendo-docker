@@ -218,6 +218,10 @@ services:
       - type: bind
         source: ./logs/account/
         target: /app/logs/
+    develop:
+      watch:
+        - action: rebuild
+          path: ./repos/account
     networks:
       internal:
     dns: 172.20.0.200
@@ -242,6 +246,10 @@ services:
         source: ./config/website-config.json
         target: /app/config.json
         read_only: true
+    develop:
+      watch:
+        - action: rebuild
+          path: ./repos/website
     networks:
       internal:
     dns: 172.20.0.200
@@ -263,6 +271,10 @@ services:
       - type: bind
         source: ./logs/friends/
         target: /build/log/
+    develop:
+      watch:
+        - action: rebuild
+          path: ./repos/friends
     networks:
       internal:
     dns: 172.20.0.200
@@ -284,6 +296,10 @@ services:
       - type: bind
         source: ./logs/miiverse-api/
         target: /app/logs/
+    develop:
+      watch:
+        - action: rebuild
+          path: ./repos/miiverse-api
     networks:
       internal:
     dns: 172.20.0.200
@@ -309,6 +325,10 @@ services:
         source: ./config/juxtaposition-config.js
         target: /app/config.js
         read_only: true
+    develop:
+      watch:
+        - action: rebuild
+          path: ./repos/juxtaposition-ui
     networks:
       internal:
     dns: 172.20.0.200
@@ -329,6 +349,10 @@ services:
       - type: bind
         source: ./logs/boss/
         target: /app/logs/
+    develop:
+      watch:
+        - action: rebuild
+          path: ./repos/boss
     networks:
       internal:
     dns: 172.20.0.200
@@ -351,6 +375,10 @@ services:
       - type: bind
         source: ./logs/wiiu-chat-authentication/
         target: /app/log/
+    develop:
+      watch:
+        - action: rebuild
+          path: ./repos/wiiu-chat-authentication
     networks:
       internal:
     dns: 172.20.0.200
@@ -374,6 +402,10 @@ services:
       - type: bind
         source: ./logs/wiiu-chat-secure/
         target: /app/log/
+    develop:
+      watch:
+        - action: rebuild
+          path: ./repos/wiiu-chat-secure
     networks:
       internal:
     dns: 172.20.0.200
@@ -400,6 +432,10 @@ services:
       - type: bind
         source: ./logs/super-mario-maker/
         target: /app/log/
+    develop:
+      watch:
+        - action: rebuild
+          path: ./repos/super-mario-maker
     networks:
       internal:
     dns: 172.20.0.200
