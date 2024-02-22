@@ -56,3 +56,9 @@ path = repos/BOSS
 url = https://github.com/PretendoNetwork/BOSS
 branch = master
 ignore = dirty
+
+[submodule "repos/super-mario-maker"]
+path = repos/super-mario-maker
+url = https://github.com/PretendoNetwork/super-mario-maker.git
+branch = master
+ignore = dirty
