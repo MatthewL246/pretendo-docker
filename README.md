@@ -165,10 +165,17 @@ Docker.
 ### Cemu
 
 1. Follow the [official Pretendo Network guide](https://pretendo.network/docs/install/cemu).
-   - This currently requires using a real Wii U console with your selfhosted PNID signed in. It may be possible to patch
-     out the legitimate device checks from the account server, but this is not currently a priority.
-   - Use Dumpling to dump the online files for your selfhosted PNID from your Wii U. If you are using multiple accounts,
-     make sure to disable the "Merge Account To Default Cemu User" setting.
+   - If you have a real Wii U console: Use Dumpling to dump the online files for your selfhosted PNID from your Wii U.
+     If you are using multiple accounts, make sure to disable the "Merge Account To Default Cemu User" setting.
+   - If you don't have a Wii U:
+     1. Visit [the account settings page](https://pretendo.network/account) in your proxied browser and click the
+        "Download account files" button. **Note:** This button will only show up on your server. This feature was
+        purposefully disabled on the Pretendo official servers due to abuse. In your selfhosted server, the checks that
+        block invalid OTP and seeprom dumps have been patched out.
+     2. Copy `otp.bin`, `seeprom.bin`, and `mlc01` to your Cemu directory.
+     3. Continue with the official guide to enable online mode with Pretendo.
+     4. You will notice that Cemu is missing certificates needed to use the online mode. You will need to find these
+        certificates (and the files for the Friend List) somewhere else.
 2. Use Dumpling to dump your system applications. Make sure to at least dump the Friend List applet, but you might as
    well dump them all.
    - Note: You can run the Miiverse applet by manually dumping it from your Wii U with FTPiiU (as it is not currently
