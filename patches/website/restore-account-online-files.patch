@@ -1,0 +1,220 @@
+diff --git i/package-lock.json w/package-lock.json
+index a906e87..aad1505 100644
+--- i/package-lock.json
++++ w/package-lock.json
+@@ -10,6 +10,7 @@
+ 			"license": "ISC",
+ 			"dependencies": {
+ 				"@discordjs/rest": "^0.5.0",
++				"adm-zip": "^0.5.9",
+ 				"browserify": "^17.0.0",
+ 				"colors": "^1.4.0",
+ 				"cookie-parser": "^1.4.5",
+@@ -28,7 +29,8 @@
+ 				"mongoose": "^6.4.0",
+ 				"morgan": "^1.10.0",
+ 				"nodemailer": "^6.7.5",
+-				"stripe": "^9.9.0"
++				"stripe": "^9.9.0",
++				"uuid": "^8.3.2"
+ 			},
+ 			"devDependencies": {
+ 				"eslint": "^7.32.0"
+@@ -1623,6 +1625,14 @@
+ 				"node": ">=0.4.0"
+ 			}
+ 		},
++		"node_modules/adm-zip": {
++			"version": "0.5.9",
++			"resolved": "https://registry.npmjs.org/adm-zip/-/adm-zip-0.5.9.tgz",
++			"integrity": "sha512-s+3fXLkeeLjZ2kLjCBwQufpI5fuN+kIGBxu6530nVQZGVol0d7Y/M88/xw9HGGUcJjKf8LutN3VPRUBq6N7Ajg==",
++			"engines": {
++				"node": ">=6.0"
++			}
++		},
+ 		"node_modules/ajv": {
+ 			"version": "6.12.6",
+ 			"resolved": "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz",
+@@ -7193,6 +7203,11 @@
+ 			"resolved": "https://registry.npmjs.org/acorn-walk/-/acorn-walk-7.2.0.tgz",
+ 			"integrity": "sha512-OPdCF6GsMIP+Az+aWfAAOEt2/+iVDKE7oy6lJ098aoe59oAmK76qV6Gw60SbZ8jHuG2wH058GF4pLFbYamYrVA=="
+ 		},
++		"adm-zip": {
++			"version": "0.5.9",
++			"resolved": "https://registry.npmjs.org/adm-zip/-/adm-zip-0.5.9.tgz",
++			"integrity": "sha512-s+3fXLkeeLjZ2kLjCBwQufpI5fuN+kIGBxu6530nVQZGVol0d7Y/M88/xw9HGGUcJjKf8LutN3VPRUBq6N7Ajg=="
++		},
+ 		"ajv": {
+ 			"version": "6.12.6",
+ 			"resolved": "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz",
+diff --git i/package.json w/package.json
+index 7ec0e51..e85b107 100644
+--- i/package.json
++++ w/package.json
+@@ -23,6 +23,7 @@
+ 	"homepage": "https://github.com/PretendoNetwork/website#readme",
+ 	"dependencies": {
+ 		"@discordjs/rest": "^0.5.0",
++		"adm-zip": "^0.5.9",
+ 		"browserify": "^17.0.0",
+ 		"colors": "^1.4.0",
+ 		"cookie-parser": "^1.4.5",
+@@ -41,7 +42,8 @@
+ 		"mongoose": "^6.4.0",
+ 		"morgan": "^1.10.0",
+ 		"nodemailer": "^6.7.5",
+-		"stripe": "^9.9.0"
++		"stripe": "^9.9.0",
++		"uuid": "^8.3.2"
+ 	},
+ 	"devDependencies": {
+ 		"eslint": "^7.32.0"
+diff --git i/public/assets/js/account.js w/public/assets/js/account.js
+index 6c8e360..aff9c4f 100644
+--- i/public/assets/js/account.js
++++ w/public/assets/js/account.js
+@@ -1,8 +1,47 @@
++const onlineFilesModal = document.querySelector('.modal-wrapper#onlinefiles');
++const onlineFilesModalButtonConfirm = document.getElementById('onlineFilesConfirmButton');
++const onlineFilesModalButtonClose = document.getElementById('onlineFilesCloseButton');
++const onlineFilesModalPasswordInput = document.getElementById('password');
++
+ const updateServerEnvironmentForm = document.querySelector('form.server-selection');
+ const serverSelectionSaveButton = document.querySelector('#save-server-selection');
+ const editSettingsModal = document.querySelector('.modal-wrapper#edit-settings');
+ const editSettingsModalButtonClose = document.getElementById('editSettingsCloseButton');
+ 
++document.getElementById('download-cemu-files')?.addEventListener('click', event => {
++	event.preventDefault();
++
++	onlineFilesModal.classList.remove('hidden');
++});
++
++onlineFilesModalButtonConfirm?.addEventListener('click', () => {
++	fetch('/account/online-files', {
++		method: 'POST',
++		headers: {
++			'Accept': 'application/json',
++			'Content-Type': 'application/json'
++		},
++		body: JSON.stringify({
++			password: onlineFilesModalPasswordInput.value
++		})
++	})
++		.then(response => response.blob())
++		.then(blob => URL.createObjectURL(blob))
++		.then(blobUrl => {
++			const a = document.createElement('a');
++			a.href = blobUrl;
++			a.setAttribute('download', 'Cemu Pretendo Online Files.zip');
++			a.click();
++
++			onlineFilesModal.classList.add('hidden');
++		})
++		.catch(console.log);
++});
++
++onlineFilesModalButtonClose?.addEventListener('click', () => {
++	onlineFilesModal.classList.add('hidden');
++});
++
+ editSettingsModalButtonClose?.addEventListener('click', () => {
+ 	editSettingsModal.classList.add('hidden');
+ });
+diff --git i/src/routes/account.js w/src/routes/account.js
+index 1f398b0..5da8def 100644
+--- i/src/routes/account.js
++++ w/src/routes/account.js
+@@ -1,6 +1,8 @@
+ const express = require('express');
+ const crypto = require('crypto');
+ const DiscordOauth2 = require('discord-oauth2');
++const { v4: uuidv4 } = require('uuid');
++const AdmZip = require('adm-zip');
+ const Stripe = require('stripe');
+ const { REST: DiscordRest } = require('@discordjs/rest');
+ const { Routes: DiscordRoutes } = require('discord-api-types/v10');
+@@ -241,6 +243,47 @@ router.get('/remove/discord', requireLoginMiddleware, async (request, response)
+ 	}
+ });
+ 
++router.post('/online-files', requireLoginMiddleware, async (request, response) => {
++	const { account } = request;
++	const { password } = request.body;
++
++	const hashedPassword = util.nintendoPasswordHash(password, account.pid);
++
++	const miiNameBuffer = Buffer.alloc(0x16);
++	const miiName = Buffer.from(account.mii.name, 'utf16le').swap16();
++	miiName.copy(miiNameBuffer);
++
++	let accountDat = 'AccountInstance_00000000\n';
++	accountDat += 'PersistentId=80000001\n';
++	accountDat += 'TransferableIdBase=0\n';
++	accountDat += `Uuid=${uuidv4().replace(/-/g, '')}\n`;
++	accountDat += `MiiData=${Buffer.from(account.mii.data, 'base64').toString('hex')}\n`;
++	accountDat += `MiiName=${miiNameBuffer.toString('hex')}\n`;
++	accountDat += `AccountId=${account.username}\n`;
++	accountDat += 'BirthYear=0\n';
++	accountDat += 'BirthMonth=0\n';
++	accountDat += 'BirthDay=0\n';
++	accountDat += 'Gender=0\n';
++	accountDat += `EmailAddress=${account.email.address}\n`;
++	accountDat += 'Country=0\n';
++	accountDat += 'SimpleAddressId=0\n';
++	accountDat += `PrincipalId=${account.pid.toString(16)}\n`;
++	accountDat += 'IsPasswordCacheEnabled=1\n';
++	accountDat += `AccountPasswordCache=${hashedPassword}`;
++
++	const onlineFiles = new AdmZip();
++
++	onlineFiles.addFile('mlc01/usr/save/system/act/80000001/account.dat', Buffer.from(accountDat)); // Minimal account.dat
++	onlineFiles.addFile('otp.bin', Buffer.alloc(0x400)); // nulled OTP
++	onlineFiles.addFile('seeprom.bin', Buffer.alloc(0x200)); // nulled SEEPROM
++
++	response.status(200);
++	response.set('Content-Disposition', 'attachment; filename="Cemu Pretendo Online Files.zip');
++	response.set('Content-Type', 'application/zip');
++
++	response.end(onlineFiles.toBuffer());
++});
++
+ router.get('/miieditor', requireLoginMiddleware, async (request, response) => {
+ 	const { account } = request;
+ 
+diff --git i/views/account/account.handlebars w/views/account/account.handlebars
+index 24f07e2..65586f9 100644
+--- i/views/account/account.handlebars
++++ w/views/account/account.handlebars
+@@ -25,6 +25,12 @@
+ 				{{/if}}
+ 			</div>
+ 			<div class="buttons">
++				<a class="button secondary" id="download-cemu-files" href="/account/online-files" download>
++					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
++					<p class="caption">{{ locale.account.settings.downloadFiles }}</p>
++					<p class="cemu-warning">{{ locale.account.settings.downloadFilesDescription }}</p>
++				</a>
++
+ 				<a class="button secondary" id="account-upgrade" href="/account/upgrade">
+ 					<p class="caption">{{ locale.account.settings.upgrade }}</p>
+ 				</a>
+@@ -188,6 +194,18 @@
+ </div>
+ {{/if}}
+ 
++<div class="modal-wrapper hidden" id="onlinefiles">
++	<div class="modal">
++		<h1 class="title dot">{{ locale.account.settings.settingCards.password }}</h1>
++		<p class="modal-caption">{{ locale.account.settings.settingCards.passwordPrompt }}</p>
++		<input name="password" id="password" type="password" required />
++		<div class="modal-button-wrapper">
++			<button class="button cancel" id="onlineFilesCloseButton">{{ locale.modals.cancel }}</button>
++			<button class="button primary confirm" id="onlineFilesConfirmButton">{{ locale.modals.confirm }}</button>
++		</div>
++	</div>
++</div>
++
+ <div class="modal-wrapper hidden" id="edit-settings">
+ 	<div class="modal">
+ 		<h1 class="title dot">{{ locale.account.settings.unavailable }}</h1>

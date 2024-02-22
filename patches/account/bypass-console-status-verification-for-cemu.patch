@@ -1,0 +1,23 @@
+diff --git i/src/middleware/console-status-verification.ts w/src/middleware/console-status-verification.ts
+index cb1b7d3..3e4fa05 100644
+--- i/src/middleware/console-status-verification.ts
++++ w/src/middleware/console-status-verification.ts
+@@ -6,6 +6,18 @@ import { getValueFromHeaders } from '@/util';
+ import { HydratedDeviceDocument } from '@/types/mongoose/device';
+ 
+ async function consoleStatusVerificationMiddleware(request: express.Request, response: express.Response, next: express.NextFunction): Promise<void> {
++	if (
++		request.certificate &&
++		request.certificate.consoleType === '3ds' &&
++		!request.certificate.valid &&
++		request.certificate.certificateName === 'NG00000000' &&
++		getValueFromHeaders(request.headers, 'x-nintendo-device-id') === '0' &&
++		!getValueFromHeaders(request.headers, 'x-nintendo-serial-number')
++	) {
++		// This is a request from Cemu using the fake online files
++		return next();
++	}
++
+ 	if (!request.certificate || !request.certificate.valid) {
+ 		response.status(400).send(xmlbuilder.create({
+ 			error: {
