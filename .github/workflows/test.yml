@@ -20,8 +20,7 @@ jobs:
       - name: Set TERM environment variable
         run: echo "TERM=xterm" >> "$GITHUB_ENV"
 
-      # Trying to expose ports in GitHub Actions causes a "bind: address already
-      # in use" error
+      # Trying to expose ports in GitHub Actions causes a "bind: address already in use" error
       - name: Remove exposed ports configuration
         run: yq eval "del(.services.*.ports)" -i compose.yml
 
