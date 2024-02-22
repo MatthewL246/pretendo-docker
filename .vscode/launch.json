@@ -58,7 +58,7 @@
             "request": "attach",
             "name": "Debug friends",
             "mode": "remote",
-            "remotePath": "${workspaceFolder}/repos/friends",
+            "debugAdapter": "legacy",
             "port": 2345,
             "host": "127.0.0.1"
         },
@@ -67,7 +67,7 @@
             "request": "attach",
             "name": "Debug wiiu-chat-authentication",
             "mode": "remote",
-            "remotePath": "${workspaceFolder}/repos/wiiu-chat-authentication",
+            "debugAdapter": "legacy",
             "port": 2346,
             "host": "127.0.0.1"
         },
@@ -76,7 +76,7 @@
             "request": "attach",
             "name": "Debug wiiu-chat-secure",
             "mode": "remote",
-            "remotePath": "${workspaceFolder}/repos/wiiu-chat-secure",
+            "debugAdapter": "legacy",
             "port": 2347,
             "host": "127.0.0.1"
         },
@@ -85,7 +85,7 @@
             "request": "attach",
             "name": "Debug super-mario-maker",
             "mode": "remote",
-            "remotePath": "${workspaceFolder}/repos/super-mario-maker",
+            "debugAdapter": "legacy",
             "port": 2348,
             "host": "127.0.0.1"
         }
