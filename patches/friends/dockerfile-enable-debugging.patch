@@ -1,0 +1,28 @@
+diff --git i/Dockerfile w/Dockerfile
+index dcd440c..6860725 100644
+--- i/Dockerfile
++++ w/Dockerfile
+@@ -4,16 +4,19 @@ LABEL stage=builder
+ RUN apk add git
+ WORKDIR /build
+ 
++RUN go install github.com/go-delve/delve/cmd/dlv@latest
++
+ COPY go.* ./
+ RUN go mod download
+ 
+ COPY . ./
+ ARG BUILD_STRING=pretendo.friends.docker
+-RUN go build -ldflags "-X 'main.serverBuildString=${BUILD_STRING}'" -v -o server
++RUN go build -gcflags "all=-N -l" -ldflags "-X 'main.serverBuildString=${BUILD_STRING}'" -v -o server
+ 
+ # --- runner ---
+ FROM alpine:3.17 as runner
+-WORKDIR /build
++WORKDIR /app
+ 
+-COPY --from=builder /build/server /build/
+-CMD ["/build/server"]
++COPY --from=builder /build/server /app/server
++COPY --from=builder /go/bin/dlv /app/
++CMD ["/app/dlv", "exec", "/app/server", "--listen=:2345", "--headless", "--api-version=2", "--log", "--accept-multiclient", "--continue"]

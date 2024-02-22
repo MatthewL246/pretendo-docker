@@ -188,7 +188,7 @@ services:
       - postgres
     restart: unless-stopped
     ports:
-      # For the Adminer web interface
+      # Adminer web interface
       - 127.0.0.1:8085:8080
     volumes:
       - type: bind
@@ -212,7 +212,7 @@ services:
       - maildev
     restart: unless-stopped
     ports:
-      # For the Node.js debugger
+      # Node.js debugger
       - 127.0.0.1:9229:9229
     volumes:
       - type: bind
@@ -232,7 +232,7 @@ services:
       - mongodb
     restart: unless-stopped
     ports:
-      # For the Node.js debugger
+      # Node.js debugger
       - 127.0.0.1:9230:9230
     volumes:
       - type: bind
@@ -253,6 +253,8 @@ services:
       - postgres
     restart: unless-stopped
     ports:
+      # Go delve debugger
+      - 127.0.0.1:2345:2345
       # Authentication server
       - 6000:6000/udp
       # Secure server
@@ -276,7 +278,7 @@ services:
       - friends
     restart: unless-stopped
     ports:
-      # For the Node.js debugger
+      # Node.js debugger
       - 127.0.0.1:9231:9231
     volumes:
       - type: bind
@@ -297,7 +299,7 @@ services:
       - friends
     restart: unless-stopped
     ports:
-      # For the Node.js debugger
+      # Node.js debugger
       - 127.0.0.1:9232:9232
     volumes:
       - type: bind
@@ -321,7 +323,7 @@ services:
       - mongodb
     restart: unless-stopped
     ports:
-      # For the Node.js debugger
+      # Node.js debugger
       - 127.0.0.1:9233:9233
     volumes:
       - type: bind
@@ -341,6 +343,8 @@ services:
       - mongodb
     restart: unless-stopped
     ports:
+      # Go delve debugger
+      - 127.0.0.1:2346:2346
       # Authentication server
       - 6002:6002/udp
     volumes:
@@ -362,6 +366,8 @@ services:
       - wiiu-chat-authentication
     restart: unless-stopped
     ports:
+      # Go delve debugger
+      - 127.0.0.1:2347:2347
       # Secure server
       - 6003:6003/udp
     volumes:
@@ -384,6 +390,8 @@ services:
       - postgres
     restart: unless-stopped
     ports:
+      # Go delve debugger
+      - 127.0.0.1:2348:2348
       # Authentication server
       - 6004:6004/udp
       # Secure server

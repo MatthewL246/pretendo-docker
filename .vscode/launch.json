@@ -10,10 +10,7 @@
             "localRoot": "${workspaceFolder}/repos/account",
             "sourceMaps": true,
             // We need this because of the TypeScript compilation
-            "resolveSourceMapLocations": [
-                "${workspaceFolder}/repos/account/dist/**",
-                "!**/node_modules/**"
-            ],
+            "resolveSourceMapLocations": ["${workspaceFolder}/repos/account/dist/**", "!**/node_modules/**"],
             "port": 9229
         },
         {
@@ -33,10 +30,7 @@
             "remoteRoot": "/app",
             "localRoot": "${workspaceFolder}/repos/miiverse-api",
             "sourceMaps": true,
-            "resolveSourceMapLocations": [
-                "${workspaceFolder}/repos/miiverse-api/dist/**",
-                "!**/node_modules/**"
-            ],
+            "resolveSourceMapLocations": ["${workspaceFolder}/repos/miiverse-api/dist/**", "!**/node_modules/**"],
             "port": 9231
         },
         {
@@ -56,11 +50,44 @@
             "remoteRoot": "/app",
             "localRoot": "${workspaceFolder}/repos/BOSS",
             "sourceMaps": true,
-            "resolveSourceMapLocations": [
-                "${workspaceFolder}/repos/BOSS/dist/**",
-                "!**/node_modules/**"
-            ],
+            "resolveSourceMapLocations": ["${workspaceFolder}/repos/BOSS/dist/**", "!**/node_modules/**"],
             "port": 9233
+        },
+        {
+            "type": "go",
+            "request": "attach",
+            "name": "Debug friends",
+            "mode": "remote",
+            "remotePath": "${workspaceFolder}/repos/friends",
+            "port": 2345,
+            "host": "127.0.0.1"
+        },
+        {
+            "type": "go",
+            "request": "attach",
+            "name": "Debug wiiu-chat-authentication",
+            "mode": "remote",
+            "remotePath": "${workspaceFolder}/repos/wiiu-chat-authentication",
+            "port": 2346,
+            "host": "127.0.0.1"
+        },
+        {
+            "type": "go",
+            "request": "attach",
+            "name": "Debug wiiu-chat-secure",
+            "mode": "remote",
+            "remotePath": "${workspaceFolder}/repos/wiiu-chat-secure",
+            "port": 2347,
+            "host": "127.0.0.1"
+        },
+        {
+            "type": "go",
+            "request": "attach",
+            "name": "Debug super-mario-maker",
+            "mode": "remote",
+            "remotePath": "${workspaceFolder}/repos/super-mario-maker",
+            "port": 2348,
+            "host": "127.0.0.1"
         }
     ]
 }

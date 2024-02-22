@@ -1,11 +1,13 @@
 diff --git c/Dockerfile i/Dockerfile
 new file mode 100644
-index 0000000..842a502
+index 0000000..06fff25
 --- /dev/null
 +++ i/Dockerfile
-@@ -0,0 +1,19 @@
+@@ -0,0 +1,22 @@
 +FROM golang:alpine AS builder
 +WORKDIR /build
++
++RUN go install github.com/go-delve/delve/cmd/dlv@latest
 +
 +RUN apk add git
 +RUN git clone --depth 1 --branch v1.0.22 https://github.com/PretendoNetwork/nex-protocols-common-go
@@ -16,10 +18,11 @@ index 0000000..842a502
 +RUN go mod download
 +
 +COPY . ./
-+RUN go build -v -o server
++RUN go build -gcflags "all=-N -l" -v -o server
 +
 +FROM alpine:latest AS runner
 +WORKDIR /app
 +
 +COPY --from=builder /build/server /app/server
-+CMD ["/app/server"]
++COPY --from=builder /go/bin/dlv /app/
++CMD ["/app/dlv", "exec", "/app/server", "--listen=:2347", "--headless", "--api-version=2", "--log", "--accept-multiclient", "--continue"]
