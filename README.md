@@ -304,6 +304,7 @@ to authenticate with the servers.
 | [juxtaposition-ui](https://github.com/PretendoNetwork/juxtaposition-ui)                                                                                      | The Miiverse applet GUI, as well as the Juxt web interface.                                                                                                                        |
 | Wii U Chat ([authentication](https://github.com/PretendoNetwork/wiiu-chat-authentication) and [secure](https://github.com/PretendoNetwork/wiiu-chat-secure)) | Server for the Wii U Chat app. This is currently untested because I only have 1 Wii U (and it does not seem to work on Cemu).                                                      |
 | [BOSS](https://github.com/PretendoNetwork/BOSS)                                                                                                              | Server for BOSS (SpotPass) content. I do not yet understand how to create new BOSS content, so it currently just serves some premade content.                                      |
+| [Super Mario Maker](https://github.com/PretendoNetwork/super-mario-maker)                                                                                    | Server for Super Mario Maker online features.                                                                                                                                      |
 
 #### Planned servers
 
@@ -312,7 +313,6 @@ These are some other servers (mostly for individual games) that I want to set up
 - [Mario Kart 7](https://github.com/PretendoNetwork/mario-kart-7)
 - Mario Kart 8 ([authentication](https://github.com/PretendoNetwork/mario-kart-8-authentication) and
   [secure](https://github.com/PretendoNetwork/mario-kart-8-secure))
-- [Super Mario Maker](https://github.com/PretendoNetwork/super-mario-maker)
 - [Pokkén Tournament](https://github.com/PretendoNetwork/pokken-tournament)
 - A bunch more of the individual game servers.
 - [Grove](https://github.com/PretendoNetwork/Grove) (Interesting but not particularly useful in its current state.)
@@ -320,9 +320,7 @@ These are some other servers (mostly for individual games) that I want to set up
 
 ## Learn more
 
-- Each of the main subdirectories in this repository contain a README file that explains their contents
-  ([config](./config/), [environment](./environment/), [patches](./patches/), [repos](./repos/), and
-  [scripts](./scripts/)).
+- Each of the subdirectories in this repository contain a README file that explains their contents.
 - Check the [compose.yml](./compose.yml) file for more information on how the server containers are run.
 - Read the source code in the
   [Pretendo Network GitHub repositories](https://github.com/orgs/PretendoNetwork/repositories).
