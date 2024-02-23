@@ -105,6 +105,7 @@ services:
     image: minio/minio:latest
     depends_on:
       - coredns-internal
+      - nginx
     restart: unless-stopped
     ports:
       # Web console

@@ -2,7 +2,7 @@
 
 set -eu
 
-while ! mc alias set minio http://minio:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD" >/dev/null 2>&1; do
+while ! mc alias set minio http://minio.pretendo.cc "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD" >/dev/null 2>&1; do
     echo "Waiting for MinIO to start..."
     sleep 1
 done
