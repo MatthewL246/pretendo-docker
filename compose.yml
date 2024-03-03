@@ -382,7 +382,6 @@ services:
       - ./environment/wiiu-chat.env
       - ./environment/wiiu-chat.local.env
 
-  # WIP: Does not work yet
   super-mario-maker:
     build: ./repos/super-mario-maker
     depends_on:
