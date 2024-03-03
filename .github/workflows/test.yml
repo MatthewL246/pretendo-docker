@@ -34,7 +34,8 @@ jobs:
       - name: Test starting the servers
         run: |
           docker compose up -d
-          sleep 35
+          echo Waiting for 60 seconds...
+          sleep 60
           docker compose ps -a
           docker compose logs
           # Fail if any containers exited
