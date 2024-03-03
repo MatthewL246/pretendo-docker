@@ -1,0 +1,58 @@
+diff --git i/locales/en@uwu.json w/locales/en@uwu.json
+index 386a5fd..be76907 100644
+--- i/locales/en@uwu.json
++++ w/locales/en@uwu.json
+@@ -209,7 +209,8 @@
+ 			"normal kitteh",
+ 			"early kitteh",
+ 			"watchin kitteh",
+-			"dev kitteh"
++			"dev kitteh",
++			"UNLIMITED POWAH KITTEH!!!"
+ 		],
+ 		"banned": "bad kitteh &gt;:("
+ 	},
+diff --git i/locales/en_US.json w/locales/en_US.json
+index 5ad0fe9..70f2d1a 100644
+--- i/locales/en_US.json
++++ w/locales/en_US.json
+@@ -328,7 +328,8 @@
+ 			"Standard",
+ 			"Tester",
+ 			"Moderator",
+-			"Developer"
++			"Developer",
++			"Jon Pretendo Himself"
+ 		],
+ 		"banned": "Banned"
+ 	},
+diff --git i/public/assets/css/account.css w/public/assets/css/account.css
+index bbed44e..a47597e 100644
+--- i/public/assets/css/account.css
++++ w/public/assets/css/account.css
+@@ -76,6 +76,25 @@
+ 	color:#5AFF15;
+ 	border-color: #5AFF15;
+ }
++.account-sidebar .user .access-level-4 {
++	position: relative;
++	background: linear-gradient(135deg, red, orange, yellow, green, blue, violet);
++	color: white;
++	padding: 16px 32px;
++	border-style: none;
++	font-size: 1.5em;
++}
++.account-sidebar .user .access-level-4::before {
++	content: "";
++	position: absolute;
++	top: -4px;
++	right: -4px;
++	bottom: -4px;
++	left: -4px;
++	border-radius: 1.2em;
++	background: linear-gradient(315deg, red, orange, yellow, green, blue, violet);
++	z-index: -1;
++}
+ 
+ .account-sidebar .user a.mii {
+ 	position: relative;
