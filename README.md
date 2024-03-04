@@ -50,8 +50,8 @@ _\*\*The Pretendo Network servers only support the Wii U and 3DS consoles._
 
 ## Usage
 
-Note that this guide assumes that you are familiar with using the Linux command line and have a basic understanding of
-Docker.
+Note that this guide assumes that you are **familiar with using the Linux command line** and have a **basic
+understanding of Docker**.
 
 ### Server setup
 
@@ -60,7 +60,10 @@ Docker.
    `git clone --recurse-submodules https://github.com/MatthewL246/pretendo-docker.git`
    - **Note:** Downloading this repo as a ZIP file from GitHub will **not** work because it uses
      [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) for the Pretendo Network repos.
-   - If you are using Windows, you should clone the repo **inside your WSL distro** for maximum performance.
+   - If you are using Windows, you should clone the repo **inside your WSL distro** for multiple reasons. First, this
+     avoids Git messing with line endings and breaking shell scripts as it can do when you clone a repo in Windows (due
+     to `autocrlf`). Second, this maximizes performance because Docker runs inside WSL and copying files between WSL and
+     Windows is slow.
 3. Optionally, dump your console's BOSS keys for the BOSS (SpotPass) server. These keys are required if you want to
    create new SpotPass content. These steps are based on
    [the guide from the boss-crypto repository](https://github.com/PretendoNetwork/boss-crypto/#dumping-crypto-keys).
@@ -73,7 +76,7 @@ Docker.
      directory in this repo.
    - Finally, run `./scripts/get-boss-keys.sh` to validate the dumped keys. It will show you if the keys are missing or
      incorrect.
-4. Run the initial setup script (`./setup.sh`) and follow its instructions.
+4. Run the initial setup script (`./setup.sh`) from your WSL distro and follow its instructions.
    - **Note:** This will take some time to build the required Docker images, and it will use up to 8GB of bandwidth to
      download images.
    - You might need to run it with `sudo` if you are using the Docker Engine on Linux.
