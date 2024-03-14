@@ -42,10 +42,14 @@ Everything else runs inside Docker containers.
 | Wii U          | ✅ Working         |
 | Cemu emulator  | ✅ Working         |
 | 3DS            | ✅ Working         |
-| Citra emulator | ❌ Not working\*   |
+| Citra emulator | ⏱️ Coming soon?\*  |
 | Wii, Switch    | ⛔ Unsupported\*\* |
 
-_\*The 3DS emulator Citra does not currently support connecting to online services._\
+_\*There is [a fork](https://github.com/PabloMK7/citra) of the 3DS emulator Citra that supports connecting to online
+services, but [the setup process](https://web.archive.org/web/20240304225450/https://github.com/PabloMK7/citra/releases)
+is currently very complex. Connecting to Pretendo is also not yet supported, although it can be hacked in by importing
+the friends and account system module save data (after switching to Pretendo from Nimbus) from a 3DS to Citra and adding
+the Nimbus IPS patches to the mods directory._\
 _\*\*The Pretendo Network servers only support the Wii U and 3DS consoles._
 
 ## Usage
