@@ -227,22 +227,32 @@ understanding of Docker**.
    automate save backups and switching save slots for the system modules.
    > **All credit for the Friends test account reset program** (originally released on the Pretendo Network Discord
    > server as `manual_override.3dsx`) **goes to Trace.**
-   1. Reboot into GodMode9 and open the scripts menu.
-   2. Run the `FriendsAccountSwitcher` script and select "Create a new save slot". Name the slot something descriptive
-      like `pretendo_official`.
-   3. Reboot into the Home Menu and open the Homebrew Launcher. From there, run the `ResetFriendsTestAccount.3dsx` app
+   1. Open Nimbus and switch back to **Nintendo**.
+   2. Reboot into GodMode9 and open the scripts menu.
+   3. Run the `FriendsAccountSwitcher` script and select "Create a new save slot". Name the slot `nintendo`. This will
+      be a backup slot for your NNID friends account.
+   4. Reboot, reopen Nimbus, and switch to **Pretendo**.
+   5. Reboot into GodMode9, run the `FriendsAccountSwitcher` script again, and select "Create a new save slot". Name the
+      slot something descriptive like `pretendo_official`.
+   6. Reboot into the Home Menu and open the Homebrew Launcher. From there, run the `ResetFriendsTestAccount.3dsx` app
       and press A when a white line appears at the top of the screen (the Nimbus GUI was removed).
-   4. Open the Friend List applet. You should be "online" and have a new friend code that is different from your friend
-      code on the official servers.
-   5. Reboot into GodMode9 and open the scripts menu again.
-   6. Run the `FriendsAccountSwitcher` script and select "Create a new save slot" again. Name the slot something
-      descriptive like `local_server`.
-   7. You now have multiple test Friends accounts saved on your SD card at `sd:/gm9/out/friends_accounts/`. You can
-      switch between them by running the `FriendsAccountSwitcher` script, selecting "Create a new save slot", and
-      following the instructions.
+   7. Open the Friend List applet. You should be "online" and have a new friend code that is different from your friend
+      code on the official servers. If you don't go online, you have not successfully connected to your selfhosted
+      server.
+   8. Reboot into GodMode9, run the `FriendsAccountSwitcher` script again, and select "Create a new save slot". Name the
+      slot something descriptive like `local_server`.
+   9. You now have multiple Friends accounts saved on your SD card at `sd:/gm9/out/friends_accounts/`. You can switch
+      between them by running the `FriendsAccountSwitcher` script, selecting "Create a new save slot", and following the
+      instructions.
       - Pay careful attention to the script's instructions. When loading a save slot, it will first save the current
         Friends and account system modules save data to the last-used save slot. Create a new slot if you don't want to
         overwrite your existing save data.
+      - **How does this work?** Each of your Friends saves contains both your prod (Nintendo) and test (Pretendo)
+        account data, as well as a config that determines which account is currently active. So, your `nintendo` slot
+        contains your Nintendo prod friends account, your Pretendo official test account, and a config that makes the
+        prod account active. Your `pretendo_official` slot contains the same data, but with the config making the test
+        account active. Your `local_server` slot contains the same prod account but a different test account, and with
+        the config making the test account active. (The account sysmodule save data seems to work in a similar way.)
 7. Open System Settings using your `local_server` Friends test account and create a new PNID or sign in to one you
    created on your Wii U or website.
 
@@ -256,7 +266,13 @@ understanding of Docker**.
   - Use the official certificate for Juxt by running `./scripts/upload-3ds-files.sh --reset`
   - Disable the custom proxy settings on the console.
   - Switch to your official Pretendo Friends account by running the `FriendsAccountSwitcher` script in GodMode9.
-- To connect to Nintendo's servers, use Nimbus to switch to Nintendo Network and disable the proxy settings.
+- To connect to Nintendo's servers:
+  - Disable the custom proxy settings on the console.
+  - Switch to your Nintendo Friends account by running the `FriendsAccountSwitcher` script in GodMode9.
+
+Note that you don't need to run Nimbus again - everything is handled by the Friends account switcher script. Running
+Nimbus again will cause your currently-active Friends account to no longer match the last-saved slot name, which means
+that it will be overwritten with a save that doesn't match the name.
 
 ## Uninstalling
 
