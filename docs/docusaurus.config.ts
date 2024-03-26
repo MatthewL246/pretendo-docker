@@ -34,10 +34,7 @@ const config: Config = {
                     sidebarPath: "./sidebars.ts",
                     editUrl: `https://github.com/${github.username}/${github.repo}/tree/main/`,
                 },
-                blog: {
-                    showReadingTime: true,
-                    editUrl: `https://github.com/${github.username}/${github.repo}/tree/main/`,
-                },
+                blog: false,
                 theme: {
                     customCss: "./src/css/custom.css",
                 },
@@ -59,7 +56,6 @@ const config: Config = {
                     position: "left",
                     label: "Tutorial",
                 },
-                { to: "/blog", label: "Blog", position: "left" },
                 {
                     href: `https://github.com/${github.username}/${github.repo}`,
                     label: "GitHub",
