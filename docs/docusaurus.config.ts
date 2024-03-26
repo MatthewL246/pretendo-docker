@@ -31,8 +31,9 @@ const config: Config = {
             "classic",
             {
                 docs: {
+                    routeBasePath: "/",
                     sidebarPath: "./sidebars.ts",
-                    editUrl: `https://github.com/${github.username}/${github.repo}/tree/main/`,
+                    editUrl: `https://github.com/${github.username}/${github.repo}/tree/main/docs/`,
                 },
                 blog: false,
                 theme: {
@@ -52,9 +53,9 @@ const config: Config = {
             items: [
                 {
                     type: "docSidebar",
-                    sidebarId: "tutorialSidebar",
+                    sidebarId: "sidebar",
                     position: "left",
-                    label: "Tutorial",
+                    label: "Docs",
                 },
                 {
                     href: `https://github.com/${github.username}/${github.repo}`,
