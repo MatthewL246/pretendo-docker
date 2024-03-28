@@ -1,5 +1,4 @@
 name: pretendo-network
-version: "3.8"
 services:
   mitmproxy-pretendo:
     image: ghcr.io/matthewl246/mitmproxy-pretendo:local
