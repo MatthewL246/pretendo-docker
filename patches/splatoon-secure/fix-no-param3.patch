@@ -1,0 +1,48 @@
+diff --git a/nex/matchmake-extension/auto_matchmake_with_param_postpone.go b/nex/matchmake-extension/auto_matchmake_with_param_postpone.go
+index 7e1fff0..22b06d5 100644
+--- a/nex/matchmake-extension/auto_matchmake_with_param_postpone.go
++++ b/nex/matchmake-extension/auto_matchmake_with_param_postpone.go
+@@ -69,7 +69,7 @@ func AutoMatchmakeWithParam_Postpone(err error, client *nex.Client, callID uint3
+ 		oEvent.PIDSource = client.PID()
+ 		oEvent.Type = 122000 // Switch gathering
+ 		oEvent.Param1 = gid
+-		oEvent.Param3 = 1
++		// oEvent.Param3 = 1
+ 
+ 		for _, pid := range database.GetRoomPlayers(sourceGid) {
+ 			if pid == 0 {
+@@ -160,7 +160,7 @@ func AutoMatchmakeWithParam_Postpone(err error, client *nex.Client, callID uint3
+ 	oEvent.Type = 3001 // New participant
+ 	oEvent.Param1 = gid
+ 	oEvent.Param2 = client.PID()
+-	oEvent.Param3 = uint32(participationCount)
++	// oEvent.Param3 = uint32(participationCount)
+ 	/* if matchmakeSession.GameMode == 12 {
+ 		oEvent.Param3 = 4
+ 	} else {
+diff --git a/nex/matchmake-extension/create_matchmake_session_with_param.go b/nex/matchmake-extension/create_matchmake_session_with_param.go
+index c8b79cf..b113f56 100644
+--- a/nex/matchmake-extension/create_matchmake_session_with_param.go
++++ b/nex/matchmake-extension/create_matchmake_session_with_param.go
+@@ -95,7 +95,7 @@ func CreateMatchmakeSessionWithParam(err error, client *nex.Client, callID uint3
+ 	oEvent.Type = 3001 // New participant
+ 	oEvent.Param1 = gid
+ 	oEvent.Param2 = hostpid
+-	oEvent.Param3 = 1
++	// oEvent.Param3 = 1
+ 
+ 	stream := nex.NewStreamOut(globals.NEXServer)
+ 	oEventBytes := oEvent.Bytes(stream)
+diff --git a/nex/matchmake-extension/join_matchmake_session_with_param.go b/nex/matchmake-extension/join_matchmake_session_with_param.go
+index 40b4d85..309385c 100644
+--- a/nex/matchmake-extension/join_matchmake_session_with_param.go
++++ b/nex/matchmake-extension/join_matchmake_session_with_param.go
+@@ -138,7 +138,7 @@ func JoinMatchmakeSessionWithParam(err error, client *nex.Client, callID uint32,
+ 	oEvent.Type = 3001 // New participant
+ 	oEvent.Param1 = gid
+ 	oEvent.Param2 = client.PID()
+-	oEvent.Param3 = 1
++	// oEvent.Param3 = 1
+ 
+ 	stream := nex.NewStreamOut(globals.NEXServer)
+ 	oEventBytes := oEvent.Bytes(stream)

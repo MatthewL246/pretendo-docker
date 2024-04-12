@@ -130,6 +130,7 @@ echo "SERVER_IP=$server_ip" >>"$git_base_dir/.env"
 echo "PN_FRIENDS_SECURE_SERVER_HOST=$server_ip" >>./friends.local.env
 echo "PN_WIIU_CHAT_SECURE_SERVER_LOCATION=$server_ip" >>./wiiu-chat.local.env
 echo "PN_SMM_SECURE_SERVER_HOST=$server_ip" >>./super-mario-maker.local.env
+echo "PN_SPLATOON_AUTHENTICATION_SERVER_HOST=$server_ip" >>./splatoon.local.env
 
 # Get the Wii U IP address
 if [[ -n "$wiiu_ip" ]]; then
