@@ -330,17 +330,10 @@ to authenticate with the servers.
 | [BOSS](https://github.com/PretendoNetwork/BOSS)                                                                                                              | Server for BOSS (SpotPass) content. I do not yet understand how to create new BOSS content, so it currently just serves some premade content.                                      |
 | [Super Mario Maker](https://github.com/PretendoNetwork/super-mario-maker)                                                                                    | Server for Super Mario Maker online features.                                                                                                                                      |
 
-#### Planned servers
+### Future plans
 
-These are some other servers (mostly for individual games) that I want to set up here.
-
-- [Mario Kart 7](https://github.com/PretendoNetwork/mario-kart-7)
-- Mario Kart 8 ([authentication](https://github.com/PretendoNetwork/mario-kart-8-authentication) and
-  [secure](https://github.com/PretendoNetwork/mario-kart-8-secure))
-- [Pokkén Tournament](https://github.com/PretendoNetwork/pokken-tournament)
-- A bunch more of the individual game servers.
-- [Grove](https://github.com/PretendoNetwork/Grove) (Interesting but not particularly useful in its current state.)
-- [SOAP (NUS)](https://github.com/PretendoNetwork/SOAP) (It would be cool to run a full local eShop server.)
+Check the [General Roadmap and Plans issue](https://github.com/MatthewL246/pretendo-docker/issues/50) for more
+information on my plans for this project.
 
 ## Learn more
 
