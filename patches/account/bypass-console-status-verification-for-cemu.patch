@@ -1,9 +1,9 @@
 diff --git i/src/middleware/console-status-verification.ts w/src/middleware/console-status-verification.ts
-index cb1b7d3..3e4fa05 100644
+index a26d9b6..ad3783b 100644
 --- i/src/middleware/console-status-verification.ts
 +++ w/src/middleware/console-status-verification.ts
-@@ -6,6 +6,18 @@ import { getValueFromHeaders } from '@/util';
- import { HydratedDeviceDocument } from '@/types/mongoose/device';
+@@ -5,6 +5,18 @@ import { Device } from '@/models/device';
+ import { getValueFromHeaders } from '@/util';
  
  async function consoleStatusVerificationMiddleware(request: express.Request, response: express.Response, next: express.NextFunction): Promise<void> {
 +	if (

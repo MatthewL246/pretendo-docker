@@ -1,8 +1,8 @@
-diff --git i/src/services/nnid/routes/content.ts w/src/services/nnid/routes/content.ts
-index b4d1ac3..9a8b374 100644
---- i/src/services/nnid/routes/content.ts
-+++ w/src/services/nnid/routes/content.ts
-@@ -39,14 +39,14 @@ router.get('/agreements/:type/:region/:version', (request: express.Request, resp
+diff --git i/src/services/nnas/routes/content.ts w/src/services/nnas/routes/content.ts
+index a60cc30..80b0224 100644
+--- i/src/services/nnas/routes/content.ts
++++ w/src/services/nnas/routes/content.ts
+@@ -37,14 +37,14 @@ router.get('/agreements/:type/:region/:version', (request: express.Request, resp
  						},
  						main_text: {
  							'@index': '1',
@@ -19,7 +19,7 @@ index b4d1ac3..9a8b374 100644
  						},
  					},
  					type: 'NINTENDO-NETWORK-EULA',
-@@ -72,14 +72,14 @@ router.get('/agreements/:type/:region/:version', (request: express.Request, resp
+@@ -70,14 +70,14 @@ router.get('/agreements/:type/:region/:version', (request: express.Request, resp
  						},
  						main_text: {
  							'@index': '1',
@@ -36,7 +36,7 @@ index b4d1ac3..9a8b374 100644
  						},
  					},
  					type: 'NINTENDO-NETWORK-EULA',
-@@ -105,14 +105,14 @@ router.get('/agreements/:type/:region/:version', (request: express.Request, resp
+@@ -103,14 +103,14 @@ router.get('/agreements/:type/:region/:version', (request: express.Request, resp
  						},
  						main_text: {
  							'@index': '1',
