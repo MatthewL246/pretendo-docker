@@ -6,6 +6,7 @@ module.exports = JSON.parse(
         http: {
             port: process.env.JUXT_CONFIG_HTTP_PORT,
         },
+        server_environment: process.env.JUXT_CONFIG_SERVER_ENVIRONMENT,
         mongoose: {
             uri: process.env.JUXT_CONFIG_MONGODB_URI,
             options: {
