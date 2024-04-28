@@ -8,6 +8,7 @@ git_base=$(git rev-parse --show-toplevel)
 info "Resetting all submodules..."
 git submodule sync --recursive >/dev/null
 git submodule foreach --recursive "git reset --hard" >/dev/null
+git submodule foreach --recursive "git clean -fd" >/dev/null
 git submodule update --init --recursive --checkout --force >/dev/null
 
 info "Applying patches to submodules..."
@@ -20,9 +21,10 @@ for dir in "$git_base/patches/"*; do
 
         for patch in "$git_base/patches/$subdir"/*; do
             git apply "$patch"
-            git add .
             num_patches=$((num_patches + 1))
         done
+
+        git add .
     fi
 done
 success "Successfully applied $num_patches patches."
