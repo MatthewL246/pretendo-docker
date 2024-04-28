@@ -46,5 +46,9 @@ module.exports = JSON.parse(
                 secret: process.env.JUXT_CONFIG_AWS_SPACES_SECRET,
             },
         },
+        redis: {
+            host: process.env.JUXT_CONFIG_REDIS_HOST,
+            port: process.env.JUXT_CONFIG_REDIS_PORT,
+        },
     })
 );

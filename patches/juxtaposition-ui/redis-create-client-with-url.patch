@@ -1,0 +1,13 @@
+diff --git i/src/redisCache.js w/src/redisCache.js
+index b4f3b7a..cabe595 100644
+--- i/src/redisCache.js
++++ w/src/redisCache.js
+@@ -5,7 +5,7 @@ const logger = require('./logger');
+ const config = require('../config.json');
+ const { host, port } = config.redis;
+ 
+-const redisClient = redis.createClient({ host, port });
++const redisClient = redis.createClient({ url: `redis://${host}:${port}` });
+ 
+ redisClient.on('error', (error) => {
+ 	logger.error(error);
