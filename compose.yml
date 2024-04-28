@@ -135,6 +135,21 @@ services:
     dns: 172.20.0.200
     command: redis-server --save 60 1 --appendonly yes
 
+  redis-commander:
+    image: ghcr.io/joeferner/redis-commander:latest
+    depends_on:
+      - coredns-internal
+      - redis
+    restart: unless-stopped
+    ports:
+      # Web interface
+      - 127.0.0.1:8086:8086
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/redis-commander.env
+
   # TODO: MailDev appears to be unmaintained and has security vulnerabilities.
   # Find an alternative. MailCatcher doesn't support persistance, and MailHog
   # also seems unmaintained.
