@@ -1,8 +1,8 @@
 diff --git i/package.json w/package.json
-index 0e99efd..fe923e7 100644
+index 5132be7..177de10 100644
 --- i/package.json
 +++ w/package.json
-@@ -61,5 +61,14 @@
+@@ -64,5 +64,14 @@
      "request": "^2.88.2",
      "tsc-alias": "^1.8.6",
      "typescript": "^5.1.3"
@@ -19,11 +19,13 @@ index 0e99efd..fe923e7 100644
 +    }
  }
 diff --git i/src/server.js w/src/server.js
-index 606da01..41cca83 100644
+index be65907..d378132 100644
 --- i/src/server.js
 +++ w/src/server.js
-@@ -1,3 +1,4 @@
-+require('module-alias/register')
+@@ -1,5 +1,6 @@
+ /* eslint-disable @typescript-eslint/explicit-function-return-type */
+ /* eslint-disable @typescript-eslint/no-var-requires */
++require('module-alias/register');
  process.title = 'Pretendo - Juxt-Web';
  const express = require('express');
  const morgan = require('morgan');
