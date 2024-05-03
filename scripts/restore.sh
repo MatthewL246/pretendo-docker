@@ -3,7 +3,7 @@
 set -eu
 
 git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/.function-lib.sh"
+. "$git_base/scripts/internal/function-lib.sh"
 
 if [ -z "${1-}" ]; then
     echo "Usage: $0 <backup_name>"
@@ -60,6 +60,6 @@ docker compose cp "$backup_dir/mitmproxy" mitmproxy-pretendo:/home/mitmproxy/.mi
 
 # The restored Postgres backup might be using a different password than what is currently in the .env files
 info "Updating the Postgres password from the environment..."
-"$git_base/scripts/update-postgres-password.sh"
+"$git_base/scripts/internal/update-postgres-password.sh"
 
 success "Restore completed successfully."

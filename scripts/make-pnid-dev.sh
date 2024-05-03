@@ -3,7 +3,7 @@
 set -eu
 
 git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/.function-lib.sh"
+. "$git_base/scripts/internal/function-lib.sh"
 update_pnid_access_level_script=$(cat "$git_base/scripts/run-in-container/make-pnid-dev.js")
 
 if [ "$#" -lt 1 ]; then

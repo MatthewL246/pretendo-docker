@@ -28,7 +28,7 @@ if [ "$#" -ge 3 ]; then
 fi
 
 git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/.function-lib.sh"
+. "$git_base/scripts/internal/function-lib.sh"
 cd "$git_base/environment"
 
 info "Setting up local environment variables..."
@@ -157,8 +157,8 @@ success "Successfully set up environment."
 # set won't be configured during initial setup, and the scripts will fail.
 if [ -z "${PRETENDO_SETUP_IN_PROGRESS+x}" ]; then
     info "Running necessary container update scripts..."
-    "$git_base"/scripts/update-postgres-password.sh
-    "$git_base"/scripts/update-account-servers-database.sh
+    "$git_base"/scripts/internal/update-postgres-password.sh
+    "$git_base"/scripts/internal/update-account-servers-database.sh
     docker compose down
     success "Successfully updated containers with new environment variables."
 fi

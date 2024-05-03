@@ -3,7 +3,7 @@
 set -eu
 
 git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/.function-lib.sh"
+. "$git_base/scripts/internal/function-lib.sh"
 
 backup_name="${1-}"
 if [ -z "$backup_name" ]; then

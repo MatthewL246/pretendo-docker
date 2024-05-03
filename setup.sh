@@ -85,15 +85,15 @@ setup_environment_variables() {
 
 setup_containers() {
     info "Setting up MongoDB container..."
-    ./scripts/firstrun-mongodb-container.sh
+    ./scripts/internal/firstrun-mongodb-container.sh
     info "Setting up MinIO container..."
-    ./scripts/firstrun-minio-container.sh
+    ./scripts/internal/firstrun-minio-container.sh
     info "Setting up Pretendo account servers database..."
-    ./scripts/update-account-servers-database.sh
+    ./scripts/internal/update-account-servers-database.sh
     info "Setting up Pretendo Miiverse endpoints database..."
-    ./scripts/update-miiverse-endpoints.sh
+    ./scripts/internal/update-miiverse-endpoints.sh
     info "Updating Postgres password..."
-    ./scripts/update-postgres-password.sh
+    ./scripts/internal/update-postgres-password.sh
     info "Stopping containers after initial setup..."
     docker compose down
 }
@@ -104,7 +104,7 @@ check_git_repository
 
 git_base=$(git rev-parse --show-toplevel)
 cd "$git_base"
-. "$git_base/scripts/.function-lib.sh"
+. "$git_base/scripts/internal/function-lib.sh"
 
 title "Unofficial Pretendo Network setup script"
 header "Pretendo setup script started at $(date)."

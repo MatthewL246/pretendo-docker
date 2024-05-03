@@ -3,7 +3,7 @@
 set -eu
 
 git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/.function-lib.sh"
+. "$git_base/scripts/internal/function-lib.sh"
 create_server_script=$(cat "$git_base/scripts/run-in-container/update-account-servers-database.js")
 
 if [ ! -f "$git_base/environment/system.local.env" ]; then

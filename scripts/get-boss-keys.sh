@@ -12,7 +12,7 @@ expected_wiiu_aes_key_hash="5202ce5099232c3d365e28379790a919"
 expected_wiiu_hmac_key_hash="b4482fef177b0100090ce0dbeb8ce977"
 
 git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/.function-lib.sh"
+. "$git_base/scripts/internal/function-lib.sh"
 cd "$git_base/console-files"
 
 if ls ./boss_keys.bin 1>/dev/null 2>&1; then

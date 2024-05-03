@@ -8,7 +8,7 @@ if [ "${1-}" = "--reset" ]; then
 fi
 
 git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/.function-lib.sh"
+. "$git_base/scripts/internal/function-lib.sh"
 cd "$git_base"
 
 if [ ! -f "$git_base/environment/system.local.env" ]; then

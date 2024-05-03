@@ -3,7 +3,7 @@
 set -eu
 
 git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/.function-lib.sh"
+. "$git_base/scripts/internal/function-lib.sh"
 mongodb_init_script=$(cat "$git_base/scripts/run-in-container/mongodb-init.js")
 
 docker compose up -d mongodb

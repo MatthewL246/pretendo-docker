@@ -3,7 +3,7 @@
 set -eu
 
 git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/.function-lib.sh"
+. "$git_base/scripts/internal/function-lib.sh"
 create_community_script=$(cat "$git_base/scripts/run-in-container/create-juxt-community.js")
 
 if [ "$#" -lt 3 ]; then
