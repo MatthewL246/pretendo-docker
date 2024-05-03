@@ -58,9 +58,8 @@ docker compose start redis
 info "Restoring Mitmproxy..."
 docker compose cp "$backup_dir/mitmproxy" mitmproxy-pretendo:/home/mitmproxy/.mitmproxy
 
-# The restored backup might be using a different password than what is currently in the .env files
-info "Now running the environment setup script to regenerate database passwords."
-. "$git_base/environment/system.local.env"
-"$git_base/scripts/setup-environment.sh" "$SERVER_IP" "${WIIU_IP-}" "${DS_IP-}"
+# The restored Postgres backup might be using a different password than what is currently in the .env files
+info "Updating the Postgres password from the environment..."
+"$git_base/scripts/update-postgres-password.sh"
 
 success "Restore completed successfully."
