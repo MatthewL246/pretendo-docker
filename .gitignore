@@ -13,3 +13,6 @@
 # Console BOSS keys
 /console-files/aes_keys.txt
 /console-files/boss_keys.bin
+
+# Backups
+/backups/

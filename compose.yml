@@ -133,7 +133,7 @@ services:
     networks:
       internal:
     dns: 172.20.0.200
-    command: redis-server --save 60 1 --appendonly yes
+    command: redis-server --save 60 1
 
   redis-commander:
     image: ghcr.io/joeferner/redis-commander:latest
