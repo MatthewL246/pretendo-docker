@@ -11,9 +11,10 @@ if [ -z "$backup_name" ]; then
 fi
 
 backup_dir="$git_base/backups/$backup_name"
-if [ ! -d "$backup_dir" ]; then
-    mkdir -p "$backup_dir"
+if [ -d "$backup_dir" ]; then
+    error "Backup directory $backup_dir already exists."
 fi
+mkdir -p "$backup_dir"
 info "Backing up to $backup_dir"
 
 docker compose up -d mitmproxy-pretendo mongodb postgres minio redis
