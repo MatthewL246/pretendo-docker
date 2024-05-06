@@ -1,16 +1,16 @@
 diff --git i/package-lock.json w/package-lock.json
-index bd4447e..c53bda4 100644
+index 7f171a74..8441d16a 100644
 --- i/package-lock.json
 +++ w/package-lock.json
-@@ -11,6 +11,7 @@
- 			"dependencies": {
+@@ -12,6 +12,7 @@
  				"@aws-sdk/client-ses": "^3.515.0",
  				"@discordjs/rest": "^0.5.0",
+ 				"@pretendonetwork/error-codes": "^1.0.2",
 +				"adm-zip": "^0.5.9",
  				"browserify": "^17.0.0",
  				"colors": "^1.4.0",
  				"cookie-parser": "^1.4.5",
-@@ -29,7 +30,8 @@
+@@ -30,7 +31,8 @@
  				"mongoose": "^6.4.0",
  				"morgan": "^1.10.0",
  				"nodemailer": "^6.7.5",
@@ -20,7 +20,7 @@ index bd4447e..c53bda4 100644
  			},
  			"devDependencies": {
  				"eslint": "^7.32.0"
-@@ -2094,6 +2096,14 @@
+@@ -2100,6 +2102,14 @@
  				"node": ">=0.4.0"
  			}
  		},
@@ -35,7 +35,7 @@ index bd4447e..c53bda4 100644
  		"node_modules/ajv": {
  			"version": "6.12.6",
  			"resolved": "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz",
-@@ -8049,6 +8059,11 @@
+@@ -8060,6 +8070,11 @@
  			"resolved": "https://registry.npmjs.org/acorn-walk/-/acorn-walk-7.2.0.tgz",
  			"integrity": "sha512-OPdCF6GsMIP+Az+aWfAAOEt2/+iVDKE7oy6lJ098aoe59oAmK76qV6Gw60SbZ8jHuG2wH058GF4pLFbYamYrVA=="
  		},
@@ -48,18 +48,18 @@ index bd4447e..c53bda4 100644
  			"version": "6.12.6",
  			"resolved": "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz",
 diff --git i/package.json w/package.json
-index 6554906..17a84ae 100644
+index 90c96f08..7df7695f 100644
 --- i/package.json
 +++ w/package.json
-@@ -24,6 +24,7 @@
- 	"dependencies": {
+@@ -25,6 +25,7 @@
  		"@aws-sdk/client-ses": "^3.515.0",
  		"@discordjs/rest": "^0.5.0",
+ 		"@pretendonetwork/error-codes": "^1.0.2",
 +		"adm-zip": "^0.5.9",
  		"browserify": "^17.0.0",
  		"colors": "^1.4.0",
  		"cookie-parser": "^1.4.5",
-@@ -42,7 +43,8 @@
+@@ -43,7 +44,8 @@
  		"mongoose": "^6.4.0",
  		"morgan": "^1.10.0",
  		"nodemailer": "^6.7.5",
@@ -70,7 +70,7 @@ index 6554906..17a84ae 100644
  	"devDependencies": {
  		"eslint": "^7.32.0"
 diff --git i/public/assets/js/account.js w/public/assets/js/account.js
-index 6c8e360..aff9c4f 100644
+index 6c8e360b..aff9c4fd 100644
 --- i/public/assets/js/account.js
 +++ w/public/assets/js/account.js
 @@ -1,8 +1,47 @@
@@ -122,7 +122,7 @@ index 6c8e360..aff9c4f 100644
  	editSettingsModal.classList.add('hidden');
  });
 diff --git i/src/routes/account.js w/src/routes/account.js
-index 1f398b0..5da8def 100644
+index 1f398b07..34897104 100644
 --- i/src/routes/account.js
 +++ w/src/routes/account.js
 @@ -1,6 +1,8 @@
@@ -183,7 +183,7 @@ index 1f398b0..5da8def 100644
  	const { account } = request;
  
 diff --git i/views/account/account.handlebars w/views/account/account.handlebars
-index 24f07e2..65586f9 100644
+index 24f07e2e..65586f95 100644
 --- i/views/account/account.handlebars
 +++ w/views/account/account.handlebars
 @@ -25,6 +25,12 @@
