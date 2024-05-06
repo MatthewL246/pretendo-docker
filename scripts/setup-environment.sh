@@ -90,6 +90,7 @@ echo "PN_FRIENDS_CONFIG_GRPC_API_KEY=$friends_api_key" >>./friends.local.env
 echo "PN_WIIU_CHAT_FRIENDS_GRPC_API_KEY=$friends_api_key" >>./wiiu-chat.local.env
 echo "PN_MIIVERSE_API_CONFIG_GRPC_FRIENDS_API_KEY=$friends_api_key" >>./miiverse-api.local.env
 echo "JUXT_CONFIG_GRPC_FRIENDS_API_KEY=$friends_api_key" >>./juxtaposition-ui.local.env
+echo "PN_BOSS_CONFIG_GRPC_FRIENDS_SERVER_API_KEY=$friends_api_key" >>./boss.local.env
 friends_aes_key=$(generate_hex 64)
 echo "PN_FRIENDS_CONFIG_AES_KEY=$friends_aes_key" >>./friends.local.env
 
