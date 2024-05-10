@@ -52,7 +52,7 @@ setup_environment_variables() {
         read -r ds_ip
     fi
 
-    ./scripts/setup-environment.sh "$server_ip" "$wiiu_ip" "$ds_ip" ${force:+--force} ${reconfigure:+--no-environment}
+    ./scripts/setup-environment.sh ${server_ip:+--server-ip "$server_ip"} ${wiiu_ip:+--wiiu-ip "$wiiu_ip"} ${ds_ip:+--3ds-ip "$ds_ip"} ${force:+--force} ${reconfigure:+--no-environment}
 }
 
 setup_containers() {
