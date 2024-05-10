@@ -25,7 +25,7 @@ jobs:
         run: yq eval "del(.services.*.ports)" -i compose.yml
 
       - name: Run the setup script
-        run: ./setup.sh
+        run: ./setup.sh --server-ip 127.0.0.1 --force
 
       # Testing whether any containers exit requires disabling restarts
       - name: Remove container restart configuration

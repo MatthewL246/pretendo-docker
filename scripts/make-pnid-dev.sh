@@ -1,14 +1,13 @@
-#! /bin/sh
+#!/usr/bin/env bash
 
-set -eu
+# shellcheck source=./internal/framework.sh
+source "$(dirname "$(realpath "$0")")/internal/framework.sh"
+set_description "This sets the access level of a PNID to developer, which gives it administrative permissions across the \
+servers. For example, this makes the PNID's posts \"verified\" on Juxt. It should be run after creating a new PNID that \
+should have administrative permissions."
+add_positional_argument "dev-pnid" "dev_pnid" "The PNID to give developer access" true
+parse_arguments "$@"
 
-git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/internal/function-lib.sh"
-update_pnid_access_level_script=$(cat "$git_base/scripts/run-in-container/make-pnid-dev.js")
+update_pnid_access_level_script=$(cat "$git_base_dir/scripts/run-in-container/make-pnid-dev.js")
 
-if [ "$#" -lt 1 ]; then
-    echo "Usage: $0 <PNID to give developer access>"
-    exit 1
-fi
-
-docker compose exec account node -e "$update_pnid_access_level_script" "$1"
+docker compose exec account node -e "$update_pnid_access_level_script" "$dev_pnid"

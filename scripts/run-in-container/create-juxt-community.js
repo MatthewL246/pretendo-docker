@@ -14,13 +14,6 @@ const s3 = new S3({
 });
 
 async function runAsync() {
-    if (process.argv.length < 4) {
-        console.log(
-            "Usage: <name> <description> <comma-separated title IDs> [icon image path] [banner image path]"
-        );
-        process.exit(1);
-    }
-
     await connect();
 
     await createMainCommunity(
@@ -39,14 +32,7 @@ runAsync().then(() => {
     process.exit(0);
 });
 
-async function createMainCommunity(
-    platform_id,
-    name,
-    description,
-    title_ids,
-    iconPath,
-    bannerPath
-) {
+async function createMainCommunity(platform_id, name, description, title_ids, iconPath, bannerPath) {
     const communityId = Math.floor(Math.random() * 1000000) + 1;
 
     const newCommunity = new COMMUNITY({
@@ -95,6 +81,7 @@ async function uploadAssets(community_id, iconPath, bannerPath) {
             };
             await s3.putObject(uploadParams).promise();
         }
+        await fs.rm(iconPath);
     }
 
     if (bannerPath) {
@@ -118,5 +105,6 @@ async function uploadAssets(community_id, iconPath, bannerPath) {
             };
             await s3.putObject(uploadParams).promise();
         }
+        await fs.rm(bannerPath);
     }
 }

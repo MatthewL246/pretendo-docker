@@ -1,48 +1,47 @@
-#! /bin/sh
+#!/usr/bin/env bash
 
-set -eu
+# shellcheck source=./internal/framework.sh
+source "$(dirname "$(realpath "$0")")/internal/framework.sh"
+set_description "This uploads required files from console-files to your 3DS to connect to your Pretendo server."
+add_option "-r --reset" "should_reset" "Reset the Juxt certificate to Pretendo's instead of using the mitmproxy certificate"
+parse_arguments "$@"
 
-should_reset=false
-if [ "${1-}" = "--reset" ]; then
-    should_reset=true
-fi
-
-git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/internal/function-lib.sh"
-cd "$git_base"
-
-if [ ! -f "$git_base/environment/system.local.env" ]; then
-    error "Missing environment file system.local.env. Did you run setup-environment.sh?"
+if [[ ! -f "$git_base_dir/environment/server.local.env" ]]; then
+    print_error "Missing environment file server.local.env. Did you run setup-environment.sh?"
     exit 1
 fi
-. "$git_base/environment/system.local.env"
-if [ -z "${DS_IP+x}" ]; then
-    warning "Missing environment variable DS_IP. Did you specify a 3DS IP address when you ran setup-environment.sh?"
-    info "Continuing without automatic FTP upload."
+source "$git_base_dir/environment/server.local.env"
+if [[ -z "${DS_IP:-}" ]]; then
+    print_warning "Missing environment variable DS_IP. Did you specify a 3DS IP address when you ran setup-environment.sh?"
+    print_info "Continuing without automatic FTP upload."
 fi
 
-if [ "$should_reset" = false ]; then
+cd "$git_base_dir/console-files"
+
+if [[ -z "$should_reset" ]]; then
     docker compose up -d mitmproxy-pretendo
 
     while ! docker compose exec mitmproxy-pretendo ls /home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem >/dev/null 2>&1; do
-        info "Waiting for mitmproxy to generate a certificate..."
+        print_info "Waiting for mitmproxy to generate a certificate..."
         sleep 1
     done
 
     # Get the current certificate
-    docker compose cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem ./console-files/mitmproxy-ca-cert.pem
+    docker compose cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem ./mitmproxy-ca-cert.pem
 else
-    info "Reset the Juxt certificate."
+    print_info "Reset the Juxt certificate."
 fi
 
 # Upload the required files
-if [ -n "${DS_IP+x}" ]; then
-    if [ "$should_reset" = false ]; then
-        ftp -u "ftp://user:pass@$DS_IP:5000/3ds/juxt-prod.pem" ./console-files/mitmproxy-ca-cert.pem
-        ftp -u "ftp://user:pass@$DS_IP:5000/gm9/scripts/FriendsAccountSwitcher.gm9" ./console-files/FriendsAccountSwitcher.gm9
-        ftp -u "ftp://user:pass@$DS_IP:5000/3ds/ResetFriendsTestAccount.3dsx" ./console-files/ResetFriendsTestAccount.3dsx
+if [[ -n "${DS_IP:-}" ]]; then
+    if [[ -z "$should_reset" ]]; then
+        tnftp -u "ftp://user:pass@$DS_IP:5000/3ds/juxt-prod.pem" ./mitmproxy-ca-cert.pem
+        tnftp -u "ftp://user:pass@$DS_IP:5000/gm9/scripts/FriendsAccountSwitcher.gm9" ./FriendsAccountSwitcher.gm9
+        tnftp -u "ftp://user:pass@$DS_IP:5000/3ds/ResetFriendsTestAccount.3dsx" ./ResetFriendsTestAccount.3dsx
     else
-        ftp -u "ftp://user:pass@$DS_IP:5000/3ds/juxt-prod.pem" ./console-files/juxt-prod.pem
+        tnftp -u "ftp://user:pass@$DS_IP:5000/3ds/juxt-prod.pem" ./juxt-prod.pem
     fi
-    success "Successfully uploaded the required files to your 3DS."
+    print_success "Successfully uploaded the required files to your 3DS."
+else
+    print_warning "The required files were not uploaded to your 3DS because you did not set an IP address."
 fi

@@ -1,6 +1,16 @@
-#! /bin/sh
+#!/usr/bin/env bash
 
-set -eu
+# shellcheck source=./internal/framework.sh
+source "$(dirname "$(realpath "$0")")/internal/framework.sh"
+set_description "This sets up local environment variables in the *.local.env files, including randomly-generated \
+secrets. Important external secrets are written to secrets.txt in the root of the repository. By default, the script \
+re-uses existing configuration values from server.local.env unless at least one is passed as an argument."
+add_option_with_value "-s --server-ip" "server_ip" "ip-address" "The IP address of the Pretendo Network server (must be accessible to the clients)" false
+add_option_with_value "-w --wiiu-ip" "wiiu_ip" "ip-address" "The IP address of the Wii U for FTP uploads" false
+add_option_with_value "-3 --3ds-ip" "ds_ip" "ip-address" "The IP address of the 3DS for FTP uploads" false
+add_option "-n --no-environment" "no_environment" "Disables reading existing configuration values from the environment"
+add_option "-f --force" "force" "Skip the confirmation prompt and always overwrite existing local environment files"
+parse_arguments "$@"
 
 generate_password() {
     length=$1
@@ -12,34 +22,34 @@ generate_hex() {
     head /dev/urandom | tr -dc "A-F0-9" | head -c "$length"
 }
 
-# Validate arguments
-if [ "$#" -lt 1 ]; then
-    echo "Usage: $0 <server IP address> [Wii U IP address] [3DS IP address]"
+cd "$git_base_dir/environment"
+
+print_info "Setting up local environment variables..."
+
+if [[ -z "$no_environment" ]]; then
+    if [[ -f "./server.local.env" ]]; then
+        source ./server.local.env
+    fi
+    # Copy the configuration from server.local.env if necessary
+    : "${server_ip:=${SERVER_IP:-}}"
+    : "${wiiu_ip:=${WIIU_IP:-}}"
+    : "${ds_ip:=${DS_IP:-}}"
+fi
+
+if [[ -z "$server_ip" ]]; then
+    print_error "A server IP address was neither passed as an argument nor found in the environment. Please provide one."
     exit 1
 fi
-server_ip=$1
-wiiu_ip=
-if [ "$#" -ge 2 ]; then
-    wiiu_ip=$2
-fi
-ds_ip=
-if [ "$#" -ge 3 ]; then
-    ds_ip=$3
-fi
 
-git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/internal/function-lib.sh"
-cd "$git_base/environment"
-
-info "Setting up local environment variables..."
-
-if ls ./*.local.env 1>/dev/null 2>&1; then
-    warning "Local environment files already exist. They will be overwritten if you continue."
-    printf "Continue? [y/N] "
-    read -r continue
-    if [ "$continue" != "Y" ] && [ "$continue" != "y" ]; then
-        echo "Aborting."
-        exit 1
+if [[ -n "$(echo ./*.local.env)" ]]; then
+    print_warning "Local environment files already exist. They will be overwritten if you continue."
+    if [[ -z "$force" ]]; then
+        printf "Continue? [y/N] "
+        read -r continue
+        if [[ "$continue" != "Y" && "$continue" != "y" ]]; then
+            echo "Aborting."
+            exit 1
+        fi
     fi
 
     docker compose down
@@ -112,33 +122,33 @@ boss_api_key=$(generate_password 32)
 echo "PN_BOSS_CONFIG_GRPC_BOSS_SERVER_API_KEY=$boss_api_key" >>./boss.local.env
 
 # Set up the server IP address
-info "Using server IP address $server_ip."
-echo "SERVER_IP=$server_ip" >>./system.local.env
+print_info "Using server IP address $server_ip."
+echo "SERVER_IP=$server_ip" >>./server.local.env
 echo "PN_FRIENDS_SECURE_SERVER_HOST=$server_ip" >>./friends.local.env
 echo "PN_WIIU_CHAT_SECURE_SERVER_LOCATION=$server_ip" >>./wiiu-chat.local.env
 echo "PN_SMM_SECURE_SERVER_HOST=$server_ip" >>./super-mario-maker.local.env
 
 # Get the Wii U IP address
-if [ -n "$wiiu_ip" ]; then
-    info "Using Wii U IP address $wiiu_ip."
-    echo "WIIU_IP=$wiiu_ip" >>./system.local.env
+if [[ -n "$wiiu_ip" ]]; then
+    print_info "Using Wii U IP address $wiiu_ip."
+    echo "WIIU_IP=$wiiu_ip" >>./server.local.env
 else
-    info "Skipping Wii U IP address."
+    print_info "Skipping Wii U IP address."
 fi
 
 # Get the 3DS IP address
-if [ -n "$ds_ip" ]; then
-    info "Using 3DS IP address $ds_ip."
-    echo "DS_IP=$ds_ip" >>./system.local.env
+if [[ -n "$ds_ip" ]]; then
+    print_info "Using 3DS IP address $ds_ip."
+    echo "DS_IP=$ds_ip" >>./server.local.env
 else
-    info "Skipping 3DS IP address."
+    print_info "Skipping 3DS IP address."
 fi
 
 # Get the BOSS keys
-"$git_base"/scripts/get-boss-keys.sh --write
+"$git_base_dir/scripts/get-boss-keys.sh" --write
 
 # Create a list of important secrets
-cat >"$git_base/secrets.txt" <<EOF
+cat >"$git_base_dir/secrets.txt" <<EOF
 Pretendo Network server secrets
 ===============================
 
@@ -151,15 +161,15 @@ Wii U IP address: ${wiiu_ip:-(not set)}
 3DS IP address: ${ds_ip:-(not set)}
 EOF
 
-success "Successfully set up environment."
+print_success "Successfully set up environment."
 
 # Some things need to be updated with the new environment variables and secrets,
 # but only if the setup script isn't in progress. The MongoDB container replica
 # set won't be configured during initial setup, and the scripts will fail.
-if [ -z "${PRETENDO_SETUP_IN_PROGRESS+x}" ]; then
-    info "Running necessary container update scripts..."
-    "$git_base"/scripts/internal/update-postgres-password.sh
-    "$git_base"/scripts/internal/update-account-servers-database.sh
+if [[ -z "${PRETENDO_SETUP_IN_PROGRESS:-}" ]]; then
+    print_info "Running necessary container update scripts..."
+    "$git_base_dir/scripts/internal/update-postgres-password.sh"
+    "$git_base_dir/scripts/internal/update-account-servers-database.sh"
     docker compose down
-    success "Successfully updated containers with new environment variables."
+    print_success "Successfully updated the containers with new environment variables."
 fi

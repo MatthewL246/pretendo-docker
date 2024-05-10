@@ -1,10 +1,10 @@
-#! /bin/sh
+#!/usr/bin/env bash
 
-set -eu
+# shellcheck source=./framework.sh
+source "$(dirname "$(realpath "$0")")/framework.sh"
+parse_arguments "$@"
 
-git_base=$(git rev-parse --show-toplevel)
-. "$git_base/scripts/internal/function-lib.sh"
-create_endpoint_script=$(cat "$git_base/scripts/run-in-container/update-miiverse-endpoints.js")
+create_endpoint_script=$(cat "$git_base_dir/scripts/run-in-container/update-miiverse-endpoints.js")
 
 docker compose up -d miiverse-api
 

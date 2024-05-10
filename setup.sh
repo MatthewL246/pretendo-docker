@@ -1,131 +1,127 @@
-#! /bin/sh
+#!/usr/bin/env bash
 
-set -eu
-
-check_git_repository() {
-    # Temporary function because function-lib isn't sourced yet
-    error() {
-        echo "$(tput bold)$(tput setaf 1)Error: ${*}$(tput sgr0)" >&2
-    }
-
-    if ! git --version >/dev/null; then
-        error "Git is not installed. Please install it: https://git-scm.com/downloads/"
-        exit 1
-    fi
-    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-        error "This script must be run from inside the pretendo-docker Git repository."
-        echo "Make sure that you cloned the repository with Git, not downloaded it as a ZIP file from GitHub."
-        exit 1
-    fi
-    if [ "$(basename -s .git "$(git config --get remote.origin.url)")" != "pretendo-docker" ]; then
-        error "This script must be run from inside the pretendo-docker Git repository."
-        echo "It looks like you are running it from a different Git repository at $(pwd) from $(git config --get remote.origin.url)."
-        exit 1
-    fi
-
-    git config --local submodule.recurse true
-}
+set -euo pipefail
 
 check_prerequisites() {
-    prerequisites_failed=false
-    prerequisites_warning=false
+    prerequisites_failed=
+    prerequisites_warning=
     if ! docker version >/dev/null; then
-        error "Docker is not installed. Please install it: https://docs.docker.com/get-docker/"
-        info "If you see a \"Permission denied while trying to connect to the Docker daemon\" error, you need to run this script with sudo."
+        print_error "Docker is not installed. Please install it: https://docs.docker.com/get-docker/"
+        print_info "If you see a \"Permission denied while trying to connect to the Docker daemon\" error, you need to \
+add your user to the docker group: https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user."
         prerequisites_failed=true
     fi
     if ! docker compose version >/dev/null; then
-        error "Docker Compose is not installed. Please install it: https://docs.docker.com/compose/install/"
+        print_error "Docker Compose is not installed. Please install it: https://docs.docker.com/compose/install/"
         prerequisites_failed=true
     fi
     # The tnftp "enhanced ftp client" has the -u option for direct uploads,
     # unlike the netkit-ftp "classical ftp client"
     if ! command -v tnftp >/dev/null; then
-        warning "tnftp is not installed. You will not be able to upload files to your consoles automatically."
+        print_warning "tnftp is not installed. You will not be able to upload files to your consoles automatically."
         prerequisites_warning=true
     fi
 
-    if [ "$prerequisites_failed" = true ]; then
-        error "Prerequisites check failed. Please install the missing prerequisites and try again."
+    if [[ "$prerequisites_failed" = true ]]; then
+        print_error "Prerequisites check failed. Please install the missing prerequisites and try again."
         exit 1
-    elif [ "$prerequisites_warning" = true ]; then
-        warning "Prerequisites check completed with warnings."
+    elif [[ "$prerequisites_warning" = true ]]; then
+        print_warning "Prerequisites check completed with warnings."
 
-        if [ -z "${CI+x}" ]; then
-            # Optional prerequisites can be ignored in CI
+        if [[ -z "$force" ]]; then
             printf "Do you want to continue anyway (y/N)? "
             read -r continue_anyway
-            if [ "$continue_anyway" != "Y" ] && [ "$continue_anyway" != "y" ]; then
+            if [[ "$continue_anyway" != "Y" && "$continue_anyway" != "y" ]]; then
+                echo "Aborting."
                 exit 1
             fi
         fi
     else
-        success "All prerequisites are installed."
+        print_success "All prerequisites are installed."
     fi
 
 }
 
 setup_environment_variables() {
-    if [ -n "${CI+x}" ]; then
-        warning "It looks like the script is running in CI. Using test IP addresses."
-        server_ip="0.0.0.0"
-        wiiu_ip=""
-        ds_ip=""
-    else
+    if [[ -n "$reconfigure" || (-z "$server_ip" && ! -f "$git_base_dir/environment/server.local.env") ]]; then
         echo "Enter the IP address of your Pretendo Network server. It must be accessible to your console."
         read -r server_ip
-        echo "Enter the IP address of your Wii U (optional). It is only used for automatic FTP uploads of modified Inkay patches."
+        echo "Enter the IP address of your Wii U (optional). It is used for automatic FTP uploads."
         read -r wiiu_ip
-        echo "Enter the IP address of your 3DS (optional). It is only used for automatic FTP uploads."
+        echo "Enter the IP address of your 3DS (optional). It is used for automatic FTP uploads."
         read -r ds_ip
     fi
 
-    ./scripts/setup-environment.sh "$server_ip" "$wiiu_ip" "$ds_ip"
+    ./scripts/setup-environment.sh "$server_ip" "$wiiu_ip" "$ds_ip" ${force:+--force} ${reconfigure:+--no-environment}
 }
 
 setup_containers() {
-    info "Setting up MongoDB container..."
+    print_info "Setting up MongoDB container..."
     ./scripts/internal/firstrun-mongodb-container.sh
-    info "Setting up MinIO container..."
+    print_info "Setting up MinIO container..."
     ./scripts/internal/firstrun-minio-container.sh
-    info "Setting up Pretendo account servers database..."
+    print_info "Setting up Pretendo account servers database..."
     ./scripts/internal/update-account-servers-database.sh
-    info "Setting up Pretendo Miiverse endpoints database..."
+    print_info "Setting up Pretendo Miiverse endpoints database..."
     ./scripts/internal/update-miiverse-endpoints.sh
-    info "Updating Postgres password..."
+    print_info "Updating Postgres password..."
     ./scripts/internal/update-postgres-password.sh
-    info "Stopping containers after initial setup..."
+    print_info "Stopping containers after initial setup..."
     docker compose down
 }
 
 export PRETENDO_SETUP_IN_PROGRESS=true
 
-check_git_repository
+# Temporary function because the framework script isn't sourced yet and we don't know if tput is available
+print_error() {
+    echo -e "\e[1;31mError: ${*}\e[0m" >&2
+}
 
-git_base=$(git rev-parse --show-toplevel)
-cd "$git_base"
-. "$git_base/scripts/internal/function-lib.sh"
+# The framework script requires git and tput, so check for them first
+if ! tput setaf 0 >/dev/null; then
+    print_error "Either the tput command is not installed, or your \$TERM environment variable is not set correctly. \
+Please install your distribution's ncurses package (such as ncurses-bin) and/or configure your terminal to set \$TERM."
+    exit 1
+fi
+if ! git --version >/dev/null; then
+    print_error "Git is not installed. Please install it: https://git-scm.com/downloads/"
+    exit 1
+fi
 
-title "Unofficial Pretendo Network setup script"
-header "Pretendo setup script started at $(date)."
+git config --local submodule.recurse true
 
-stage "Checking prerequisites."
+# shellcheck source=./scripts/internal/framework.sh
+source "$(dirname "$(realpath "$0")")/scripts/internal/framework.sh"
+set_description "This is the main setup script for your self-hosted Pretendo Network server. By default, it will prompt \
+for configuration values the first run and re-use those values for future runs."
+add_option "-r --reconfigure" "reconfigure" "Always shows configuration prompts, even if the values are already set. \
+Also disables reading configuration values from the environment."
+add_option "-f --force" "force" "Ignores warnings and confirmation prompts during the setup process."
+add_option_with_value "-s --server-ip" "server_ip" "IP-address" "The IP address of your Pretendo Network server. It \
+must be accessible to your console. Disables interactive prompts by default, unless --force-interactive is specified." false
+add_option_with_value "-w --wiiu-ip" "wiiu_ip" "IP-address" "The IP address of your Wii U. It is used for automatic FTP uploads." false
+add_option_with_value "-3 --3ds-ip" "ds_ip" "IP-address" "The IP address of your 3DS. It is used for automatic FTP uploads." false
+parse_arguments "$@"
+
+print_title "Unofficial Pretendo Network server setup script started"
+
+print_stage "Checking prerequisites."
 check_prerequisites
 
-stage "Setting up submodules and applying patches."
+print_stage "Setting up submodules and applying patches."
 ./scripts/setup-submodule-patches.sh
 
-stage "Setting up environment variables."
+print_stage "Setting up environment variables."
 setup_environment_variables
 
-stage "Pulling Docker images."
+print_stage "Pulling Docker images."
 docker compose pull
 
-stage "Building Docker images."
+print_stage "Building Docker images."
 docker compose build
 
-stage "Setting up containers with first-run scripts."
+print_stage "Setting up containers with first-run scripts."
 setup_containers
 
-success "Setup completed! You can now start your Pretendo Network server with \"docker compose up -d\"."
-header "Pretendo setup script finished at $(date)."
+print_title "Pretendo Network server setup script finished"
+print_success "Setup completed! You can now start your Pretendo server with \"docker compose up -d\"."
