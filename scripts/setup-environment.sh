@@ -41,7 +41,7 @@ if [[ -z "$server_ip" ]]; then
     exit 1
 fi
 
-if [[ -n "$(echo ./*.local.env)" ]]; then
+if ls ./*.local.env >/dev/null 2>&1; then
     print_warning "Local environment files already exist. They will be overwritten if you continue."
     if [[ -z "$force" ]]; then
         printf "Continue? [y/N] "
