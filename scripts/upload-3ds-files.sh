@@ -21,10 +21,8 @@ cd "$git_base_dir/console-files"
 if [[ -z "$should_reset" ]]; then
     docker compose up -d mitmproxy-pretendo
 
-    while ! docker compose exec mitmproxy-pretendo ls /home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem >/dev/null 2>&1; do
-        print_info "Waiting for mitmproxy to generate a certificate..."
-        sleep 1
-    done
+    run_command_until_success "docker compose exec mitmproxy-pretendo ls /home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem" \
+        "Waiting for mitmproxy to generate a certificate..." 4
 
     # Get the current certificate
     docker compose cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem ./mitmproxy-ca-cert.pem

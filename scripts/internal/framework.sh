@@ -82,6 +82,28 @@ print_success() {
     echo "${term_bold}${term_green}${*}${term_reset}"
 }
 
+# Run a command every second silently until it succeeds, or show output if the max number of retries is reached.
+#
+# Usage: run_command_until_success command wait_text [max_attempts]
+# Example: run_command_until_success "docker compose exec mongodb mongosh --eval 'db.adminCommand(\"ping\")'" "Waiting
+# for MongoDB to be ready..." 10
+run_command_until_success() {
+    local command="${1:?${FUNCNAME[0]}: Command is required}"
+    local wait_text="${2:?${FUNCNAME[0]}: Wait text is required}"
+    local max_attempts="${3:-10}"
+    local count=0
+
+    while ! eval $command >/dev/null 2>&1; do
+        count=$((count + 1))
+        if [ $count -ge $max_attempts ]; then
+            print_error "Max attempts reached. Showing error info..."
+            eval $command
+        fi
+        print_info "$wait_text"
+        sleep 2
+    done
+}
+
 # Argument parsing framework
 # Uses a lot of Bash parameter expansion tricks: https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameter-Expansion
 argument_variables=()
@@ -129,7 +151,7 @@ add_option() {
 # required, the script will exit with an error if the option is not provided. If a default value is set, the variable
 # will be set to the default value if the option is provided without a value.
 #
-# Usage: add_option_with_value options variable_name value_name description required default_value
+# Usage: add_option_with_value options variable_name value_name description required [default_value]
 # Example: add_option_with_value "-o --option" "option_value" "option-value" "Sets the option value" false "default value"
 add_option_with_value() {
     local options="${1:?${FUNCNAME[0]}: Option arguments are required}"
