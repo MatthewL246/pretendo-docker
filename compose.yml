@@ -40,8 +40,6 @@ services:
     ports:
       # HTTP
       - 80:80
-      # HTTPS (supports TLSv1.0 for Wii U)
-      - 443:443
     volumes:
       - type: bind
         source: ./config/nginx.conf
@@ -54,10 +52,6 @@ services:
       - type: bind
         source: ./logs/nginx/
         target: /var/log/nginx/
-      - type: volume
-        source: mitmproxy-pretendo-data
-        target: /etc/nginx/mitmproxy-certs
-        read_only: true
     networks:
       default:
       internal:
