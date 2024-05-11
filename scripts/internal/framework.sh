@@ -3,6 +3,7 @@
 # Usage:
 # # shellcheck source=./internal/framework.sh
 # source "$(dirname "$(realpath "$0")")/internal/framework.sh"
+# set_description "Script description goes here"
 # # Add options and arguments here
 # parse_arguments "$@"
 
