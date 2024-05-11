@@ -1,0 +1,65 @@
+# Trying to expose ports in GitHub Actions causes a "bind: address already in use" error
+# Testing whether any containers exit in CI requires disabling restarts
+# Every service must be added to this file to make CI work correctly
+
+services:
+  mitmproxy-pretendo:
+    restart: no
+    ports: !reset []
+  coredns-internal:
+    restart: no
+    ports: !reset []
+  nginx:
+    restart: no
+    ports: !reset []
+  mongodb:
+    restart: no
+    ports: !reset []
+  mongo-express:
+    restart: no
+    ports: !reset []
+  minio:
+    restart: no
+    ports: !reset []
+  redis:
+    restart: no
+    ports: !reset []
+  redis-commander:
+    restart: no
+    ports: !reset []
+  maildev:
+    restart: no
+    ports: !reset []
+  postgres:
+    restart: no
+    ports: !reset []
+  adminer:
+    restart: no
+    ports: !reset []
+  account:
+    restart: no
+    ports: !reset []
+  website:
+    restart: no
+    ports: !reset []
+  friends:
+    restart: no
+    ports: !reset []
+  miiverse-api:
+    restart: no
+    ports: !reset []
+  juxtaposition-ui:
+    restart: no
+    ports: !reset []
+  boss:
+    restart: no
+    ports: !reset []
+  wiiu-chat-authentication:
+    restart: no
+    ports: !reset []
+  wiiu-chat-secure:
+    restart: no
+    ports: !reset []
+  super-mario-maker:
+    restart: no
+    ports: !reset []
