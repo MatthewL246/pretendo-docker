@@ -34,9 +34,6 @@ goto end
 @menu_Load_a_save_slot
 
 if find "$[save_slots_dir]/*" NULL
-    allow "$[friends_save_data]"
-    allow "$[account_save_data]"
-
     # Save the old save data to the current save slot
     if not find "$[current_save_dir]/*" current_save
         # Manually choose a save slot
@@ -47,10 +44,10 @@ if find "$[save_slots_dir]/*" NULL
 
     echo "This script will load your Friends and account\nsystem modules save data from another save slot.\n\nFirst, your current save data will be saved to the\nlast-used slot: $[current_save]."
     set save_slot_save "$[save_slots_dir]/$[current_save]"
-    ask "Overwrite this save slot?\n$[save_slot_save]"
-
-    cp -w "$[friends_save_data]" "$[save_slot_save]/friends.bin"
-    cp -w "$[account_save_data]" "$[save_slot_save]/account.bin"
+    if ask "Overwrite this save slot?\n$[save_slot_save]\n\nIf you select no, your current save data will\nnot be saved before loading."
+        cp -w "$[friends_save_data]" "$[save_slot_save]/friends.bin"
+        cp -w "$[account_save_data]" "$[save_slot_save]/account.bin"
+    end
 
     # Load a new save slot
     dirsel "Which save slot do you want to load?" "$[save_slots_dir]" save_slot_load
