@@ -21,7 +21,7 @@ jobs:
         run: echo "TERM=xterm" >> "$GITHUB_ENV"
 
       - name: Apply Docker Compose CI overrides
-        run: ln -s compose.override.yml .github/compose.ci.yml
+        run: ln -s .github/compose.ci.yml compose.override.yml
 
       - name: Run the setup script
         run: ./setup.sh --server-ip 127.0.0.1 --force
