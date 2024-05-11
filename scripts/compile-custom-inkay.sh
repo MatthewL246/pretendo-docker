@@ -7,11 +7,11 @@ Miiverse applet. It must be run if you want to use Juxt."
 add_option "-r --reset" "should_reset" "Resets the Inkay CA certificate to Pretendo's instead of using the mitmproxy certificate"
 parse_arguments "$@"
 
-if [[ ! -f "$git_base_dir/environment/server.local.env" ]]; then
-    print_error "Missing environment file server.local.env. Did you run setup-environment.sh?"
+if [[ ! -f "$git_base_dir/.env" ]]; then
+    print_error "Missing .env file. Did you run setup-environment.sh?"
     exit 1
 fi
-source "$git_base_dir/environment/server.local.env"
+source "$git_base_dir/.env"
 if [[ -z "${WIIU_IP:-}" ]]; then
     print_warning "Missing environment variable WIIU_IP. Did you specify a Wii U IP address when you ran setup-environment.sh?"
     print_info "Continuing without automatic FTP upload."

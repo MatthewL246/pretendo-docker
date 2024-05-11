@@ -43,7 +43,7 @@ add your user to the docker group: https://docs.docker.com/engine/install/linux-
 }
 
 setup_environment_variables() {
-    if [[ -n "$reconfigure" || (-z "$server_ip" && ! -f "$git_base_dir/environment/server.local.env") ]]; then
+    if [[ -n "$reconfigure" || (-z "$server_ip" && ! -f "$git_base_dir/.env") ]]; then
         echo "Enter the IP address of your Pretendo Network server. It must be accessible to your console."
         read -r server_ip
         echo "Enter the IP address of your Wii U (optional). It is used for automatic FTP uploads."

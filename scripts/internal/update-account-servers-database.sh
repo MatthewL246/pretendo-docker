@@ -6,11 +6,11 @@ parse_arguments "$@"
 
 create_server_script=$(cat "$git_base_dir/scripts/run-in-container/update-account-servers-database.js")
 
-if [[ ! -f "$git_base_dir/environment/server.local.env" ]]; then
-    print_error "Missing environment file server.local.env. Did you run setup-environment.sh?"
+if [[ ! -f "$git_base_dir/.env" ]]; then
+    print_error "Missing .env file. Did you run setup-environment.sh?"
     exit 1
 fi
-source "$git_base_dir/environment/server.local.env"
+source "$git_base_dir/.env"
 
 necessary_environment_files=("friends" "miiverse-api" "wiiu-chat" "super-mario-maker")
 for environment in "${necessary_environment_files[@]}"; do

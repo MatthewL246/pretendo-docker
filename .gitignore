@@ -1,4 +1,5 @@
 # Local environment variables (used for secrets)
+.env
 /environment/*.local.env
 
 # Important secrets

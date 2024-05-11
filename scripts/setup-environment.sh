@@ -4,11 +4,11 @@
 source "$(dirname "$(realpath "$0")")/internal/framework.sh"
 set_description "This sets up local environment variables in the *.local.env files, including randomly-generated \
 secrets. Important external secrets are written to secrets.txt in the root of the repository. By default, the script \
-re-uses existing configuration values from server.local.env unless at least one is passed as an argument."
+re-uses existing configuration values from .env unless at least one is passed as an argument."
 add_option_with_value "-s --server-ip" "server_ip" "ip-address" "The IP address of the Pretendo Network server (must be accessible to the clients)" false
 add_option_with_value "-w --wiiu-ip" "wiiu_ip" "ip-address" "The IP address of the Wii U for FTP uploads" false
 add_option_with_value "-3 --3ds-ip" "ds_ip" "ip-address" "The IP address of the 3DS for FTP uploads" false
-add_option "-n --no-environment" "no_environment" "Disables reading existing configuration values from the environment"
+add_option "-n --no-environment" "no_environment" "Disables reading existing configuration values from .env"
 add_option "-f --force" "force" "Skip the confirmation prompt and always overwrite existing local environment files"
 parse_arguments "$@"
 
@@ -27,10 +27,10 @@ cd "$git_base_dir/environment"
 print_info "Setting up local environment variables..."
 
 if [[ -z "$no_environment" ]]; then
-    if [[ -f "./server.local.env" ]]; then
-        source ./server.local.env
+    if [[ -f "$git_base_dir/.env" ]]; then
+        source $git_base_dir/.env
     fi
-    # Copy the configuration from server.local.env if necessary
+    # Copy the configuration from .env if necessary
     : "${server_ip:=${SERVER_IP:-}}"
     : "${wiiu_ip:=${WIIU_IP:-}}"
     : "${ds_ip:=${DS_IP:-}}"
@@ -54,6 +54,7 @@ if ls ./*.local.env >/dev/null 2>&1; then
 
     docker compose down
     rm ./*.local.env
+    rm "$git_base_dir/.env"
 fi
 
 # Generate an AES-256-CBC key for account server tokens
@@ -123,7 +124,7 @@ echo "PN_BOSS_CONFIG_GRPC_BOSS_SERVER_API_KEY=$boss_api_key" >>./boss.local.env
 
 # Set up the server IP address
 print_info "Using server IP address $server_ip."
-echo "SERVER_IP=$server_ip" >>./server.local.env
+echo "SERVER_IP=$server_ip" >>"$git_base_dir/.env"
 echo "PN_FRIENDS_SECURE_SERVER_HOST=$server_ip" >>./friends.local.env
 echo "PN_WIIU_CHAT_SECURE_SERVER_LOCATION=$server_ip" >>./wiiu-chat.local.env
 echo "PN_SMM_SECURE_SERVER_HOST=$server_ip" >>./super-mario-maker.local.env
@@ -131,7 +132,7 @@ echo "PN_SMM_SECURE_SERVER_HOST=$server_ip" >>./super-mario-maker.local.env
 # Get the Wii U IP address
 if [[ -n "$wiiu_ip" ]]; then
     print_info "Using Wii U IP address $wiiu_ip."
-    echo "WIIU_IP=$wiiu_ip" >>./server.local.env
+    echo "WIIU_IP=$wiiu_ip" >>"$git_base_dir/.env"
 else
     print_info "Skipping Wii U IP address."
 fi
@@ -139,7 +140,7 @@ fi
 # Get the 3DS IP address
 if [[ -n "$ds_ip" ]]; then
     print_info "Using 3DS IP address $ds_ip."
-    echo "DS_IP=$ds_ip" >>./server.local.env
+    echo "DS_IP=$ds_ip" >>"$git_base_dir/.env"
 else
     print_info "Skipping 3DS IP address."
 fi
