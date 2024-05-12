@@ -1,5 +1,16 @@
 . {
+	log
+	errors
+	view nncs {
+		expr name() matches 'nncs.\\.app\\..*'
+	}
+	rewrite name regex (.*\.)?nintendo(wifi)?\.net {1}pretendo.cc answer auto
+	forward . /etc/resolv.conf
+}
+
+. {
     log
+	errors
     rewrite name regex (.*\.)?nintendo\.net server.local answer auto
     rewrite name regex (.*\.)?nintendowifi\.net server.local answer auto
     rewrite name regex (.*\.)?pretendo\.cc server.local answer auto
