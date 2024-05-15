@@ -36,7 +36,7 @@ rm -f ./*.elf ./*.wps
 # Set up the Inkay build environment and then build the patches
 docker build . -t inkay-build
 docker run -it --rm -v .:/app -w /app inkay-build
-success "Inkay patches built successfully at $(pwd)/Inkay-pretendo.wps"
+print_success "Inkay patches built successfully at $(pwd)/Inkay-pretendo.wps"
 
 # Upload the new Inkay patches to the Wii U
 if [[ -n "${WIIU_IP:-}" ]]; then
