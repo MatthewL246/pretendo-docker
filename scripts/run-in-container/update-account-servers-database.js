@@ -9,6 +9,18 @@ async function runAsync() {
 
     // Wii U: https://wiiubrew.org/wiki/Title_database and https://yls8.mtheall.com/ninupdates/titlelist.php?sys=wup
     // 3DS: https://www.3dbrew.org/wiki/Title_list and https://yls8.mtheall.com/ninupdates/titlelist.php?sys=ktr
+    await createServiceServer(
+        "PNID Settings",
+        "3f3928cc6f780638d360f0485cef973f",
+        [
+            // Wii U Account Settings
+            "000500101004B000",
+            "000500101004B100",
+            "000500101004B200",
+        ],
+        1,
+        "0".repeat(64)
+    );
     await createNexServer(
         "Friend List",
         "00003200",
