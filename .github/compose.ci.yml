@@ -13,7 +13,7 @@ services:
     restart: no
     ports: !reset []
   mongodb:
-    restart: no
+    # Can be flaky in CI, so allow restarting
     ports: !reset []
   mongo-express:
     restart: no
@@ -31,7 +31,7 @@ services:
     restart: no
     ports: !reset []
   postgres:
-    restart: no
+    # Can be flaky in CI, so allow restarting
     ports: !reset []
   adminer:
     restart: no
