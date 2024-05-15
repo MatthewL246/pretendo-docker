@@ -18,7 +18,7 @@ module.exports = JSON.parse(
         // need a CDN domain here because we just let the Juxt server send the
         // static files
         CDN_domain: process.env.JUXT_CONFIG_CDN_DOMAIN,
-        // mii_image_cdn should be cdn.pretendo.cc, but it seems to be hardcoded to
+        // mii_image_cdn should be pretendo-cdn.b-cdn.net, but it seems to be hardcoded to
         // mii.olv.pretendo.cc in the source code, so we use that for consistency
         mii_image_cdn: process.env.JUXT_CONFIG_MII_IMAGE_CDN,
         // account_server_domain is currently unused in all views
