@@ -20,6 +20,7 @@ fi
 # Provide the Git base directory
 framework_dir="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 git_base_dir="$(cd "$framework_dir" && git rev-parse --show-toplevel)"
+cd "$git_base_dir"
 
 # Terminal styling codes
 term_reset=$(tput sgr0)

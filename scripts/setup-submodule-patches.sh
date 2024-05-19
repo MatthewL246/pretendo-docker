@@ -8,8 +8,6 @@ use this if you're trying to update the submodules to a newer version than is su
 be applied first with --reject, and if that fails, a 3-way merge will be attempted."
 parse_arguments "$@"
 
-cd "$git_base_dir"
-
 print_info "Resetting all submodules..."
 git submodule sync >/dev/null
 git submodule foreach "git reset --hard" >/dev/null
