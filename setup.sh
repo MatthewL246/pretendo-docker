@@ -5,19 +5,19 @@ set -euo pipefail
 check_prerequisites() {
     prerequisites_failed=
     prerequisites_warning=
-    if ! docker version >/dev/null; then
+    if ! run_verbose docker version; then
         print_error "Docker is not installed. Please install it: https://docs.docker.com/get-docker/"
         print_info "If you see a \"Permission denied while trying to connect to the Docker daemon\" error, you need to \
 add your user to the docker group: https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user."
         prerequisites_failed=true
     fi
-    if ! docker compose version >/dev/null; then
+    if ! run_verbose docker compose version; then
         print_error "Docker Compose is not installed. Please install it: https://docs.docker.com/compose/install/"
         prerequisites_failed=true
     fi
     # The tnftp "enhanced ftp client" has the -u option for direct uploads,
     # unlike the netkit-ftp "classical ftp client"
-    if ! command -v tnftp >/dev/null; then
+    if ! run_verbose command -v tnftp; then
         print_warning "tnftp is not installed. You will not be able to upload files to your consoles automatically."
         prerequisites_warning=true
     fi
@@ -88,8 +88,6 @@ if ! git --version >/dev/null; then
     exit 1
 fi
 
-git config --local submodule.recurse true
-
 # shellcheck source=./scripts/internal/framework.sh
 source "$(dirname "$(realpath "$0")")/scripts/internal/framework.sh"
 set_description "This is the main setup script for your self-hosted Pretendo Network server. By default, it will prompt \
@@ -104,6 +102,8 @@ add_option_with_value "-3 --3ds-ip" "ds_ip" "IP-address" "The IP address of your
 parse_arguments "$@"
 
 print_title "Unofficial Pretendo Network server setup script started"
+
+git config --local submodule.recurse true
 
 print_stage "Checking prerequisites."
 check_prerequisites

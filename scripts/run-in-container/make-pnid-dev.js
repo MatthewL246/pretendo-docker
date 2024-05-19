@@ -17,7 +17,7 @@ async function runAsync() {
     if (pnid) {
         await updatePnidAccessLevel(pnid, 3, "dev");
     } else {
-        console.log(`No PNID found for username ${process.argv[1]}.`);
+        console.error(`No PNID found for username ${process.argv[1]}.`);
         await mongoose.connection.close();
         process.exit(2);
     }

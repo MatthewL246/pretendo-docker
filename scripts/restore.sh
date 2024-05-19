@@ -10,6 +10,14 @@ add_positional_argument "backup-directory" "backup_dir" "The backup directory to
 add_option "-f --force" "force" "Skips the restore confirmation prompt"
 parse_arguments "$@"
 
+if [[ ! -f "$git_base_dir/environment/minio.local.env" ]]; then
+    print_error "Missing environment file minio.local.env. Did you run setup-environment.sh?"
+    exit 1
+fi
+source "$git_base_dir/environment/minio.env"
+source "$git_base_dir/environment/minio.local.env"
+source "$git_base_dir/environment/postgres.env"
+
 if [[ ! -d "$backup_dir" ]]; then
     print_error "Backup directory $backup_dir does not exist."
     exit 1
@@ -31,31 +39,32 @@ docker compose down
 docker compose up -d mitmproxy-pretendo mongodb postgres minio redis
 
 print_info "Restoring MongoDB..."
-docker compose exec mongodb rm -rf /tmp/backup
-docker compose cp "$backup_dir/mongodb" mongodb:/tmp/backup
-docker compose exec mongodb mongorestore /tmp/backup --drop --quiet
-docker compose exec mongodb rm -rf /tmp/backup
+run_verbose docker compose exec mongodb rm -rf /tmp/backup
+run_verbose_no_errors docker compose cp "$backup_dir/mongodb" mongodb:/tmp/backup
+# mongodump uses stderr for output
+[[ -z "$show_verbose" ]] && mongodump_quiet=true
+run_verbose docker compose exec mongodb mongorestore /tmp/backup --drop "${mongodump_quiet:+--quiet}"
+run_verbose docker compose exec mongodb rm -rf /tmp/backup
 
 print_info "Restoring Postgres..."
 # According to the pg_dumpall documentation, dropping and creating the superuser role is expected to cause an error
-print_info "Note: the errors \"current user cannot be dropped\" and \"role ... already exists\" are expected and can be safely ignored."
-docker compose exec -T postgres sh -c 'psql -U "$POSTGRES_USER" -d postgres' <"$backup_dir/postgres.sql" >/dev/null
+run_verbose_no_errors docker compose exec -T postgres psql -U "$POSTGRES_USER" -d postgres <"$backup_dir/postgres.sql"
 
 print_info "Restoring MinIO..."
-docker compose exec minio /bin/sh -c 'mc alias set minio http://minio.pretendo.cc "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"'
-docker compose exec minio rm -rf /tmp/backup
-docker compose cp "$backup_dir/minio" minio:/tmp/backup
-docker compose exec minio mc mirror /tmp/backup minio/ --overwrite --remove
-docker compose exec minio rm -rf /tmp/backup
+run_verbose docker compose exec minio mc alias set minio http://minio.pretendo.cc "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
+run_verbose docker compose exec minio rm -rf /tmp/backup
+run_verbose_no_errors docker compose cp "$backup_dir/minio" minio:/tmp/backup
+run_verbose docker compose exec minio mc mirror /tmp/backup minio/ --overwrite --remove
+run_verbose docker compose exec minio rm -rf /tmp/backup
 
 print_info "Restoring Redis..."
 # Redis cannot be running when restoring a dump or it will overwrite the restored dump when it exits
-docker compose stop redis
-docker compose cp "$backup_dir/redis.rdb" redis:/data/dump.rdb
-docker compose start redis
+run_verbose_no_errors docker compose stop redis
+run_verbose_no_errors docker compose cp "$backup_dir/redis.rdb" redis:/data/dump.rdb
+run_verbose_no_errors docker compose start redis
 
 print_info "Restoring Mitmproxy..."
-docker compose cp "$backup_dir/mitmproxy" mitmproxy-pretendo:/home/mitmproxy/.mitmproxy
+run_verbose_no_errors docker compose cp "$backup_dir/mitmproxy" mitmproxy-pretendo:/home/mitmproxy/.mitmproxy
 
 # The restored backup might be using different secrets than what are currently in the .env files
 "$git_base_dir/scripts/setup-environment.sh" --force

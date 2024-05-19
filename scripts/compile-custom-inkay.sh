@@ -21,11 +21,11 @@ cd "$git_base_dir/repos/Inkay"
 
 if [[ -z "$should_reset" ]]; then
     docker compose up -d mitmproxy-pretendo
-    run_command_until_success "docker compose exec mitmproxy-pretendo ls /home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem" \
-        "Waiting for mitmproxy to generate a certificate..." 4
+    run_command_until_success "Waiting for mitmproxy to generate a certificate..." 5 \
+        docker compose exec mitmproxy-pretendo ls /home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem
 
     # Get the current certificate
-    docker compose cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem ./data/ca.pem
+    run_verbose_no_errors docker compose cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem ./data/ca.pem
 else
     git restore ./data/ca.pem
     print_info "Reset Inkay CA certificate."

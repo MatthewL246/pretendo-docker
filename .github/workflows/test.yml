@@ -24,7 +24,7 @@ jobs:
         run: ln -s .github/compose.ci.yml compose.override.yml
 
       - name: Run the setup script
-        run: ./setup.sh --server-ip 127.0.0.1 --force
+        run: ./setup.sh --server-ip 127.0.0.1 --force --verbose
 
       - name: Test starting the servers
         run: |

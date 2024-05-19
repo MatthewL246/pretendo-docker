@@ -27,5 +27,7 @@ docker compose down --volumes
 rm -f ./environment/*.local.env
 
 print_success "Reset complete. Run setup.sh to set up the environment again."
-print_info "To restore the backup and undo the reset, use scripts/restore.sh with the backup directory starting with
+if [[ -z "$no_backup" ]]; then
+    print_info "To restore the backup and undo the reset, use scripts/restore.sh with the backup directory starting with
 \"pre_reset\" after running setup.sh."
+fi

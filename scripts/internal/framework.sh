@@ -83,22 +83,41 @@ print_success() {
     echo "${term_bold}${term_green}${*}${term_reset}"
 }
 
-# Run a command every second silently until it succeeds, or show output if the max number of retries is reached.
+# Run a command and only show output if the verbose option is set, show errors
+run_verbose() {
+    if [[ -n "$show_verbose" ]]; then
+        "$@"
+    else
+        "$@" >/dev/null
+    fi
+}
+
+# Run a command and only show output if the verbose option is set, hide errors
+run_verbose_no_errors() {
+    if [[ -n "$show_verbose" ]]; then
+        "$@"
+    else
+        "$@" >/dev/null 2>&1
+    fi
+}
+
+# Run a command every 2 seconds silently until it succeeds, or show output if the max number of retries is reached.
 #
-# Usage: run_command_until_success command wait_text [max_attempts]
-# Example: run_command_until_success "docker compose exec mongodb mongosh --eval 'db.adminCommand(\"ping\")'" "Waiting
-# for MongoDB to be ready..." 10
+# Usage: run_command_until_success wait_text max_attempts command...
+# Example: run_command_until_success "Waiting for command..." 5 command arg1 arg2
 run_command_until_success() {
-    local command="${1:?${FUNCNAME[0]}: Command is required}"
-    local wait_text="${2:?${FUNCNAME[0]}: Wait text is required}"
-    local max_attempts="${3:-10}"
+    local wait_text="${1:?${FUNCNAME[0]}: Wait text is required}"
+    local max_attempts="${2:?${FUNCNAME[0]}: Max attempts is required}"
+    shift
+    shift
     local count=0
 
-    while ! eval $command >/dev/null 2>&1; do
+    while ! run_verbose_no_errors "$@"; do
         count=$((count + 1))
-        if [ $count -ge $max_attempts ]; then
+        if [[ $count -ge "$max_attempts" ]]; then
             print_error "Max attempts reached. Showing error info..."
-            eval $command
+            "$@"
+            exit 1
         fi
         print_info "$wait_text"
         sleep 2
@@ -247,6 +266,9 @@ parse_arguments() {
         declare -g "$variable="
     done
 
+    # Keep verbosity if it was set in a previous script
+    show_verbose="${SHOW_VERBOSE:-}"
+
     # Split combined short options into individual options
     local split_args=()
     local arg
@@ -308,6 +330,9 @@ parse_arguments() {
             exit 1
         fi
     done
+
+    # Export verbosity for the next script
+    export SHOW_VERBOSE="${show_verbose:-}"
 }
 
 # Shows the auto-generated help text based on the configured options and positional arguments.
@@ -336,3 +361,4 @@ show_help() {
 }
 
 add_option "-h --help" "show_help" "Displays this help message"
+add_option "-v --verbose" "show_verbose" "Enables verbose output"

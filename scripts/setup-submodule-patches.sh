@@ -9,10 +9,10 @@ be applied first with --reject, and if that fails, a 3-way merge will be attempt
 parse_arguments "$@"
 
 print_info "Resetting all submodules..."
-git submodule sync >/dev/null
-git submodule foreach "git reset --hard" >/dev/null
-git submodule foreach "git clean -fd" >/dev/null
-git submodule update --init --checkout >/dev/null
+run_verbose git submodule sync
+run_verbose git submodule foreach "git reset --hard"
+run_verbose git submodule foreach "git clean -fd"
+run_verbose git submodule update --init --checkout
 if [[ -n "$update_remote" ]]; then
     print_info "Updating submodules from their remotes..."
     git submodule update --remote
@@ -41,6 +41,7 @@ for dir in "$git_base_dir/patches/"*; do
                     error_count=$((error_count + 1))
                 fi
             else
+                run_verbose echo "Applying patch $patch"
                 git apply "$patch"
             fi
             patch_count=$((patch_count + 1))
