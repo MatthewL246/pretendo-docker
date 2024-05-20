@@ -61,9 +61,10 @@ print_info "Restoring Redis..."
 # Redis cannot be running when restoring a dump or it will overwrite the restored dump when it exits
 run_verbose_no_errors docker compose stop redis
 run_verbose_no_errors docker compose cp "$backup_dir/redis.rdb" redis:/data/dump.rdb
-run_verbose_no_errors docker compose start redis
 
 print_info "Restoring Mitmproxy..."
+# Mitmproxy cannot be running when restoring a backup or it will continue using its new certificate
+run_verbose_no_errors docker compose stop mitmproxy-pretendo
 run_verbose_no_errors docker compose cp "$backup_dir/mitmproxy" mitmproxy-pretendo:/home/mitmproxy/.mitmproxy
 
 # The restored backup might be using different secrets than what are currently in the .env files
