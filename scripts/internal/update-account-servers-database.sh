@@ -6,20 +6,11 @@ parse_arguments "$@"
 
 create_server_script=$(cat "$git_base_dir/scripts/run-in-container/update-account-servers-database.js")
 
-if [[ ! -f "$git_base_dir/.env" ]]; then
-    print_error "Missing .env file. Did you run setup-environment.sh?"
-    exit 1
-fi
-source "$git_base_dir/.env"
+load_dotenv .env
 
-necessary_environment_files=("friends" "miiverse-api" "wiiu-chat" "super-mario-maker")
-for environment in "${necessary_environment_files[@]}"; do
-    if [[ ! -f "$git_base_dir/environment/$environment.local.env" ]]; then
-        print_error "Missing environment file $environment.local.env. Did you run setup-environment.sh?"
-        exit 1
-    fi
-    source "$git_base_dir/environment/$environment.env"
-    source "$git_base_dir/environment/$environment.local.env"
+dotenv_files=("friends" "miiverse-api" "wiiu-chat" "super-mario-maker")
+for file in "${dotenv_files[@]}"; do
+    load_dotenv "$file.env" "$file.local.env"
 done
 
 docker compose up -d account

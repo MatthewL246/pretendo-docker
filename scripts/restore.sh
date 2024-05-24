@@ -10,13 +10,7 @@ add_positional_argument "backup-directory" "backup_dir" "The backup directory to
 add_option "-f --force" "force" "Skips the restore confirmation prompt"
 parse_arguments "$@"
 
-if [[ ! -f "$git_base_dir/environment/minio.local.env" ]]; then
-    print_error "Missing environment file minio.local.env. Did you run setup-environment.sh?"
-    exit 1
-fi
-source "$git_base_dir/environment/minio.env"
-source "$git_base_dir/environment/minio.local.env"
-source "$git_base_dir/environment/postgres.env"
+load_dotenv minio.env minio.local.env postgres.env
 
 if [[ ! -d "$backup_dir" ]]; then
     print_error "Backup directory $backup_dir does not exist."

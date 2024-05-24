@@ -4,12 +4,7 @@
 source "$(dirname "$(realpath "$0")")/framework.sh"
 parse_arguments "$@"
 
-if [[ ! -f "$git_base_dir/environment/postgres.local.env" ]]; then
-    print_error "Missing environment file postgres.local.env. Did you run setup-environment.sh?"
-    exit 1
-fi
-source "$git_base_dir/environment/postgres.env"
-source "$git_base_dir/environment/postgres.local.env"
+load_dotenv postgres.env postgres.local.env
 
 docker compose up -d postgres
 

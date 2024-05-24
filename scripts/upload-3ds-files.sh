@@ -6,11 +6,7 @@ set_description "This uploads required files from console-files to your 3DS to c
 add_option "-r --reset" "should_reset" "Reset the Juxt certificate to Pretendo's instead of using the mitmproxy certificate"
 parse_arguments "$@"
 
-if [[ ! -f "$git_base_dir/.env" ]]; then
-    print_error "Missing .env file. Did you run setup-environment.sh?"
-    exit 1
-fi
-source "$git_base_dir/.env"
+load_dotenv .env
 if [[ -z "${DS_IP:-}" ]]; then
     print_warning "Missing environment variable DS_IP. Did you specify a 3DS IP address when you ran setup-environment.sh?"
     print_info "Continuing without automatic FTP upload."

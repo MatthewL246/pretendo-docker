@@ -124,6 +124,29 @@ run_command_until_success() {
     done
 }
 
+# Load a .env file file from the environment directory. The global .env file is a special case, as it is loaded from the
+# repository root. Variables are sourced as non-exported global variables.
+#
+# Usage: load_dotenv dotenv_files...
+# Example: load_dotenv .env example.env example.local.env
+load_dotenv() {
+    for env_file in "$@"; do
+        local env_file_path
+        if [[ "$env_file" = ".env" ]]; then
+            env_file_path="$git_base_dir/$env_file"
+        else
+            env_file_path="$git_base_dir/environment/$env_file"
+        fi
+
+        if [[ -f "$env_file_path" ]]; then
+            source "$env_file_path"
+        else
+            print_error "Environment file not found: $env_file. Did you run the setup script?"
+            exit 1
+        fi
+    done
+}
+
 # Argument parsing framework
 # Uses a lot of Bash parameter expansion tricks: https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameter-Expansion
 argument_variables=()

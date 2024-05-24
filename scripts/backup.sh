@@ -7,13 +7,7 @@ this before doing something risky with the datbases to prevent data loss."
 add_positional_argument "backup-name" "backup_name" "Name of the backup directory, defaults to the current date and time" false
 parse_arguments "$@"
 
-if [[ ! -f "$git_base_dir/environment/minio.local.env" ]]; then
-    print_error "Missing environment file minio.local.env. Did you run setup-environment.sh?"
-    exit 1
-fi
-source "$git_base_dir/environment/minio.env"
-source "$git_base_dir/environment/minio.local.env"
-source "$git_base_dir/environment/postgres.env"
+load_dotenv minio.env minio.local.env postgres.env
 
 if [[ -z "$backup_name" ]]; then
     backup_name="backup_$(date +%Y-%m-%dT%H.%M.%S)"
