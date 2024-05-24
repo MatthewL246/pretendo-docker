@@ -24,8 +24,6 @@ generate_hex() {
 
 cd "$git_base_dir/environment"
 
-print_info "Setting up local environment variables..."
-
 if [[ -z "$no_environment" ]]; then
     if [[ -f "$git_base_dir/.env" ]]; then
         source $git_base_dir/.env
@@ -52,10 +50,13 @@ if ls ./*.local.env >/dev/null 2>&1; then
         fi
     fi
 
-    docker compose down
+    print_info "Stopping containers and removing existing local environment files..."
+    compose_no_progress down
     rm ./*.local.env
     rm "$git_base_dir/.env"
 fi
+
+print_info "Setting up local environment variables..."
 
 # Generate an AES-256-CBC key for account server tokens
 account_aes_key=$(generate_hex 64)
@@ -123,7 +124,7 @@ boss_api_key=$(generate_password 32)
 echo "PN_BOSS_CONFIG_GRPC_BOSS_SERVER_API_KEY=$boss_api_key" >>./boss.local.env
 
 # Set up the server IP address
-print_info "Using server IP address $server_ip."
+if_verbose print_info "Using server IP address $server_ip."
 echo "SERVER_IP=$server_ip" >>"$git_base_dir/.env"
 echo "PN_FRIENDS_SECURE_SERVER_HOST=$server_ip" >>./friends.local.env
 echo "PN_WIIU_CHAT_SECURE_SERVER_LOCATION=$server_ip" >>./wiiu-chat.local.env
@@ -131,7 +132,7 @@ echo "PN_SMM_SECURE_SERVER_HOST=$server_ip" >>./super-mario-maker.local.env
 
 # Get the Wii U IP address
 if [[ -n "$wiiu_ip" ]]; then
-    print_info "Using Wii U IP address $wiiu_ip."
+    if_verbose print_info "Using Wii U IP address $wiiu_ip."
     echo "WIIU_IP=$wiiu_ip" >>"$git_base_dir/.env"
 else
     print_info "Skipping Wii U IP address."
@@ -139,7 +140,7 @@ fi
 
 # Get the 3DS IP address
 if [[ -n "$ds_ip" ]]; then
-    print_info "Using 3DS IP address $ds_ip."
+    if_verbose print_info "Using 3DS IP address $ds_ip."
     echo "DS_IP=$ds_ip" >>"$git_base_dir/.env"
 else
     print_info "Skipping 3DS IP address."
@@ -162,7 +163,7 @@ Wii U IP address: ${wiiu_ip:-(not set)}
 3DS IP address: ${ds_ip:-(not set)}
 EOF
 
-print_success "Successfully set up environment."
+print_success "Successfully set up the environment."
 
 # Some things need to be updated with the new environment variables and secrets,
 # but only if the setup script isn't in progress. The MongoDB container replica
@@ -171,6 +172,5 @@ if [[ -z "${PRETENDO_SETUP_IN_PROGRESS:-}" ]]; then
     print_info "Running necessary container update scripts..."
     "$git_base_dir/scripts/internal/update-postgres-password.sh"
     "$git_base_dir/scripts/internal/update-account-servers-database.sh"
-    docker compose down
     print_success "Successfully updated the containers with new environment variables."
 fi

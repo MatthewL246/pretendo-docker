@@ -15,19 +15,20 @@ fi
 cd "$git_base_dir/console-files"
 
 if [[ -z "$should_reset" ]]; then
-    docker compose up -d mitmproxy-pretendo
-
-    run_command_until_success "docker compose exec mitmproxy-pretendo ls /home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem" \
-        "Waiting for mitmproxy to generate a certificate..." 4
+    print_info "Retrieving the mitmproxy CA certificate..."
+    compose_no_progress up -d mitmproxy-pretendo
+    run_command_until_success "Waiting for mitmproxy to generate a certificate..." 5 \
+        docker compose exec mitmproxy-pretendo ls /home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem
 
     # Get the current certificate
-    docker compose cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem ./mitmproxy-ca-cert.pem
+    compose_no_progress cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem ./mitmproxy-ca-cert.pem
 else
-    print_info "Reset the Juxt certificate."
+    print_info "Resetting the Juxt certificate..."
 fi
 
 # Upload the required files
 if [[ -n "${DS_IP:-}" ]]; then
+    print_info "Uploading the required files to your 3DS..."
     if [[ -z "$should_reset" ]]; then
         tnftp -u "ftp://user:pass@$DS_IP:5000/3ds/juxt-prod.pem" ./mitmproxy-ca-cert.pem
         tnftp -u "ftp://user:pass@$DS_IP:5000/gm9/scripts/FriendsAccountSwitcher.gm9" ./FriendsAccountSwitcher.gm9
@@ -35,7 +36,7 @@ if [[ -n "${DS_IP:-}" ]]; then
     else
         tnftp -u "ftp://user:pass@$DS_IP:5000/3ds/juxt-prod.pem" ./juxt-prod.pem
     fi
-    print_success "Successfully uploaded the required files to your 3DS."
+    print_success "Successfully uploaded the required files."
 else
     print_warning "The required files were not uploaded to your 3DS because you did not set an IP address."
 fi

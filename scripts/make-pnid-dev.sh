@@ -8,6 +8,10 @@ should have administrative permissions."
 add_positional_argument "dev-pnid" "dev_pnid" "The PNID to give developer access" true
 parse_arguments "$@"
 
+print_info "Giving $dev_pnid developer access..."
+
 update_pnid_access_level_script=$(cat "$git_base_dir/scripts/run-in-container/make-pnid-dev.js")
 
-docker compose exec account node -e "$update_pnid_access_level_script" "$dev_pnid"
+run_verbose docker compose exec account node -e "$update_pnid_access_level_script" "$dev_pnid"
+
+print_success "Successfully set $dev_pnid's access level to developer."

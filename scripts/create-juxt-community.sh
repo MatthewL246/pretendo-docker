@@ -11,18 +11,22 @@ add_option_with_value "-i --icon-path" "icon_path" "image-path" "Path to an icon
 add_option_with_value "-b --banner-path" "banner_path" "image-path" "Path to a banner image for the community" false
 parse_arguments "$@"
 
+print_info "Creating new community $name..."
+
 create_community_script=$(cat "$git_base_dir/scripts/run-in-container/create-juxt-community.js")
 
 # Clean up title IDs by removing non-alphanumeric characters, but keep commas
 title_ids=$(echo "$title_ids" | tr -dc "a-zA-Z0-9,")
 
-docker compose up -d juxtaposition-ui
+compose_no_progress up -d juxtaposition-ui
 
 if [[ -n "$icon_path" ]]; then
-    run_verbose_no_errors docker compose cp "$icon_path" juxtaposition-ui:/tmp/icon
+    compose_no_progress cp "$icon_path" juxtaposition-ui:/tmp/icon
 fi
 if [[ -n "$banner_path" ]]; then
-    run_verbose_no_errors docker compose cp "$banner_path" juxtaposition-ui:/tmp/banner
+    compose_no_progress cp "$banner_path" juxtaposition-ui:/tmp/banner
 fi
 
-docker compose exec juxtaposition-ui node -e "$create_community_script" "$name" "$description" "$title_ids" "${icon_path:+/tmp/icon}" "${banner_path:+/tmp/banner}"
+run_verbose docker compose exec juxtaposition-ui node -e "$create_community_script" "$name" "$description" "$title_ids" "${icon_path:+/tmp/icon}" "${banner_path:+/tmp/banner}"
+
+print_success "Successfully created community $name."

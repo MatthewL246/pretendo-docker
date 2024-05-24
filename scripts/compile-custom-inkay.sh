@@ -16,17 +16,19 @@ fi
 cd "$git_base_dir/repos/Inkay"
 
 if [[ -z "$should_reset" ]]; then
-    docker compose up -d mitmproxy-pretendo
+    print_info "Retrieving the mitmproxy CA certificate..."
+    compose_no_progress up -d mitmproxy-pretendo
     run_command_until_success "Waiting for mitmproxy to generate a certificate..." 5 \
         docker compose exec mitmproxy-pretendo ls /home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem
 
     # Get the current certificate
-    run_verbose_no_errors docker compose cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem ./data/ca.pem
+    compose_no_progress cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem ./data/ca.pem
 else
+    print_info "Resetting the Inkay CA certificate..."
     git restore ./data/ca.pem
-    print_info "Reset Inkay CA certificate."
 fi
 
+print_info "Compiling the Inkay patches..."
 rm -f ./*.elf ./*.wps
 
 # Set up the Inkay build environment and then build the patches
@@ -34,10 +36,10 @@ docker build . -t inkay-build
 docker run -it --rm -v .:/app -w /app inkay-build
 print_success "Inkay patches built successfully at $(pwd)/Inkay-pretendo.wps"
 
-# Upload the new Inkay patches to the Wii U
 if [[ -n "${WIIU_IP:-}" ]]; then
+    print_info "Uploading the new Inkay patches to your Wii U..."
     tnftp -u "ftp://user:pass@$WIIU_IP/fs/vol/external01/wiiu/environments/aroma/plugins/Inkay-pretendo.wps" ./Inkay-pretendo.wps
-    print_info "Reboot your Wii U now to apply the new patches."
+    print_success "Successfully uploaded the new Inkay patches. Reboot your Wii U now to apply them."
 else
     print_warning "The modified patches were not uploaded to your Wii U because you did not set an IP address."
 fi

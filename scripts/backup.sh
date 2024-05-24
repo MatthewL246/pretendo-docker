@@ -21,14 +21,14 @@ fi
 mkdir -p "$backup_dir"
 print_info "Backing up to $backup_dir"
 
-docker compose up -d mitmproxy-pretendo mongodb postgres minio redis
+print_info "Starting necessary services..."
+compose_no_progress up -d mitmproxy-pretendo mongodb postgres minio redis
 
 print_info "Backing up MongoDB..."
 run_verbose docker compose exec mongodb rm -rf /tmp/backup
-# mongodump uses stderr for output
-[[ -z "$show_verbose" ]] && mongodump_quiet=true
-run_verbose docker compose exec mongodb mongodump -o /tmp/backup "${mongodump_quiet:+--quiet}"
-run_verbose_no_errors docker compose cp mongodb:/tmp/backup "$backup_dir/mongodb"
+# shellcheck disable=SC2046
+run_verbose docker compose exec mongodb mongodump -o /tmp/backup $(if_not_verbose --quiet)
+run_verbose compose_no_progress cp mongodb:/tmp/backup "$backup_dir/mongodb"
 run_verbose docker compose exec mongodb rm -rf /tmp/backup
 
 print_info "Backing up Postgres..."
@@ -39,14 +39,14 @@ run_verbose docker compose exec minio mc alias set minio http://minio.pretendo.c
 run_verbose docker compose exec minio rm -rf /tmp/backup
 run_verbose docker compose exec minio mkdir -p /tmp/backup
 run_verbose docker compose exec minio mc mirror minio/ /tmp/backup
-run_verbose_no_errors docker compose cp minio:/tmp/backup "$backup_dir/minio"
+run_verbose compose_no_progress cp minio:/tmp/backup "$backup_dir/minio"
 run_verbose docker compose exec minio rm -rf /tmp/backup
 
 print_info "Backing up Redis..."
 run_verbose docker compose exec redis redis-cli save
-run_verbose_no_errors docker compose cp redis:/data/dump.rdb "$backup_dir/redis.rdb"
+run_verbose compose_no_progress cp redis:/data/dump.rdb "$backup_dir/redis.rdb"
 
 print_info "Backing up Mitmproxy..."
-run_verbose_no_errors docker compose cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy "$backup_dir/mitmproxy"
+run_verbose compose_no_progress cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy "$backup_dir/mitmproxy"
 
 print_success "Backup completed successfully."

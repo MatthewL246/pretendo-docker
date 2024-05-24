@@ -101,6 +101,12 @@ run_verbose_no_errors() {
     fi
 }
 
+# Run a Docker Compose command without showing progress unless the verbose option is set
+compose_no_progress() {
+    # shellcheck disable=SC2046
+    docker compose $(if_not_verbose --progress quiet) "$@"
+}
+
 # Run a command every 2 seconds silently until it succeeds, or show output if the max number of retries is reached.
 #
 # Usage: run_command_until_success wait_text max_attempts command...
@@ -145,6 +151,26 @@ load_dotenv() {
             exit 1
         fi
     done
+}
+
+# Output the provided text if the verbose option is set.
+#
+# Usage: if_verbose text...
+# Example: command $(if_verbose --verbose)
+if_verbose() {
+    if [[ -n "$show_verbose" ]]; then
+        echo "$*"
+    fi
+}
+
+# Output the provided text unless the verbose option is set.
+#
+# Usage: if_not_verbose text...
+# Example: command $(if_not_verbose --quiet)
+if_not_verbose() {
+    if [[ -z "$show_verbose" ]]; then
+        echo "$*"
+    fi
 }
 
 # Argument parsing framework

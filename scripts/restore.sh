@@ -29,15 +29,15 @@ if [[ -z "$force" ]]; then
 fi
 
 print_info "Stopping unnecessary services..."
-docker compose down
-docker compose up -d mitmproxy-pretendo mongodb postgres minio redis
+compose_no_progress down
+print_info "Starting necessary services..."
+compose_no_progress up -d mitmproxy-pretendo mongodb postgres minio redis
 
 print_info "Restoring MongoDB..."
 run_verbose docker compose exec mongodb rm -rf /tmp/backup
-run_verbose_no_errors docker compose cp "$backup_dir/mongodb" mongodb:/tmp/backup
-# mongodump uses stderr for output
-[[ -z "$show_verbose" ]] && mongodump_quiet=true
-run_verbose docker compose exec mongodb mongorestore /tmp/backup --drop "${mongodump_quiet:+--quiet}"
+run_verbose compose_no_progress cp "$backup_dir/mongodb" mongodb:/tmp/backup
+# shellcheck disable=SC2046
+run_verbose docker compose exec mongodb mongorestore /tmp/backup --drop $(if_not_verbose --quiet)
 run_verbose docker compose exec mongodb rm -rf /tmp/backup
 
 print_info "Restoring Postgres..."
@@ -47,19 +47,19 @@ run_verbose_no_errors docker compose exec -T postgres psql -U "$POSTGRES_USER" -
 print_info "Restoring MinIO..."
 run_verbose docker compose exec minio mc alias set minio http://minio.pretendo.cc "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
 run_verbose docker compose exec minio rm -rf /tmp/backup
-run_verbose_no_errors docker compose cp "$backup_dir/minio" minio:/tmp/backup
+run_verbose compose_no_progress cp "$backup_dir/minio" minio:/tmp/backup
 run_verbose docker compose exec minio mc mirror /tmp/backup minio/ --overwrite --remove
 run_verbose docker compose exec minio rm -rf /tmp/backup
 
 print_info "Restoring Redis..."
 # Redis cannot be running when restoring a dump or it will overwrite the restored dump when it exits
-run_verbose_no_errors docker compose stop redis
-run_verbose_no_errors docker compose cp "$backup_dir/redis.rdb" redis:/data/dump.rdb
+run_verbose compose_no_progress stop redis
+run_verbose compose_no_progress cp "$backup_dir/redis.rdb" redis:/data/dump.rdb
 
 print_info "Restoring Mitmproxy..."
 # Mitmproxy cannot be running when restoring a backup or it will continue using its new certificate
-run_verbose_no_errors docker compose stop mitmproxy-pretendo
-run_verbose_no_errors docker compose cp "$backup_dir/mitmproxy" mitmproxy-pretendo:/home/mitmproxy/.mitmproxy
+run_verbose compose_no_progress stop mitmproxy-pretendo
+run_verbose compose_no_progress cp "$backup_dir/mitmproxy" mitmproxy-pretendo:/home/mitmproxy/.mitmproxy
 
 # The restored backup might be using different secrets than what are currently in the .env files
 "$git_base_dir/scripts/setup-environment.sh" --force

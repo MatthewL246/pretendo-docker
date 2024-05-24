@@ -56,18 +56,13 @@ setup_environment_variables() {
 }
 
 setup_containers() {
-    print_info "Setting up MongoDB container..."
     ./scripts/internal/firstrun-mongodb-container.sh
-    print_info "Setting up MinIO container..."
     ./scripts/internal/firstrun-minio-container.sh
-    print_info "Setting up Pretendo account servers database..."
     ./scripts/internal/update-account-servers-database.sh
-    print_info "Setting up Pretendo Miiverse endpoints database..."
     ./scripts/internal/update-miiverse-endpoints.sh
-    print_info "Updating Postgres password..."
     ./scripts/internal/update-postgres-password.sh
     print_info "Stopping containers after initial setup..."
-    docker compose down
+    compose_no_progress down
 }
 
 export PRETENDO_SETUP_IN_PROGRESS=true

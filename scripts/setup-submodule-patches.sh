@@ -41,7 +41,7 @@ for dir in "$git_base_dir/patches/"*; do
                     error_count=$((error_count + 1))
                 fi
             else
-                run_verbose echo "Applying patch $patch"
+                if_verbose "Applying patch $patch"
                 git apply "$patch"
             fi
             patch_count=$((patch_count + 1))
