@@ -1,0 +1,19 @@
+diff --git i/src/server.ts w/src/server.ts
+index bc34398..46d42c7 100644
+--- i/src/server.ts
++++ w/src/server.ts
+@@ -1,4 +1,7 @@
+ process.title = 'Pretendo - Miiverse';
++process.on('SIGTERM', () => {
++	process.exit(0);
++});
+ 
+ import express from 'express';
+ import morgan from 'morgan';
+@@ -78,4 +81,4 @@ async function main(): Promise<void> {
+ 	});
+ }
+ 
+-main().catch(console.error);
+\ No newline at end of file
++main().catch(console.error);

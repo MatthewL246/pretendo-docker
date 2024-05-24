@@ -18,14 +18,3 @@ index 5132be7..177de10 100644
 +        "../../../../../../config.json": "/app/config.js"
 +    }
  }
-diff --git i/src/server.js w/src/server.js
-index be65907..d378132 100644
---- i/src/server.js
-+++ w/src/server.js
-@@ -1,5 +1,6 @@
- /* eslint-disable @typescript-eslint/explicit-function-return-type */
- /* eslint-disable @typescript-eslint/no-var-requires */
-+require('module-alias/register');
- process.title = 'Pretendo - Juxt-Web';
- const express = require('express');
- const morgan = require('morgan');

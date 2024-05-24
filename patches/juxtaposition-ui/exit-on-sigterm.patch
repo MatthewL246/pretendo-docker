@@ -1,0 +1,23 @@
+diff --git i/src/server.js w/src/server.js
+index be65907..ff45025 100644
+--- i/src/server.js
++++ w/src/server.js
+@@ -1,6 +1,11 @@
+ /* eslint-disable @typescript-eslint/explicit-function-return-type */
+ /* eslint-disable @typescript-eslint/no-var-requires */
++require('module-alias/register');
+ process.title = 'Pretendo - Juxt-Web';
++process.on('SIGTERM', () => {
++	process.exit(0);
++});
++
+ const express = require('express');
+ const morgan = require('morgan');
+ const cookieParser = require('cookie-parser');
+@@ -88,4 +93,4 @@ async function main() {
+ 	});
+ }
+ 
+-main().catch(console.error);
+\ No newline at end of file
++main().catch(console.error);

@@ -1,0 +1,12 @@
+diff --git i/src/server.js w/src/server.js
+index b73bdde..04c714b 100644
+--- i/src/server.js
++++ w/src/server.js
+@@ -1,4 +1,7 @@
+ process.title = 'Pretendo - Website';
++process.on('SIGTERM', () => {
++	process.exit(0);
++});
+ 
+ const express = require('express');
+ const handlebars = require('express-handlebars');

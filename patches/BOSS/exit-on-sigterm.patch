@@ -1,0 +1,12 @@
+diff --git i/src/server.ts w/src/server.ts
+index 5db5542..f4c1d47 100644
+--- i/src/server.ts
++++ w/src/server.ts
+@@ -1,4 +1,7 @@
+ process.title = 'Pretendo - BOSS';
++process.on('SIGTERM', () => {
++	process.exit(0);
++});
+ 
+ import express from 'express';
+ import morgan from 'morgan';
