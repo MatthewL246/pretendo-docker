@@ -11,6 +11,15 @@
             }
         },
         {
+            "label": "Start docs server",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/docs"
+            },
+            "command": "npm install && npm start",
+            "problemMatcher": []
+        },
+        {
             "label": "Build account",
             "type": "shell",
             "options": {
