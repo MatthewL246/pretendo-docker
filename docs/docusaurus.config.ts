@@ -36,6 +36,7 @@ const config: Config = {
                     editUrl: `https://github.com/${github.username}/${github.repo}/tree/main/docs/`,
                 },
                 blog: false,
+                pages: false,
                 theme: {
                     customCss: "./src/css/custom.css",
                 },
