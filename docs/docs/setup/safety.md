@@ -4,18 +4,34 @@ sidebar_position: 3
 
 # Safety
 
-**Back up your data!** If you lose your MongoDB database, you will lose all of your PNIDs and Juxt posts. If you have a
-PNID signed in on a Wii U, you will also be **stuck with a useless account on your console that you can't delete**
-because deleting an account requires a server to authenticate the password. Creating a new account on your server with
-the same PNID won't work because each PNID has a numerical ID that is appended to the end of the password before
-hashing, so your console will not authenticate with the new PNID. Use the included `./scripts/backup.sh` script to back
-up all of your Pretendo server data.
+Remember to follow these safety guidelines when using your server.
 
-**Don't delete the `pretendo-network-*` Docker volumes**. You will permanently lose your database (see above) and all of
-your Pretendo server data. If you need to do something risky, run a backup first.
+:::danger[Danger: Back up your server data!]
 
-**Don't use the same P/NNID username on multiple servers.** This applies to NNIDs and PNIDs on the official Pretendo
-Network server.
+If you lose your server database, you will lose all of your PNIDs and Juxt posts. You will also need to take manual
+steps to remove your self-hosted PNID from your consoles, as they will not be able to authenticate with an account that
+does not exist on the server. **Use the included script `./scripts/backup.sh` script to back up all of your Pretendo
+server data regularly.**
 
-**Always verify that you are actually connecting to your own server.** The easiest way is to check the mitmproxy logs to
-see if you are getting the expected HTTP requests.
+:::
+
+:::danger[Don't delete the `pretendo-network-*` Docker volumes!]
+
+You will permanently lose your database (see above) and all of your Pretendo server data. If you need to do something
+risky, run a backup first. If you need to fully reset your environment, use the included script
+`./scripts/full-reset.sh` to do so safely by running a backup first.
+
+:::
+
+:::warning[Don't use the same P/NNID username on multiple servers.]
+
+This applies to NNIDs, PNIDs on the official Pretendo Network server, and PNIDs on your self-hosted server. The consoles
+will not work right if you attempt to use multiple accounts with the same username.
+
+:::
+
+:::warning[Always verify that you are actually connecting to your own server.]
+
+The easiest way is to check the mitmproxy logs to see if you are getting the expected HTTP requests.
+
+:::

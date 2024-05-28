@@ -8,7 +8,7 @@ sidebar_label: Welcome
 
 This documentation will help you get started with running your own self-hosted Pretendo Network server!
 
-You can learn more about this project [on GitHub](https://github.com/MatthewL246/pretendo-docker) and learn more about
-the Pretendo Network [on their website](https://pretendo.network/).
+You can learn more about this project at [the GitHub repo](https://github.com/MatthewL246/pretendo-docker) and learn
+more about the Pretendo Network on [their website](https://pretendo.network/).
 
-Get started by [continuing to the next page](./setup/requirements.md).
+Get started by [continuing to the setup guide](./setup/requirements.md).
