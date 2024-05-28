@@ -119,4 +119,4 @@ print_stage "Setting up containers with first-run scripts."
 setup_containers
 
 print_title "Pretendo Network server setup script finished"
-print_success "Setup completed! You can now start your Pretendo server with \"docker compose up -d\"."
+print_success "Setup completed! You can now start your Pretendo Network server with \"docker compose up -d --build\"."

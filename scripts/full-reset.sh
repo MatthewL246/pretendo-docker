@@ -7,8 +7,10 @@ add_option "-f --force" "force" "Skip the confirmation prompt when resetting"
 add_option "--no-backup" "no_backup" "Skip the backup step, very dangerous!"
 parse_arguments "$@"
 
-print_warning "This script will fully reset the Pretendo environment by **deleting all server data**. You will lose your \
+print_warning "This script will fully reset the Pretendo environment by ${term_underline}deleting all server data${term_nounderline}. You will lose your \
 PNIDs, NEX accounts, Juxtaposition posts, Super Mario Maker courses, and anything else stored on the server!"
+print_warning "This script will also reset the Git repository and all submodules to their original state. Any changes \
+you've made will be lost."
 if [[ -z "$force" ]]; then
     printf "Continue? [y/N] "
     read -r continue
@@ -25,6 +27,9 @@ fi
 # Resetting stuff...
 docker compose down --volumes
 rm -f ./environment/*.local.env
+# Avoid deleting the .env, as it contains manual configuration
+git reset --hard
+git submodule foreach "git reset --hard"
 
 print_success "Reset complete. Run setup.sh to set up the environment again."
 if [[ -z "$no_backup" ]]; then
