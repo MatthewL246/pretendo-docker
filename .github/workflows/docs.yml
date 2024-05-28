@@ -37,13 +37,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Cache Docusaurus temp directory
-        uses: actions/cache@v4
-        with:
-          path: ./docs/.docusaurus
-          key: docusaurus-cache-${{ runner.os }}-${{ hashFiles('./docs/package-lock.json') }}-${{ github.sha }}
-          restore-keys: docusaurus-cache-${{ runner.os }}-${{ hashFiles('./docs/package-lock.json') }}-
-
       - name: Build the documentation site
         run: npm run build
 
