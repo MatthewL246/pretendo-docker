@@ -2,7 +2,11 @@ name: Test scripts and build Docker images
 
 on:
   push:
+    paths-ignore:
+      - "docs/**"
   pull_request:
+    paths-ignore:
+      - "docs/**"
   workflow_dispatch:
 
 jobs:
