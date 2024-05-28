@@ -39,4 +39,12 @@ if [[ -n "${DS_IP:-}" ]]; then
     print_success "Successfully uploaded the required files."
 else
     print_warning "The required files were not uploaded to your 3DS because you did not set an IP address."
+    print_info "Please copy the following files to your 3DS SD card:"
+    if [[ -z "$should_reset" ]]; then
+        print_info "- \"$(pwd)/mitmproxy-ca-cert.pem\" as \"SD:/3ds/juxt-prod.pem\""
+        print_info "- \"$(pwd)/FriendsAccountSwitcher.gm9\" as \"SD:/gm9/scripts/FriendsAccountSwitcher.gm9\""
+        print_info "- \"$(pwd)/ResetFriendsTestAccount.3dsx\" as \"SD:/3ds/ResetFriendsTestAccount.3dsx\""
+    else
+        print_info "- \"$(pwd)/juxt-prod.pem\" as \"SD:/3ds/juxt-prod.pem\""
+    fi
 fi

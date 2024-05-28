@@ -42,4 +42,5 @@ if [[ -n "${WIIU_IP:-}" ]]; then
     print_success "Successfully uploaded the new Inkay patches. Reboot your Wii U now to apply them."
 else
     print_warning "The modified patches were not uploaded to your Wii U because you did not set an IP address."
+    print_info "Please copy the file \"$(pwd)/Inkay-pretendo.wps\" to your Wii U SD card as \"SD:/wiiu/environments/aroma/plugins/Inkay-pretendo.wps\"."
 fi
