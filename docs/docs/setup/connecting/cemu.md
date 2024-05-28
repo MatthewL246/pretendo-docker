@@ -1,5 +1,7 @@
 ---
 sidebar_position: 3
+pagination_prev: setup/connecting/index
+pagination_next: setup/next-steps
 ---
 
 # Cemu

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+pagination_prev: setup/connecting/index
+pagination_next: setup/next-steps
 ---
 
 # Computer browser

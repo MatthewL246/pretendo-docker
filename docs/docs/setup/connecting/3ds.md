@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+pagination_prev: setup/connecting/index
+pagination_next: setup/next-steps
 ---
 
 # 3DS

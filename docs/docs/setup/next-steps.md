@@ -1,5 +1,6 @@
 ---
 sidebar_position: 5
+pagination_prev: setup/connecting/index
 ---
 
 # Next Steps
