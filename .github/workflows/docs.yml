@@ -24,15 +24,15 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: ./docs/package-lock.json
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: npm ci
