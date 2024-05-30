@@ -28,3 +28,23 @@
     --ifm-color-primary-lightest: #4fddbf;
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Make tabs inside lists more distinguishable from the next item. */
+li > .tabs-container {
+    margin-bottom: var(--ifm-leading);
+    border: 3px solid var(--ifm-tabs-color-active-border);
+    border-radius: var(--ifm-global-radius);
+    padding: var(--ifm-tabs-padding-vertical) var(--ifm-tabs-padding-horizontal);
+    padding-top: 0;
+}
+
+/* Customize ordered list styles. */
+ol {
+    list-style: decimal;
+}
+ol ol {
+    list-style: lower-alpha;
+}
+ol ol ol {
+    list-style: lower-roman;
+}

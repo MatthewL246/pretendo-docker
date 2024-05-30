@@ -6,22 +6,37 @@ sidebar_position: 4
 
 Please be aware that uninstalling Pretendo Docker requires a some manual steps to be taken on the console.
 
-1. ⚠️ **_EXTREMELY IMPORTANT:_ If you use a Wii U, delete your selfhosted PNID from your console _or_ back up your
-   MongoDB database now!** See the [safety section above](#safety) for more information. **If you don't do this, you
-   will be stuck with a useless account on your console that you can't delete!**
-2. Revert the steps you did when connecting.
-   - Disable the custom proxy settings on your console.
-   - On Wii U, replace your custom Inkay patcher with the original Inkay by re-downloading it from GitHub.
-   - On 3DS, replace your custom Juxt certificate with the original one by re-downloading Nimbus from GitHub.
-   - On 3DS, switch to your official Pretendo Friends account by running the `FriendsAccountSwitcher` script in GodMode9
-     and loading the `pretendo_official` slot you made.
-     - You may now delete the `sd:/gm9/out/friends_accounts` directory from your SD card, as well as
-       `sd:/3ds/ResetFriendsTestAccount.3dsx` and `sd:/gm9/scripts/FriendsAccountSwitcher.gm9` if you will no longer be
-       using multiple Friends accounts.
-   - Make sure your console still works when connecting to the official Pretendo Network servers.
-3. Run `docker compose down` to stop the containers.
-4. Delete this repository.
-5. Run `docker system prune -a` to delete the Docker images and build cache.
-6. _Optional:_ delete the `pretendo-network-*` Docker volumes and run `docker volume prune`. Again, **double check that
-   you deleted your selfhosted PNID from your console now** or made a backup of your MongoDB database if you intend to
-   start selfhosting a Pretendo server again later.
+:::danger
+
+**Take a backup of your server data now!** Run `./scripts/backup.sh before-uninstall` to back up all server data to
+`backups/before-uninstall`.
+
+After backing up, **copy the `backups` directory in this repo to somewhere safe so it is not deleted**.
+
+:::
+
+1. Go back to the [connecting guide](./setup/connecting/index.mdx) and follow the steps to connect to either the
+   official Pretendo Network server or Nintendo's server.
+
+   - You may now delete anything related to your self-hosted PNID from your consoles and emulators.
+
+     :::warning
+
+     If you do not delete your self-hosted PNID from your Wii U now, while connected to your local server, you will need
+     to take manual steps if you decide to delete it later. Deleting a Wii U account normally requires server
+     authentication, but this can be bypassed by using the `Unlink the account.dat file` option of the
+     [Wii U Account Swap tool](https://github.com/Nightkingale/Wii-U-Account-Swap) and then deleting the account
+     normally.
+
+     :::
+
+2. Run `docker compose down` to stop the containers.
+3. Delete your copy of the `pretendo-docker` repository.
+4. Run `docker system prune -a` to free up some storage by deleting the Pretendo Docker images and build cache.
+
+:::danger
+
+If you have safely stored your server data backup, you may now delete the Docker volumes that start with
+`pretendo-network` to free up some more storage.
+
+:::

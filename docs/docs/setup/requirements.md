@@ -9,9 +9,9 @@ Before you start setting up the Pretendo Network server, make sure your system m
 ## Hardware
 
 - A decent CPU
+  - Must be using the x64 or ARM64 architecture
+    - If you're using an ARM SBC like a Raspberry Pi, make sure you install a 64-bit operating system
   - At least 4 cores are recommended
-  - Must fulfill the
-    [MongoDB system requirements](https://www.mongodb.com/docs/ops-manager/current/tutorial/provisioning-prep/)
 - At least 4GB of free RAM while building the Docker containers
   - The servers themselves uses about 1GB of RAM while running
 - At least 10 GB of free storage for Docker images, build cache, and server data
