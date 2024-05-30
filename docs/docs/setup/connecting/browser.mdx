@@ -1,0 +1,103 @@
+---
+sidebar_position: 1
+pagination_prev: setup/connecting/index
+pagination_next: setup/next-steps
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Web browser
+
+This guide will show you how to access your server from your computer's web browser.
+
+## Connecting
+
+{/** Using an HTML list here is the simplest way to make the tabs display correctly inside the list. Mixing HTML/JSX and
+Markdown block elements often causes unexpected results. **/}
+
+<ol>
+  <li>
+    Create an isolated browser profile so you can safely MITM your browser. This is important because mitmproxy will
+    intercept all traffic from your browser, potentially including passwords and other sensitive information. This also
+    prevents irrelevant web browsing traffic from filling up the mitmproxy logs.
+
+    <Tabs groupId="browsers">
+      <TabItem value="chrome" label="Google Chrome">
+        The easiest way to do this is to download [Chrome Dev](https://www.google.com/chrome/dev/), which always uses a
+        different browser profile than the stable version.
+
+        Alternatively, if you only want to use the stable version of Chrome, you can use the
+        [`--user-data-dir`](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/user_data_dir.md#overriding-the-user-data-directory)
+        flag to create an isolated user data directory. Chrome's "profiles" do not isolate network settings, so a
+        separate user data directory is required.
+      </TabItem>
+
+      <TabItem value="firefox" label="Mozilla Firefox">
+        The easiest way to do this is to download
+        [Firefox Developer Edition](https://www.mozilla.org/en-US/firefox/developer/), which always uses a different
+        browser profile than the stable version.
+
+        Alternatively, if you only want to use the stable version of Firefox, you can use the
+        [profile manager](https://support.mozilla.org/en-US/kb/profile-manager-create-remove-switch-firefox-profiles) to
+        create an isolated profile.
+      </TabItem>
+    </Tabs>
+
+  </li>
+  <li>
+    Start your web browser using your server as a proxy server.
+
+    <Tabs groupId="browsers">
+      <TabItem value="chrome" label="Google Chrome">
+        Using your isolated browser profile (either Chrome Dev or `--user-data-dir`), launch Chrome with the flag
+        `--proxy-server="server-ip:8080"`, replacing `server-ip` with your server's IP address. Create a shortcut to
+        your isolated Chrome profile with this flag to make it easier to open.
+      </TabItem>
+
+      <TabItem value="firefox" label="Mozilla Firefox">
+        Using your isolated browser profile (either Firefox Developer Edition or the profile manager), go to `Settings
+        => General => Network Settings => Settings...` and select `Manual proxy configuration`. Set the HTTP proxy to
+        your server's IP address, the port to `8080`, and check `Also use this proxy for HTTPS`. Finally, click `OK`.
+      </TabItem>
+    </Tabs>
+
+    Then, visit [127.0.0.1:8081](http://127.0.0.1:8081) in any browser to view the mitmproxy logs and verify that
+    traffic is going through mitmproxy.
+
+  </li>
+</ol>
+
+:::tip
+
+If you don't want to deal with the security warnings on every page from being MITMed, go to [mitm.it](http://mitm.it) in
+your proxied browser and follow the instructions there to trust the mitmproxy certificate. This is secure because
+mitmproxy generates a random certificate on first run, so nobody else could MITM your traffic except you.
+
+:::
+
+## Creating a test account
+
+First, open [pretendo.network/account](https://pretendo.network/account) in your proxied browser.
+
+:::warning
+
+**Make sure that there is a big red banner stating "This is an unofficial Pretendo Network server!"** If there is not,
+your proxy settings did not apply correctly, and you are connected to the official Pretendo Network server.
+
+:::
+
+Then, sign up for an account on the website, just as you would on the official Pretendo Network server. You can also
+visit [juxt.pretendo.network](https://juxt.pretendo.network) in your proxied browser to view Juxt posts.
+
+:::note
+
+You can ignore the captcha: captcha verification is disabled in the account server.
+
+:::
+
+## Changing which server you are connected to
+
+- To connect to your self-hosted Pretendo server, use your isolated web browser profile with the proxy settings to open
+  the Pretendo Network website.
+- To connect to the official Pretendo server, use your regular web browser without the proxy settings.
