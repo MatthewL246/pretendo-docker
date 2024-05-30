@@ -31,7 +31,7 @@ fi
 print_info "Stopping unnecessary services..."
 compose_no_progress down
 print_info "Starting necessary services..."
-compose_no_progress up -d mitmproxy-pretendo mongodb postgres minio redis
+compose_no_progress up -d mitmproxy-pretendo mongodb postgres minio redis mailpit
 
 print_info "Restoring MongoDB..."
 run_verbose docker compose exec mongodb rm -rf /tmp/backup
@@ -60,6 +60,10 @@ print_info "Restoring Mitmproxy..."
 # Mitmproxy cannot be running when restoring a backup or it will continue using its new certificate
 run_verbose compose_no_progress stop mitmproxy-pretendo
 run_verbose compose_no_progress cp "$backup_dir/mitmproxy" mitmproxy-pretendo:/home/mitmproxy/.mitmproxy
+
+print_info "Restoring Mailpit..."
+run_verbose compose_no_progress stop mailpit
+run_verbose compose_no_progress cp "$backup_dir/mailpit.db" mailpit:/data/mailpit.db
 
 # The restored backup might be using different secrets than what are currently in the .env files
 "$git_base_dir/scripts/setup-environment.sh" --force

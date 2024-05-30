@@ -144,28 +144,23 @@ services:
     env_file:
       - ./environment/redis-commander.env
 
-  # TODO: MailDev appears to be unmaintained and has security vulnerabilities.
-  # Find an alternative. MailCatcher doesn't support persistance, and MailHog
-  # also seems unmaintained.
-  maildev:
-    image: maildev/maildev:latest
+  mailpit:
+    image: axllent/mailpit:latest
     depends_on:
       - coredns-internal
     restart: unless-stopped
     ports:
-      # MailDev web UI
+      # Mailpit web UI
       - 127.0.0.1:8084:8084
     volumes:
       - type: volume
-        source: maildev-mail
+        source: mailpit-mail
         target: /data
     networks:
       internal:
     dns: 172.20.0.200
     env_file:
-      - ./environment/maildev.env
-    # We need to set the user to root so that MailDev can write to the volume.
-    user: root
+      - ./environment/mailpit.env
 
   postgres:
     image: postgres:alpine
@@ -218,7 +213,7 @@ services:
       - mongodb
       - minio
       - redis
-      - maildev
+      - mailpit
     restart: unless-stopped
     ports:
       # Node.js debugger
@@ -421,7 +416,7 @@ volumes:
   mongodb-database:
   minio-s3-data:
   redis-data:
-  maildev-mail:
+  mailpit-mail:
   postgres-database:
 
 networks:

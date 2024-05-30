@@ -22,7 +22,7 @@ mkdir -p "$backup_dir"
 print_info "Backing up to $backup_dir"
 
 print_info "Starting necessary services..."
-compose_no_progress up -d mitmproxy-pretendo mongodb postgres minio redis
+compose_no_progress up -d mitmproxy-pretendo mongodb postgres minio redis mailpit
 
 print_info "Backing up MongoDB..."
 run_verbose docker compose exec mongodb rm -rf /tmp/backup
@@ -48,5 +48,8 @@ run_verbose compose_no_progress cp redis:/data/dump.rdb "$backup_dir/redis.rdb"
 
 print_info "Backing up Mitmproxy..."
 run_verbose compose_no_progress cp mitmproxy-pretendo:/home/mitmproxy/.mitmproxy "$backup_dir/mitmproxy"
+
+print_info "Backing up Mailpit..."
+run_verbose compose_no_progress cp mailpit:/data/mailpit.db "$backup_dir/mailpit.db"
 
 print_success "Backup completed successfully."

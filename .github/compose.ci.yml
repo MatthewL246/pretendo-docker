@@ -27,7 +27,7 @@ services:
   redis-commander:
     restart: no
     ports: !reset []
-  maildev:
+  mailpit:
     restart: no
     ports: !reset []
   postgres:
