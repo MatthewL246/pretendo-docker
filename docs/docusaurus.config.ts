@@ -53,12 +53,6 @@ const config: Config = {
             },
             items: [
                 {
-                    type: "docSidebar",
-                    sidebarId: "sidebar",
-                    position: "left",
-                    label: "Docs",
-                },
-                {
                     href: `https://github.com/${github.username}/${github.repo}`,
                     label: "GitHub",
                     position: "right",
