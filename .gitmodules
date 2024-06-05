@@ -65,3 +65,14 @@ path = repos/super-mario-maker
 url = https://github.com/PretendoNetwork/super-mario-maker.git
 branch = master
 ignore = dirty
+
+[submodule "repos/SSSL"]
+path = repos/SSSL
+url = https://github.com/PretendoNetwork/SSSL.git
+branch = master
+ignore = dirty
+[submodule "repos/SSSL-DNS"]
+path = repos/SSSL-DNS
+url = https://github.com/PretendoNetwork/SSSL-DNS.git
+branch = master
+ignore = dirty
