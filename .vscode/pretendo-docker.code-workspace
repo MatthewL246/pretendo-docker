@@ -28,6 +28,12 @@
             "path": "../repos/mitmproxy-pretendo"
         },
         {
+            "path": "../repos/SSSL"
+        },
+        {
+            "path": "../repos/SSSL-DNS"
+        },
+        {
             "path": "../repos/super-mario-maker"
         },
         {
