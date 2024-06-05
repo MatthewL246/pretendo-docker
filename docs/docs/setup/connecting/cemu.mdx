@@ -15,34 +15,34 @@ This guide will show you how to access your server from the Cemu emulator.
 ## Connecting
 
 <Tabs>
-   <TabItem value="wiiu" label="With a Wii U" default>
-      1. Follow the [Wii U connecting guide](./wiiu.md) first.
-      2. Follow the [official Pretendo Network Cemu installation guide](https://pretendo.network/docs/install/cemu).
-         - If you are using multiple accounts, make sure to disable the `Merge Account To Default Cemu User` setting in
-           Dumpling.
-      3. If you have not done so already, use Dumpling to dump your Friend List system application and any online games
-         you want to play.
-   </TabItem>
+  <TabItem value="wiiu" label="With a Wii U" default>
+    1. Follow the [Wii U connecting guide](./wiiu.md) first.
+    2. Follow the [official Pretendo Network Cemu installation guide](https://pretendo.network/docs/install/cemu).
+       - If you are using multiple accounts, make sure to disable the `Merge Account To Default Cemu User` setting in
+         Dumpling.
+    3. If you have not done so already, use Dumpling to dump your Friend List system application and any online games
+       you want to play.
+  </TabItem>
 
-   <TabItem value="no-wiiu" label="Without a Wii U">
-      <Admonition type="warning">
-         Prefer using the Wii U method if you have access to a Wii U console. This method is more complicated and
-         requires using an account server patch that disables the console verification, which normally blocks invalid OTP
-         and SEEPROM dumps. **The fake OTP and SEEPROM dumps will not work on the official Pretendo server.**
-      </Admonition>
+  <TabItem value="no-wiiu" label="Without a Wii U">
+    <Admonition type="warning">
+      Prefer using the Wii U method if you have access to a Wii U console. This method is more complicated and
+      requires using an account server patch that disables the console verification, which normally blocks invalid OTP
+      and SEEPROM dumps. **The fake OTP and SEEPROM dumps will not work on the official Pretendo server.**
+    </Admonition>
 
-      1. Follow the [browser connecting guide](./browser.mdx) first.
-      2. Visit [the account settings page](https://pretendo.network/account) in your proxied browser and click the
-         `Download account files` button.
-         <Admonition type="info">
-            This button will only show up on your server. This feature was purposefully disabled on the official Pretendo
-            servers to prevent abuse and ban evasion.
-         </Admonition>
-      3. Copy `otp.bin`, `seeprom.bin`, and `mlc01` from the downloaded ZIP file to your Cemu directory.
-      4. Continue with the [official Pretendo Network Cemu installation guide](https://pretendo.network/docs/install/cemu)
-         to enable online mode with Pretendo.
+    1. Follow the [browser connecting guide](./browser.mdx) first.
+    2. Visit [the account settings page](https://pretendo.network/account) in your proxied browser and click the
+       `Download account files` button.
+       <Admonition type="info">
+         This button will only show up on your server. This feature was purposefully disabled on the official Pretendo
+         servers to prevent abuse and ban evasion.
+       </Admonition>
+    3. Copy `otp.bin`, `seeprom.bin`, and `mlc01` from the downloaded ZIP file to your Cemu directory.
+    4. Continue with the [official Pretendo Network Cemu installation guide](https://pretendo.network/docs/install/cemu)
+       to enable online mode with Pretendo.
 
-   </TabItem>
+  </TabItem>
 </Tabs>
 
 Finally, open the `settings.xml` file in your Cemu data directory and set the `<proxy_server>` value to
