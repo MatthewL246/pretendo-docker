@@ -15,5 +15,10 @@
 /console-files/aes_keys.txt
 /console-files/boss_keys.bin
 
+# SSSL certificates
+/console-files/CACERT_NINTENDO_CA_G3.der
+/console-files/cert-chain.pem
+/console-files/ssl-cert-private-key.pem
+
 # Backups
 /backups/

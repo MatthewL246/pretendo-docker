@@ -16,9 +16,47 @@ services:
     command: mitmweb --web-host 0.0.0.0
     tty: true
 
+  nginx-sssl:
+    # This forwards all requests to the primary Nginx
+    build: ./repos/SSSL-DNS/nginx
+    restart: always
+    ports:
+      # HTTPS
+      - 443:443
+    volumes:
+      - type: bind
+        source: ./config/nginx-sssl.conf
+        target: /opt/nginx/conf/nginx.conf
+        read_only: true
+      - type: bind
+        source: ./console-files/cert-chain.pem
+        target: /opt/nginx/ssl/ca.pem
+        read_only: true
+      - type: bind
+        source: ./console-files/ssl-cert-private-key.pem
+        target: /opt/nginx/ssl/private.key
+        read_only: true
+
+  coredns-public:
+    # This responds to DNS queries from client consoles, redirecting Nintendo requests to the local server
+    image: coredns/coredns:latest
+    restart: always
+    ports:
+      # DNS
+      - 53:53/udp
+    volumes:
+      - type: bind
+        source: ./config/public.Corefile
+        target: /etc/coredns/Corefile
+        read_only: true
+    networks:
+      default:
+    command: -conf /etc/coredns/Corefile
+    env_file:
+      - ./.env
+
   coredns-internal:
-    # This responds to DNS queries from the internal network of containers,
-    # redirecting them to the nginx container
+    # This responds to DNS queries from the internal network of containers, redirecting Pretendo to the Nginx container
     image: coredns/coredns:latest
     restart: always
     volumes:

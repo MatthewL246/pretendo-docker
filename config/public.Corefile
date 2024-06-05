@@ -1,3 +1,5 @@
+# Send NNCS requests to Pretendo's servers because NNCS requires multiple servers with different public IP addresses,
+# which most people don't have.
 . {
 	log
 	errors
@@ -8,6 +10,7 @@
 	forward . /etc/resolv.conf
 }
 
+# Redirect all Pretendo/Nintendo requests to a local server
 . {
     log
 	errors
