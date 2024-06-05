@@ -3,7 +3,7 @@ services:
   mitmproxy-pretendo:
     image: ghcr.io/matthewl246/mitmproxy-pretendo:local
     # build: ./repos/mitmproxy-pretendo
-    restart: unless-stopped
+    restart: always
     ports:
       # Proxy server
       - 8080:8080
@@ -20,7 +20,7 @@ services:
     # This responds to DNS queries from the internal network of containers,
     # redirecting them to the nginx container
     image: coredns/coredns:latest
-    restart: unless-stopped
+    restart: always
     volumes:
       - type: bind
         source: ./config/internal.Corefile
@@ -36,7 +36,7 @@ services:
     depends_on:
       - coredns-internal
       - mitmproxy-pretendo
-    restart: unless-stopped
+    restart: always
     ports:
       # HTTP
       - 80:80
@@ -62,7 +62,7 @@ services:
     image: mongo:latest
     depends_on:
       - coredns-internal
-    restart: unless-stopped
+    restart: always
     ports:
       # For connecting with mongosh or MongoDB Compass
       - 127.0.0.1:27017:27017
@@ -84,7 +84,7 @@ services:
     depends_on:
       - coredns-internal
       - mongodb
-    restart: unless-stopped
+    restart: always
     ports:
       # Web interface
       - 127.0.0.1:8082:8082
@@ -99,7 +99,7 @@ services:
     depends_on:
       - coredns-internal
       - nginx
-    restart: unless-stopped
+    restart: always
     ports:
       # Web console
       - 127.0.0.1:8083:8083
@@ -119,7 +119,7 @@ services:
     image: redis:alpine
     depends_on:
       - coredns-internal
-    restart: unless-stopped
+    restart: always
     volumes:
       - type: volume
         source: redis-data
@@ -134,7 +134,7 @@ services:
     depends_on:
       - coredns-internal
       - redis
-    restart: unless-stopped
+    restart: always
     ports:
       # Web interface
       - 127.0.0.1:8086:8086
@@ -148,7 +148,7 @@ services:
     image: axllent/mailpit:latest
     depends_on:
       - coredns-internal
-    restart: unless-stopped
+    restart: always
     ports:
       # Mailpit web UI
       - 127.0.0.1:8084:8084
@@ -166,7 +166,7 @@ services:
     image: postgres:alpine
     depends_on:
       - coredns-internal
-    restart: unless-stopped
+    restart: always
     ports:
       # For connecting with pgAdmin
       - 127.0.0.1:5432:5432
@@ -190,7 +190,7 @@ services:
     depends_on:
       - coredns-internal
       - postgres
-    restart: unless-stopped
+    restart: always
     ports:
       # Adminer web interface
       - 127.0.0.1:8085:8080
@@ -214,7 +214,7 @@ services:
       - minio
       - redis
       - mailpit
-    restart: unless-stopped
+    restart: always
     ports:
       # Node.js debugger
       - 127.0.0.1:9229:9229
@@ -234,7 +234,7 @@ services:
     depends_on:
       - account
       - mongodb
-    restart: unless-stopped
+    restart: always
     ports:
       # Node.js debugger
       - 127.0.0.1:9230:9230
@@ -255,7 +255,7 @@ services:
     depends_on:
       - account
       - postgres
-    restart: unless-stopped
+    restart: always
     ports:
       # Go delve debugger
       - 127.0.0.1:2345:2345
@@ -280,7 +280,7 @@ services:
       - account
       - mongodb
       - friends
-    restart: unless-stopped
+    restart: always
     ports:
       # Node.js debugger
       - 127.0.0.1:9231:9231
@@ -302,7 +302,7 @@ services:
       - mongodb
       - redis
       - friends
-    restart: unless-stopped
+    restart: always
     ports:
       # Node.js debugger
       - 127.0.0.1:9232:9232
@@ -326,7 +326,7 @@ services:
     depends_on:
       - account
       - mongodb
-    restart: unless-stopped
+    restart: always
     ports:
       # Node.js debugger
       - 127.0.0.1:9233:9233
@@ -346,7 +346,7 @@ services:
     depends_on:
       - account
       - mongodb
-    restart: unless-stopped
+    restart: always
     ports:
       # Go delve debugger
       - 127.0.0.1:2346:2346
@@ -369,7 +369,7 @@ services:
       - account
       - mongodb
       - wiiu-chat-authentication
-    restart: unless-stopped
+    restart: always
     ports:
       # Go delve debugger
       - 127.0.0.1:2347:2347
@@ -392,7 +392,7 @@ services:
       - account
       - minio
       - postgres
-    restart: unless-stopped
+    restart: always
     ports:
       # Go delve debugger
       - 127.0.0.1:2348:2348
