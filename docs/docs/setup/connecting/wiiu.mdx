@@ -48,13 +48,31 @@ _These steps are based on the
   </TabItem>
 
   <TabItem value="sssl" label="SSSL (hackless)">
-    1. Copy the file `/storage_mlc/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CA_G3.der` to the
-       `console-files` directory in this repo.
-    2. Run `./scripts/patch-sssl-certificate.sh` to create a patched Nintendo CA G3 SSL certificate for SSSL.
-    3. Open `compose.yml` and uncomment the `nginx-sssl` and `coredns-public` services.
-    4. Follow the [official Pretendo Network Wii U SSSL guide](https://pretendo.network/docs/install/wiiu#sssl), but **use
+    ### Getting the Nintendo CA G3 certificate
+
+    If you or someone you know already has a homebrewed Wii U, use FTP to copy the file
+    `/storage_mlc/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CA_G3.der` to the `console-files` directory
+    in this repo and move on to [Setting up SSSL](#setting-up-sssl). Otherwise, continue with the following steps.
+
+    1. Visit [https://account.nintendo.net](https://account.nintendo.net) in Google Chrome. Unfortunately, Firefox does
+       not have the necessary feature of exporting server certificates. Ensure that you get to a
+       `Your connection is not private` tab (you might need to reload a couple times).
+    2. Click the `Not secure` button in the left side of the address bar.
+    3. Click on `Certificate is not valid`.
+    4. Click on the `Details` tab. Then, click on `Nintendo CA - G3` in the `Certificate Heirarchy` box. Ensure that the
+       first line of the `Certificate Fields` box also says `Nintendo CA - G3` to make sure you are downloading the
+       correct certificate.
+    5. Click on the `Export...` button. Select the file type as `DER-encoded binary (*.der)` and save the certificate as
+       `CACERT_NINTENDO_CA_G3.der` in the `console-files` directory of this repo.
+
+    ### Setting up SSSL
+
+    1. Run `./scripts/patch-sssl-certificate.sh` to create a patched Nintendo CA G3 SSL certificate for SSSL.
+    2. Open `compose.yml` and uncomment the `nginx-sssl` and `coredns-public` services.
+    3. Follow the [official Pretendo Network Wii U SSSL guide](https://pretendo.network/docs/install/wiiu#sssl), but **use
        your local server's IP address** as the `Primary DNS` server.
-    5. Create a new PNID on your console from the users page.
+    4. Create a new PNID on your console from the users page.
+
   </TabItem>
 </Tabs>
 
