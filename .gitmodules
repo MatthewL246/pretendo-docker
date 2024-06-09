@@ -11,11 +11,8 @@ ignore = dirty
 
 [submodule "repos/account"]
 path = repos/account
-# TODO: Switch this back after https://github.com/PretendoNetwork/account/pull/91 is merged
-# url = https://github.com/PretendoNetwork/account.git
-# branch = dev
-url = https://github.com/CaramelKat/account.git
-branch = user-information-app
+url = https://github.com/PretendoNetwork/account.git
+branch = dev
 ignore = dirty
 
 [submodule "repos/website"]
