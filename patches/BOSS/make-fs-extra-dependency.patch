@@ -1,0 +1,130 @@
+diff --git i/package-lock.json w/package-lock.json
+index f72209d..00d6594 100644
+--- i/package-lock.json
++++ w/package-lock.json
+@@ -20,6 +20,7 @@
+         "dotenv": "^10.0.0",
+         "express": "^4.17.1",
+         "express-subdomain": "^1.0.5",
++        "fs-extra": "^11.2.0",
+         "moment": "^2.29.4",
+         "mongoose": "^7.4.3",
+         "morgan": "^1.10.0",
+@@ -36,7 +37,6 @@
+         "@typescript-eslint/parser": "^6.4.0",
+         "axios": "^1.6.2",
+         "eslint": "^8.47.0",
+-        "fs-extra": "^10.1.0",
+         "tsc-alias": "^1.8.7",
+         "typescript": "^5.1.6",
+         "xmlbuilder2": "^3.0.2"
+@@ -3458,17 +3458,16 @@
+       }
+     },
+     "node_modules/fs-extra": {
+-      "version": "10.1.0",
+-      "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-10.1.0.tgz",
+-      "integrity": "sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==",
+-      "dev": true,
++      "version": "11.2.0",
++      "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-11.2.0.tgz",
++      "integrity": "sha512-PmDi3uwK5nFuXh7XDTlVnS17xJS7vW36is2+w3xcv8SVxiB4NyATf4ctkVY5bkSjX0Y4nbvZCq1/EjtEyr9ktw==",
+       "dependencies": {
+         "graceful-fs": "^4.2.0",
+         "jsonfile": "^6.0.1",
+         "universalify": "^2.0.0"
+       },
+       "engines": {
+-        "node": ">=12"
++        "node": ">=14.14"
+       }
+     },
+     "node_modules/fs-minipass": {
+@@ -3599,8 +3598,7 @@
+     "node_modules/graceful-fs": {
+       "version": "4.2.8",
+       "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.8.tgz",
+-      "integrity": "sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==",
+-      "dev": true
++      "integrity": "sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg=="
+     },
+     "node_modules/graphemer": {
+       "version": "1.4.0",
+@@ -3855,7 +3853,6 @@
+       "version": "6.1.0",
+       "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-6.1.0.tgz",
+       "integrity": "sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==",
+-      "dev": true,
+       "dependencies": {
+         "universalify": "^2.0.0"
+       },
+@@ -5211,7 +5208,6 @@
+       "version": "2.0.0",
+       "resolved": "https://registry.npmjs.org/universalify/-/universalify-2.0.0.tgz",
+       "integrity": "sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==",
+-      "dev": true,
+       "engines": {
+         "node": ">= 10.0.0"
+       }
+@@ -8071,10 +8067,9 @@
+       "integrity": "sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q=="
+     },
+     "fs-extra": {
+-      "version": "10.1.0",
+-      "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-10.1.0.tgz",
+-      "integrity": "sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==",
+-      "dev": true,
++      "version": "11.2.0",
++      "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-11.2.0.tgz",
++      "integrity": "sha512-PmDi3uwK5nFuXh7XDTlVnS17xJS7vW36is2+w3xcv8SVxiB4NyATf4ctkVY5bkSjX0Y4nbvZCq1/EjtEyr9ktw==",
+       "requires": {
+         "graceful-fs": "^4.2.0",
+         "jsonfile": "^6.0.1",
+@@ -8172,8 +8167,7 @@
+     "graceful-fs": {
+       "version": "4.2.8",
+       "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.8.tgz",
+-      "integrity": "sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==",
+-      "dev": true
++      "integrity": "sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg=="
+     },
+     "graphemer": {
+       "version": "1.4.0",
+@@ -8357,7 +8351,6 @@
+       "version": "6.1.0",
+       "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-6.1.0.tgz",
+       "integrity": "sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==",
+-      "dev": true,
+       "requires": {
+         "graceful-fs": "^4.1.6",
+         "universalify": "^2.0.0"
+@@ -9317,8 +9310,7 @@
+     "universalify": {
+       "version": "2.0.0",
+       "resolved": "https://registry.npmjs.org/universalify/-/universalify-2.0.0.tgz",
+-      "integrity": "sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==",
+-      "dev": true
++      "integrity": "sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ=="
+     },
+     "unpipe": {
+       "version": "1.0.0",
+diff --git i/package.json w/package.json
+index 0e95ff9..24a694b 100644
+--- i/package.json
++++ w/package.json
+@@ -24,6 +24,7 @@
+     "dotenv": "^10.0.0",
+     "express": "^4.17.1",
+     "express-subdomain": "^1.0.5",
++    "fs-extra": "^11.2.0",
+     "moment": "^2.29.4",
+     "mongoose": "^7.4.3",
+     "morgan": "^1.10.0",
+@@ -40,7 +41,6 @@
+     "@typescript-eslint/parser": "^6.4.0",
+     "axios": "^1.6.2",
+     "eslint": "^8.47.0",
+-    "fs-extra": "^10.1.0",
+     "tsc-alias": "^1.8.7",
+     "typescript": "^5.1.6",
+     "xmlbuilder2": "^3.0.2"

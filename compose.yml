@@ -328,6 +328,10 @@ services:
       - type: bind
         source: ./logs/miiverse-api/
         target: /app/logs/
+      - type: bind
+        source: ./config/mongoose-connect-options.json
+        target: /home/node/app/mongoose-connect-options.json
+        read_only: true
     networks:
       internal:
     dns: 172.20.0.200
@@ -374,6 +378,10 @@ services:
       - type: bind
         source: ./logs/boss/
         target: /app/logs/
+      - type: bind
+        source: ./config/mongoose-connect-options.json
+        target: /home/node/app/mongoose-connect-options.json
+        read_only: true
     networks:
       internal:
     dns: 172.20.0.200
