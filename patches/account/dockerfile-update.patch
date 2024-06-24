@@ -12,10 +12,10 @@ index 7a2fc0a..19cdd91 100644
 +dist
 +logs
 diff --git i/Dockerfile w/Dockerfile
-index a810a90..4f2eb80 100644
+index a810a90..25e1b0a 100644
 --- i/Dockerfile
 +++ w/Dockerfile
-@@ -1,16 +1,45 @@
+@@ -1,16 +1,48 @@
 -FROM node:18-alpine
 +# syntax=docker/dockerfile:1
  
@@ -61,6 +61,9 @@ index a810a90..4f2eb80 100644
 +# * Running the final application
 +FROM base AS final
 +ARG app_dir
++
++RUN mkdir -p ${app_dir}/logs
++RUN chown node:node ${app_dir}/logs
 +
 +ENV NODE_ENV production
 +USER node
