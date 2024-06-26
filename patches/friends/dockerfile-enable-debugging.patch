@@ -1,28 +1,59 @@
 diff --git i/Dockerfile w/Dockerfile
-index dcd440c..6860725 100644
+index dcd440c..055911b 100644
 --- i/Dockerfile
 +++ w/Dockerfile
-@@ -4,16 +4,19 @@ LABEL stage=builder
- RUN apk add git
- WORKDIR /build
- 
-+RUN go install github.com/go-delve/delve/cmd/dlv@latest
-+
- COPY go.* ./
- RUN go mod download
- 
- COPY . ./
- ARG BUILD_STRING=pretendo.friends.docker
--RUN go build -ldflags "-X 'main.serverBuildString=${BUILD_STRING}'" -v -o server
-+RUN go build -gcflags "all=-N -l" -ldflags "-X 'main.serverBuildString=${BUILD_STRING}'" -v -o server
- 
- # --- runner ---
- FROM alpine:3.17 as runner
+@@ -1,19 +1,39 @@
+-# --- builder ---
+-FROM golang:1.20.6-alpine3.17 as builder
+-LABEL stage=builder
+-RUN apk add git
 -WORKDIR /build
-+WORKDIR /app
++# syntax=docker/dockerfile:1
+ 
+-COPY go.* ./
+-RUN go mod download
++ARG app_dir="/home/go/app"
+ 
+-COPY . ./
+-ARG BUILD_STRING=pretendo.friends.docker
+-RUN go build -ldflags "-X 'main.serverBuildString=${BUILD_STRING}'" -v -o server
+ 
+-# --- runner ---
+-FROM alpine:3.17 as runner
+-WORKDIR /build
++# * Building the application
++FROM golang:1.22-alpine3.20 AS build
++ARG app_dir build_string=pretendo.friends.docker
  
 -COPY --from=builder /build/server /build/
 -CMD ["/build/server"]
-+COPY --from=builder /build/server /app/server
-+COPY --from=builder /go/bin/dlv /app/
-+CMD ["/app/dlv", "exec", "/app/server", "--listen=:2345", "--headless", "--api-version=2", "--log", "--accept-multiclient", "--continue"]
++WORKDIR ${app_dir}
++
++RUN go install github.com/go-delve/delve/cmd/dlv@latest
++
++RUN --mount=type=cache,target=/go/pkg/mod/ \
++	--mount=type=bind,source=go.sum,target=go.sum \
++	--mount=type=bind,source=go.mod,target=go.mod \
++	go mod download -x
++
++COPY . .
++RUN --mount=type=cache,target=/go/pkg/mod/ \
++	CGO_ENABLED=0 go build -v -o ${app_dir}/build/server -gcflags "all=-N -l" -ldflags "-X 'main.serverBuildString=${build_string}'"
++
++
++# * Running the final application
++FROM alpine:3.20 AS final
++ARG app_dir
++WORKDIR ${app_dir}
++
++RUN addgroup go && adduser -D -G go go
++
++RUN mkdir -p ${app_dir}/log
++RUN chown go:go ${app_dir}/log
++
++USER go
++
++COPY --from=build /go/bin/dlv ${app_dir}/dlv
++COPY --from=build ${app_dir}/build/server ${app_dir}/server
++
++CMD ["./dlv", "exec", "./server", "--listen=:2345", "--headless", "--api-version=2", "--log", "--accept-multiclient", "--continue"]
