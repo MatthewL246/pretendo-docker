@@ -61,6 +61,7 @@ setup_containers() {
     ./scripts/internal/update-account-servers-database.sh
     ./scripts/internal/update-miiverse-endpoints.sh
     ./scripts/internal/update-postgres-password.sh
+    ./scripts/internal/migrations.sh
     print_info "Stopping containers after initial setup..."
     compose_no_progress down
 }

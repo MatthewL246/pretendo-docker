@@ -24,7 +24,7 @@ ignore = dirty
 [submodule "repos/friends"]
 path = repos/friends
 url = https://github.com/PretendoNetwork/friends.git
-branch = dev
+branch = nex-go-rewrite
 ignore = dirty
 
 [submodule "repos/miiverse-api"]

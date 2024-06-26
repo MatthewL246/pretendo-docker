@@ -93,10 +93,11 @@ echo "POSTGRES_PASSWORD=$postgres_password" >>./postgres.local.env
 echo "PN_FRIENDS_CONFIG_DATABASE_URI=postgres://postgres_pretendo:$postgres_password@postgres/friends?sslmode=disable" >>./friends.local.env
 echo "PN_SMM_POSTGRES_URI=postgres://postgres_pretendo:$postgres_password@postgres/super_mario_maker?sslmode=disable" >>./super-mario-maker.local.env
 
-# Generate a Kerberos password, a gRPC API key, and an AES key for the friends
-# server
-friends_kerberos_password=$(generate_password 32)
-echo "PN_FRIENDS_CONFIG_KERBEROS_PASSWORD=$friends_kerberos_password" >>./friends.local.env
+# Generate passwords, a gRPC API key, and an AES key for the friends server
+friends_authentication_password=$(generate_password 32)
+echo "PN_FRIENDS_CONFIG_AUTHENTICATION_PASSWORD=$friends_authentication_password" >>./friends.local.env
+friends_secure_password=$(generate_password 32)
+echo "PN_FRIENDS_CONFIG_SECURE_PASSWORD=$friends_secure_password" >>./friends.local.env
 friends_api_key=$(generate_password 32)
 echo "PN_FRIENDS_CONFIG_GRPC_API_KEY=$friends_api_key" >>./friends.local.env
 echo "PN_WIIU_CHAT_FRIENDS_GRPC_API_KEY=$friends_api_key" >>./wiiu-chat.local.env
