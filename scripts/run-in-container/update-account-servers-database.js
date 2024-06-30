@@ -85,7 +85,7 @@ async function runAsync() {
     );
     await createNexServer(
         "Splatoon",
-        "10176900",
+        "10162B00",
         ["00050000-10176A00", "00050000-10176900", "00050000-10162B00"],
         process.env.SERVER_IP,
         process.env.SPLATOON_PORT,

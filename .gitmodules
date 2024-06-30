@@ -73,3 +73,7 @@ path = repos/SSSL-DNS
 url = https://github.com/PretendoNetwork/SSSL-DNS.git
 branch = master
 ignore = dirty
+
+[submodule "repos/splatoon"]
+	path = repos/splatoon
+	url = https://github.com/ashquarky/splatoon

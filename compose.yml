@@ -459,47 +459,23 @@ services:
       - ./environment/super-mario-maker.env
       - ./environment/super-mario-maker.local.env
 
-  splatoon-authentication:
-    build: ./repos/splatoon-authentication
+  splatoon:
+    build: ./repos/splatoon
     depends_on:
       - account
       - mongodb
     restart: unless-stopped
     ports:
       # Go delve debugger
-      - 127.0.0.1:2349:2349
+      - 127.0.0.1:2350:2351
       # Authentication server
       - 61002:61002/udp
-    volumes:
-      - type: bind
-        source: ./logs/splatoon-authentication/
-        target: /app/log/
-    networks:
-      internal:
-    dns: 172.20.0.200
-    env_file:
-      - ./environment/splatoon.env
-      - ./environment/splatoon.local.env
-
-  splatoon-secure:
-    build: ./repos/splatoon-secure
-    depends_on:
-      - account
-      - mongodb
-      - splatoon-authentication
-    restart: unless-stopped
-    ports:
-      # Go delve debugger
-      - 127.0.0.1:2350:2350
       # Secure server
-      - 60003:60003/udp
+      - 61003:61003/udp
     volumes:
       - type: bind
-        source: ./logs/splatoon-secure/
+        source: ./logs/splatoon/
         target: /app/log/
-      - type: bind
-        source: ./environment/splatoon-secure.conf
-        target: /app/secure.conf
     networks:
       internal:
     dns: 172.20.0.200
