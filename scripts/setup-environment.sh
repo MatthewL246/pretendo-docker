@@ -118,7 +118,6 @@ echo "PN_SMM_KERBEROS_PASSWORD=$smm_kerberos_password" >>./super-mario-maker.loc
 
 # Generate a Kerberos password for the Splatoon server
 splat_kerberos_password=$(generate_password 32)
-splat_api_key=$(generate_password 32)
 echo "PN_SPLATOON_KERBEROS_PASSWORD=$splat_kerberos_password" >>./splatoon.local.env
 
 # Generate an AES key for the Miiverse servers

@@ -7,7 +7,7 @@ parse_arguments "$@"
 print_info "Setting up Pretendo account servers database..."
 
 load_dotenv .env
-dotenv_files=("friends" "miiverse-api" "wiiu-chat" "super-mario-maker")
+dotenv_files=("friends" "miiverse-api" "wiiu-chat" "super-mario-maker" "splatoon")
 for file in "${dotenv_files[@]}"; do
     load_dotenv "$file.env" "$file.local.env"
 done

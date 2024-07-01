@@ -469,9 +469,9 @@ services:
       # Go delve debugger
       - 127.0.0.1:2350:2351
       # Authentication server
-      - 61002:61002/udp
+      - 6006:6006/udp
       # Secure server
-      - 61003:61003/udp
+      - 6007:6007/udp
     volumes:
       - type: bind
         source: ./logs/splatoon/
