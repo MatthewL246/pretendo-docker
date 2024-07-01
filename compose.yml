@@ -459,6 +459,30 @@ services:
       - ./environment/super-mario-maker.env
       - ./environment/super-mario-maker.local.env
 
+  splatoon:
+    build: ./repos/splatoon
+    depends_on:
+      - account
+      - mongodb
+    restart: unless-stopped
+    ports:
+      # Go delve debugger
+      - 127.0.0.1:2350:2351
+      # Authentication server
+      - 6006:6006/udp
+      # Secure server
+      - 6007:6007/udp
+    volumes:
+      - type: bind
+        source: ./logs/splatoon/
+        target: /app/log/
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/splatoon.env
+      - ./environment/splatoon.local.env
+
 volumes:
   mitmproxy-pretendo-data:
   mongodb-database:

@@ -83,6 +83,15 @@ async function runAsync() {
         1,
         "0".repeat(64)
     );
+    await createNexServer(
+        "Splatoon",
+        "10162B00",
+        ["0005000010176A00", "0005000010176900", "0005000010162B00"],
+        process.env.SERVER_IP,
+        process.env.SPLATOON_PORT,
+        1,
+        "0".repeat(64)
+    );
 
     await mongoose.connection.close();
 }
