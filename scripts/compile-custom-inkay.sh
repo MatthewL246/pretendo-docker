@@ -29,7 +29,7 @@ else
 fi
 
 print_info "Compiling the Inkay patches..."
-rm -f ./*.elf ./*.wps
+git clean -fdx
 
 # Set up the Inkay build environment and then build the patches
 docker build . -t inkay-build
