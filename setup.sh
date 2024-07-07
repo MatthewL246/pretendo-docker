@@ -39,7 +39,6 @@ add your user to the docker group: https://docs.docker.com/engine/install/linux-
     else
         print_success "All prerequisites are installed."
     fi
-
 }
 
 setup_environment_variables() {

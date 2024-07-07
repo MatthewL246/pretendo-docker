@@ -10,14 +10,20 @@
 # Update the script path to be the correct relative path to framework.sh
 
 # Basic setup
-set -euo pipefail
+set -Eeuo pipefail
 
 if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
     echo "The framework script needs to be sourced, not executed."
     exit 1
 fi
 
+if [[ -n "${SCRIPT_USES_FRAMEWORK:-}" ]]; then
+    # This script is being run from another script
+    nested_script=true
+fi
+
 # Provide the Git base directory
+original_dir="$(pwd)"
 framework_dir="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 git_base_dir="$(cd "$framework_dir" && git rev-parse --show-toplevel)"
 cd "$git_base_dir"
@@ -82,6 +88,51 @@ print_info() {
 print_success() {
     echo "${term_bold}${term_green}${*}${term_reset}"
 }
+
+# Handle errors in the scripts, inspired by Python tracebacks
+error_handler() {
+    local exit_code=$?
+    local stacktrace=()
+    cd "$original_dir"
+
+    # The first element of the stack is the error_handler function itself
+    local stack_depth=$((${#BASH_SOURCE[@]} - 1))
+    for ((i = stack_depth - 1; i >= 0; i--)); do
+        local source_file="${BASH_SOURCE[i + 1]}"
+        local line_number="${BASH_LINENO[i]}"
+        local containing_function="${FUNCNAME[i + 1]}"
+
+        local stacktrace_source=$'\n  '
+        stacktrace_source+="$source_file: line $line_number, in $containing_function"
+        stacktrace+=("$stacktrace_source")
+
+        local stacktrace_line=$'\n    '
+        stacktrace_line+=$(head -n "$line_number" "$source_file" | tail -n 1 | sed 's/^[ \t]*//')
+        stacktrace+=("$stacktrace_line")
+    done
+    stacktrace+=($'\n'"$BASH_COMMAND: exited with code $exit_code")
+
+    echo
+    print_error "The script $0 exited unexpectedly because an error occurred.${stacktrace[*]}"
+
+    if [[ -z "${nested_script:-}" ]]; then
+        print_header "pretendo-docker commit $(git rev-parse --short HEAD)"
+
+        echo
+        print_info "General steps to troubleshoot the issue:"
+        if [[ -z "${show_verbose:-}" ]]; then
+            print_info "- Re-run this script with the --verbose option to see more detailed output."
+        fi
+        print_info "- Check the script output and stack trace above for more details about the error."
+        print_info "- Research the error message (most likely shown directly above the stack trace) and try to find a solution."
+        print_info "- Search previously-reported issues at https://github.com/MatthewL246/pretendo-docker/issues?q=is%3Aissue."
+        print_info "- If you believe this is a bug or need help, please create an issue at https://github.com/MatthewL246/pretendo-docker/issues/new and include the script's full output (above this help text)."
+    fi
+
+    exit $exit_code
+}
+
+trap error_handler ERR
 
 # Run a command and only show output if the verbose option is set, show errors
 run_verbose() {
@@ -411,3 +462,5 @@ show_help() {
 
 add_option "-h --help" "show_help" "Displays this help message"
 add_option "-v --verbose" "show_verbose" "Enables verbose output"
+
+export SCRIPT_USES_FRAMEWORK=true
