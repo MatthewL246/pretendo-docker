@@ -24,9 +24,10 @@ Before you start setting up the Pretendo Network server, make sure your system m
 | --------------------------------- | -------------- |
 | Windows (Docker Desktop on WSL 2) | ✅ Working     |
 | Linux (Docker Engine)             | ✅ Working     |
-| macOS (Docker Desktop)            | ❓ Untested\*  |
+| macOS (Docker Desktop)            | ✅ Working\*   |
 
-_\*macOS is untested because I don't own the hardware to test it with. In theory, it should work._
+_\*Please note that this project is not regularly tested on macOS, but users have reported that it works. If you
+encounter any issues, please report them!_
 
 ## Software
 

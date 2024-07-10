@@ -14,12 +14,12 @@ parse_arguments "$@"
 
 generate_password() {
     length=$1
-    head /dev/urandom | tr -dc "a-zA-Z0-9" | head -c "$length"
+    head /dev/urandom | LC_ALL=C tr -dc "a-zA-Z0-9" | head -c "$length"
 }
 
 generate_hex() {
     length=$1
-    head /dev/urandom | tr -dc "A-F0-9" | head -c "$length"
+    head /dev/urandom | LC_ALL=C tr -dc "A-F0-9" | head -c "$length"
 }
 
 cd "$git_base_dir/environment"
