@@ -214,10 +214,6 @@ services:
       - type: volume
         source: postgres-database
         target: /var/lib/postgresql/data
-      - type: bind
-        source: ./scripts/run-in-container/postgres-init.sh
-        target: /docker-entrypoint-initdb.d/postgres-init.sh
-        read_only: true
     networks:
       internal:
     dns: 172.20.0.200

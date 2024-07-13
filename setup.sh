@@ -57,6 +57,7 @@ setup_environment_variables() {
 setup_containers() {
     ./scripts/internal/firstrun-mongodb-container.sh
     ./scripts/internal/firstrun-minio-container.sh
+    ./scripts/internal/firstrun-postgres-container.sh
     ./scripts/internal/update-account-servers-database.sh
     ./scripts/internal/update-miiverse-endpoints.sh
     ./scripts/internal/update-postgres-password.sh
