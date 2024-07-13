@@ -361,10 +361,15 @@ add_positional_argument() {
 parse_arguments() {
     local positional_arguments=()
     local variable
-    for variable in "${argument_variables[@]}"; do
-        # Variables should start out global and empty strings
-        declare -g "$variable="
-    done
+
+    # Bash 3.2 will throw an error when accessing an empty array
+    if [[ "${#argument_variables[@]}" -ne 0 ]]; then
+        for variable in "${argument_variables[@]}"; do
+            # Variables should start out global and empty strings
+            # Bash 3.2 does not support the `declare -g` syntax
+            eval "$variable="
+        done
+    fi
 
     # Keep verbosity if it was set in a previous script
     show_verbose="${SHOW_VERBOSE:-}"
@@ -384,7 +389,9 @@ parse_arguments() {
     done
 
     # Replace the original arguments with the split ones
-    set -- "${split_args[@]}"
+    if [[ "${#split_args[@]}" -ne "0" ]]; then
+        set -- "${split_args[@]}"
+    fi
 
     while [[ $# -gt 0 ]]; do
         # It is very important to use \$1 instead of $1 here to prevent command injection
@@ -421,15 +428,17 @@ parse_arguments() {
     fi
     local i
     for i in "${!positional_arguments[@]}"; do
-        declare -g "${positional_argument_variables[i]}=${positional_arguments[$i]}"
+        eval "${positional_argument_variables[i]}=${positional_arguments[$i]}"
     done
 
-    for i in "${required_argument_variable_indices[@]}"; do
-        if [[ -z "${!argument_variables[i]}" ]]; then
-            print_error "Required argument not provided: ${help_text_arguments[i]}"
-            exit 1
-        fi
-    done
+    if [[ "${#required_argument_variable_indices[@]}" -ne 0 ]]; then
+        for i in "${required_argument_variable_indices[@]}"; do
+            if [[ -z "${!argument_variables[i]}" ]]; then
+                print_error "Required argument not provided: ${help_text_arguments[i]}"
+                exit 1
+            fi
+        done
+    fi
 
     # Export verbosity for the next script
     export SHOW_VERBOSE="${show_verbose:-}"
