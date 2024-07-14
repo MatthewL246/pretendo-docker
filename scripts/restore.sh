@@ -59,7 +59,9 @@ run_verbose compose_no_progress cp "$backup_dir/redis.rdb" redis:/data/dump.rdb
 print_info "Restoring Mitmproxy..."
 # Mitmproxy cannot be running when restoring a backup or it will continue using its new certificate
 run_verbose compose_no_progress stop mitmproxy-pretendo
-run_verbose compose_no_progress cp "$backup_dir/mitmproxy" mitmproxy-pretendo:/home/mitmproxy/.mitmproxy
+# Don't restore the config file because copying a broken relative symlink causes an error
+rm -f "$backup_dir/mitmproxy/config.yaml"
+run_verbose compose_no_progress cp "$backup_dir/mitmproxy/." mitmproxy-pretendo:/home/mitmproxy/.mitmproxy
 
 print_info "Restoring Mailpit..."
 run_verbose compose_no_progress stop mailpit
