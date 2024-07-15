@@ -51,6 +51,13 @@ if ls ./*.local.env >/dev/null 2>&1; then
     fi
 
     print_info "Stopping containers and removing existing local environment files..."
+    # If a new server was added in an update, `docker compose down` will fail unless the necessary local environment
+    # files exist, even if the new server isn't running. The contents of the files don't matter, so they can be empty.
+    for file in *.env; do
+        if [ -f "$file" ]; then
+            touch "${file%%.*}.local.env"
+        fi
+    done
     compose_no_progress down
     rm ./*.local.env
     rm "$git_base_dir/.env"
