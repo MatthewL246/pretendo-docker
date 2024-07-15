@@ -119,14 +119,15 @@ error_handler() {
         print_header "pretendo-docker commit $(git rev-parse --short HEAD)"
 
         echo
-        print_info "General steps to troubleshoot the issue:"
+        echo "General steps to troubleshoot the issue:"
         if [[ -z "${show_verbose:-}" ]]; then
-            print_info "- Re-run this script with the --verbose option to see more detailed output."
+            echo "- Re-run this script with the --verbose option to see more detailed output."
         fi
-        print_info "- Check the script output and stack trace above for more details about the error."
-        print_info "- Research the error message (most likely shown directly above the stack trace) and try to find a solution."
-        print_info "- Search previously-reported issues at https://github.com/MatthewL246/pretendo-docker/issues?q=is%3Aissue."
-        print_info "- If you believe this is a bug or need help, please create an issue at https://github.com/MatthewL246/pretendo-docker/issues/new and include the script's full output (above this help text)."
+        echo "- Check the script output and stack trace above for more details about the error."
+        echo "- Research the error message shown above the stack trace and try to find a solution."
+        echo "- Search previously-reported issues at https://github.com/MatthewL246/pretendo-docker/issues?q=is%3Aissue."
+        echo "- If you believe this is a bug or need help, please create an issue at https://github.com/MatthewL246/pretendo-docker/issues/new."
+        echo "${term_bold}Make sure to include ${term_magenta}${term_underline}ALL of the script's output${term_reset}${term_bold} shown above this help text when creating an issue.${term_reset}"
     fi
 
     exit $exit_code
