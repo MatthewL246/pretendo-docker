@@ -455,8 +455,8 @@ services:
       - ./environment/super-mario-maker.env
       - ./environment/super-mario-maker.local.env
 
-  splatoon:
-    build: ./repos/splatoon
+  minecraft-wiiu:
+    build: ./repos/minecraft-wiiu
     depends_on:
       - account
       - mongodb
@@ -476,8 +476,33 @@ services:
       internal:
     dns: 172.20.0.200
     env_file:
-      - ./environment/splatoon.env
-      - ./environment/splatoon.local.env
+      - ./environment/minecraft-wiiu.env
+      - ./environment/minecraft-wiiu.local.env
+
+      super-mario-maker:
+    build: ./repos/super-mario-maker
+    depends_on:
+      - account
+      - minio
+      - postgres
+    restart: always
+    ports:
+      # Go delve debugger
+      - 127.0.0.1:2348:2348
+      # Authentication server
+      - 6004:6004/udp
+      # Secure server
+      - 6005:6005/udp
+    volumes:
+      - type: bind
+        source: ./logs/super-mario-maker/
+        target: /app/log/
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/super-mario-maker.env
+      - ./environment/super-mario-maker.local.env
 
 volumes:
   mitmproxy-pretendo-data:
