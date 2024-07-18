@@ -92,6 +92,15 @@ async function runAsync() {
         1,
         "0".repeat(64)
     );
+    await createNexServer(
+        "Minecraft: Wii U Edition",
+        "10176A00",
+        ["00050000101D7500", "00050000101D9D00", "00050000101DBE00"],
+        process.env.SERVER_IP,
+        process.env.MINECRAFT_PORT,
+        1,
+        "0".repeat(64)
+    );
 
     await mongoose.connection.close();
 }
