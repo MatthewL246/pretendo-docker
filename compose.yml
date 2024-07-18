@@ -489,7 +489,7 @@ services:
       # Go delve debugger
       - 127.0.0.1:2375:2376
       # Authentication server
-      - 6006:6006/udp
+      - 6397:6397/udp
       # Secure server
       - 6398:6398/udp
     volumes:
