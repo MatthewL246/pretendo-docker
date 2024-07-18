@@ -63,3 +63,6 @@ services:
   super-mario-maker:
     restart: no
     ports: !reset []
+  minecraft-wiiu:
+    restart: no
+    ports: !reset []
