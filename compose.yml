@@ -491,7 +491,7 @@ services:
       # Authentication server
       - 6006:6006/udp
       # Secure server
-      - 6007:6007/udp
+      - 6398:6398/udp
     volumes:
       - type: bind
         source: ./logs/splatoon/
