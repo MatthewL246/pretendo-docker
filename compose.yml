@@ -8,7 +8,7 @@ services:
       # Proxy server
       - 8080:8080
       # Mitmweb interface
-      - 127.0.0.1:8081:8081
+      - 0.0.0.0:8081:8081
     volumes:
       - type: volume
         source: mitmproxy-pretendo-data
@@ -105,7 +105,7 @@ services:
     restart: always
     ports:
       # For connecting with mongosh or MongoDB Compass
-      - 127.0.0.1:27017:27017
+      - 0.0.0.0:27017:27017
     volumes:
       - type: bind
         source: ./config/mongod.conf
@@ -127,7 +127,7 @@ services:
     restart: always
     ports:
       # Web interface
-      - 127.0.0.1:8082:8082
+      - 0.0.0.0:8082:8082
     networks:
       internal:
     dns: 172.20.0.200
@@ -142,7 +142,7 @@ services:
     restart: always
     ports:
       # Web console
-      - 127.0.0.1:8083:8083
+      - 0.0.0.0:8083:8083
     volumes:
       - type: volume
         source: minio-s3-data
@@ -177,7 +177,7 @@ services:
     restart: always
     ports:
       # Web interface
-      - 127.0.0.1:8086:8086
+      - 0.0.0.0:8086:8086
     networks:
       internal:
     dns: 172.20.0.200
@@ -191,7 +191,7 @@ services:
     restart: always
     ports:
       # Mailpit web UI
-      - 127.0.0.1:8084:8084
+      - 0.0.0.0:8084:8084
     volumes:
       - type: volume
         source: mailpit-mail
@@ -209,7 +209,7 @@ services:
     restart: always
     ports:
       # For connecting with pgAdmin
-      - 127.0.0.1:5432:5432
+      - 0.0.0.0:5432:5432
     volumes:
       - type: volume
         source: postgres-database
@@ -229,7 +229,7 @@ services:
     restart: always
     ports:
       # Adminer web interface
-      - 127.0.0.1:8085:8080
+      - 0.0.0.0:8085:8080
     volumes:
       - type: bind
         source: ./config/adminer-login-servers.php
@@ -253,7 +253,7 @@ services:
     restart: always
     ports:
       # Node.js debugger
-      - 127.0.0.1:9229:9229
+      - 0.0.0.0:9229:9229
     volumes:
       - type: bind
         source: ./logs/account/
@@ -273,7 +273,7 @@ services:
     restart: always
     ports:
       # Node.js debugger
-      - 127.0.0.1:9230:9230
+      - 0.0.0.0:9230:9230
     volumes:
       - type: bind
         source: ./logs/website/
@@ -294,7 +294,7 @@ services:
     restart: always
     ports:
       # Go delve debugger
-      - 127.0.0.1:2345:2345
+      - 0.0.0.0:2345:2345
       # Authentication server
       - 6000:6000/udp
       # Secure server
@@ -319,7 +319,7 @@ services:
     restart: always
     ports:
       # Node.js debugger
-      - 127.0.0.1:9231:9231
+      - 0.0.0.0:9231:9231
     volumes:
       - type: bind
         source: ./logs/miiverse-api/
@@ -345,7 +345,7 @@ services:
     restart: always
     ports:
       # Node.js debugger
-      - 127.0.0.1:9232:9232
+      - 0.0.0.0:9232:9232
     volumes:
       - type: bind
         source: ./logs/juxtaposition-ui/
@@ -369,7 +369,7 @@ services:
     restart: always
     ports:
       # Node.js debugger
-      - 127.0.0.1:9233:9233
+      - 0.0.0.0:9233:9233
     volumes:
       - type: bind
         source: ./logs/boss/
@@ -393,7 +393,7 @@ services:
     restart: always
     ports:
       # Go delve debugger
-      - 127.0.0.1:2346:2346
+      - 0.0.0.0:2346:2346
       # Authentication server
       - 6002:6002/udp
     volumes:
@@ -416,7 +416,7 @@ services:
     restart: always
     ports:
       # Go delve debugger
-      - 127.0.0.1:2347:2347
+      - 0.0.0.0:2347:2347
       # Secure server
       - 6003:6003/udp
     volumes:
@@ -439,7 +439,7 @@ services:
     restart: always
     ports:
       # Go delve debugger
-      - 127.0.0.1:2348:2348
+      - 0.0.0.0:2348:2348
       # Authentication server
       - 6004:6004/udp
       # Secure server
@@ -463,7 +463,7 @@ services:
     restart: unless-stopped
     ports:
       # Go delve debugger
-      - 127.0.0.1:2350:2351
+      - 0.0.0.0:2350:2351
       # Authentication server
       - 6006:6006/udp
       # Secure server
@@ -487,7 +487,7 @@ services:
     restart: unless-stopped
     ports:
       # Go delve debugger
-      - 127.0.0.1:2375:2376
+      - 0.0.0.0:2375:2376
       # Authentication server
       - 6397:6397/udp
       # Secure server
