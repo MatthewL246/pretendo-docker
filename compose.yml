@@ -280,7 +280,7 @@ services:
         target: /app/logs/
       - type: bind
         source: ./config/website-config.json
-        target: /app/config.json
+        target: /home/node/app/config.json
         read_only: true
     networks:
       internal:

@@ -1,0 +1,10 @@
+diff --git i/Dockerfile w/Dockerfile
+index 7f2cada..b989512 100644
+--- i/Dockerfile
++++ w/Dockerfile
+@@ -49,4 +49,4 @@ COPY --from=build ${app_dir} ${app_dir}
+ # TODO: change back after TypeScript migration
+ #COPY --from=build ${app_dir}/dist ${app_dir}/dist
+ 
+-CMD ["node", "."]
++CMD ["node", "--inspect=0.0.0.0:9232", "."]

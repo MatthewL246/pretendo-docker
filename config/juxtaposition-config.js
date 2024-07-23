@@ -9,6 +9,7 @@ module.exports = JSON.parse(
         server_environment: process.env.JUXT_CONFIG_SERVER_ENVIRONMENT,
         mongoose: {
             uri: process.env.JUXT_CONFIG_MONGODB_URI,
+            database: process.env.JUXT_CONFIG_MONGODB_DATABASE,
             options: {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,

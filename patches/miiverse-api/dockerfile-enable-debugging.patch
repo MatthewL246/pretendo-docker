@@ -1,0 +1,10 @@
+diff --git i/Dockerfile w/Dockerfile
+index 53811ab..a56b582 100644
+--- i/Dockerfile
++++ w/Dockerfile
+@@ -44,4 +44,4 @@ COPY package.json .
+ COPY --from=dependencies ${app_dir}/node_modules ${app_dir}/node_modules
+ COPY --from=build ${app_dir}/dist ${app_dir}/dist
+ 
+-CMD ["node", "."]
++CMD ["node", "--inspect=0.0.0.0:9231", "."]
