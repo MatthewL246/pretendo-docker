@@ -85,6 +85,7 @@ echo "JUXT_CONFIG_GRPC_ACCOUNT_API_KEY=$account_grpc_api_key" >>./juxtaposition-
 echo "PN_BOSS_CONFIG_GRPC_ACCOUNT_SERVER_API_KEY=$account_grpc_api_key" >>./boss.local.env
 echo "PN_SMM_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./super-mario-maker.local.env
 echo "PN_SPLATOON_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./splatoon.local.env
+echo "PN_MINECRAFT_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./minecraft-wiiu.local.env
 
 # Generate a secret key for MinIO
 minio_secret_key=$(generate_password 32)
@@ -127,6 +128,9 @@ echo "PN_SMM_KERBEROS_PASSWORD=$smm_kerberos_password" >>./super-mario-maker.loc
 splat_kerberos_password=$(generate_password 32)
 echo "PN_SPLATOON_KERBEROS_PASSWORD=$splat_kerberos_password" >>./splatoon.local.env
 
+minecraft_kerberos_password=$(generate_password 32)
+echo "PN_MINECRAFT_KERBEROS_PASSWORD=$minecraft_kerberos_password" >>./minecraft-wiiu.local.env
+
 # Generate an AES key for the Miiverse servers
 miiverse_aes_key=$(generate_hex 64)
 echo "PN_MIIVERSE_API_CONFIG_AES_KEY=$miiverse_aes_key" >>./miiverse-api.local.env
@@ -143,6 +147,7 @@ echo "PN_FRIENDS_SECURE_SERVER_HOST=$server_ip" >>./friends.local.env
 echo "PN_WIIU_CHAT_SECURE_SERVER_LOCATION=$server_ip" >>./wiiu-chat.local.env
 echo "PN_SMM_SECURE_SERVER_HOST=$server_ip" >>./super-mario-maker.local.env
 echo "PN_SPLATOON_SECURE_SERVER_HOST=$server_ip" >>./splatoon.local.env
+echo "PN_MINECRAFT_SECURE_SERVER_HOST=$server_ip" >>./minecraft-wiiu.local.env
 
 # Get the Wii U IP address
 if [[ -n "$wiiu_ip" ]]; then
