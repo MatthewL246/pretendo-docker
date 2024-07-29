@@ -12,19 +12,18 @@ index 5141359..6ed615d 100644
  	github.com/PretendoNetwork/grpc-go v1.0.1
  	github.com/PretendoNetwork/nex-go v1.0.28
 diff --git a/Dockerfile b/Dockerfile
-index 08da995..fad1084 100644
+index 08da995..f61daae 100644
 --- a/Dockerfile
 +++ b/Dockerfile
-@@ -17,6 +17,12 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
- 	go mod download -x
+@@ -11,6 +11,11 @@ WORKDIR ${app_dir}
  
- COPY . .
-+
+ RUN go install github.com/go-delve/delve/cmd/dlv@latest
+ 
 +RUN apk add git
 +RUN git clone --depth 1 --branch v1.0.22 https://github.com/PretendoNetwork/nex-protocols-common-go
 +# Terrible hack to work around the issue where the ticket timestamp is 0
 +RUN sed -i 's/ticket\.Timestamp()\.Standard()/time\.Now()\.UTC()/g' nex-protocols-common-go/secure-connection/connect.go
 +
  RUN --mount=type=cache,target=/go/pkg/mod/ \
- 	CGO_ENABLED=0 go build -v -o ${app_dir}/build/server -gcflags "all=-N -l"
- 
+ 	--mount=type=bind,source=go.sum,target=go.sum \
+ 	--mount=type=bind,source=go.mod,target=go.mod \
