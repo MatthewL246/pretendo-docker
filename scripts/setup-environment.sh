@@ -149,9 +149,6 @@ echo "PN_SMM_SECURE_SERVER_HOST=$server_ip" >>./super-mario-maker.local.env
 echo "PN_SPLATOON_SECURE_SERVER_HOST=$server_ip" >>./splatoon.local.env
 echo "PN_MINECRAFT_SECURE_SERVER_HOST=$server_ip" >>./minecraft-wiiu.local.env
 
-echo "PN_MINECRAFT_ALLOW_PUBLIC_MATCHMAKING=0" >>./minecraft-wiiu.local.env
-echo "# 0 = disable, 1 = enable" >>./minecraft-wiiu.local.env
-
 # Get the Wii U IP address
 if [[ -n "$wiiu_ip" ]]; then
     if_verbose print_info "Using Wii U IP address $wiiu_ip."
