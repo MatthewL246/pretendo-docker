@@ -29,4 +29,6 @@ fi
 
 run_verbose docker compose exec juxtaposition-ui node -e "$create_community_script" "$name" "$description" "$title_ids" "${icon_path:+/tmp/icon}" "${banner_path:+/tmp/banner}"
 
+docker compose exec juxtaposition-ui rm -f /tmp/icon /tmp/banner
+
 print_success "Successfully created community $name."
