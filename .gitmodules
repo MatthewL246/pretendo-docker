@@ -83,5 +83,5 @@ ignore = dirty
 [submodule "repos/minecraft-wiiu"]
 path = repos/minecraft-wiiu
 url = https://github.com/PretendoNetwork/minecraft-wiiu
-branch = master
+branch = main
 ignore = dirty
