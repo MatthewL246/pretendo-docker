@@ -1,6 +1,5 @@
 // This should be evaled in the juxtaposition-ui container
 require("module-alias/register");
-const mongoose = require("mongoose");
 const { connect } = require("./src/database");
 const { COMMUNITY } = require("./src/models/communities");
 const fs = require("fs").promises;
@@ -24,8 +23,6 @@ async function runAsync() {
         process.argv[4],
         process.argv[5]
     );
-
-    await mongoose.connection.close();
 }
 
 runAsync().then(() => {

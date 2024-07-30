@@ -1,5 +1,4 @@
 // This should be evaled in the account container
-const mongoose = require("mongoose");
 const { connect } = require("./dist/database");
 const { PNID } = require("./dist/models/pnid");
 
@@ -18,11 +17,8 @@ async function runAsync() {
         await updatePnidAccessLevel(pnid, 3, "dev");
     } else {
         console.error(`No PNID found for username ${process.argv[1]}.`);
-        await mongoose.connection.close();
-        process.exit(2);
+        process.exit(1);
     }
-
-    await mongoose.connection.close();
 }
 
 runAsync().then(() => {

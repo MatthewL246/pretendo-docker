@@ -1,5 +1,4 @@
 // This should be evaled in the miiverse-api container
-const mongoose = require("mongoose");
 const { connect } = require("./dist/database");
 const { Endpoint } = require("./dist/models/endpoint");
 
@@ -15,8 +14,6 @@ async function runAsync() {
         "portal.olv.pretendo.cc",
         "ctr.olv.pretendo.cc"
     );
-
-    await mongoose.connection.close();
 }
 
 runAsync().then(() => {

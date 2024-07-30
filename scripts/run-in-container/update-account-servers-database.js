@@ -1,5 +1,4 @@
 // This should be evaled in the account container
-const mongoose = require("mongoose");
 const { connect } = require("./dist/database");
 const { Server } = require("./dist/models/server");
 
@@ -101,8 +100,6 @@ async function runAsync() {
         1,
         "0".repeat(64)
     );
-
-    await mongoose.connection.close();
 }
 
 runAsync().then(() => {
