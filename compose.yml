@@ -440,6 +440,25 @@ services:
       - ./environment/splatoon.env
       - ./environment/splatoon.local.env
 
+  minecraft-wiiu:
+    build: ./repos/minecraft-wiiu
+    depends_on:
+      - account
+    restart: unless-stopped
+    ports:
+      # Go delve debugger
+      - 127.0.0.1:2352:2350
+      # Authentication server
+      - 6008:6008/udp
+      # Secure server
+      - 6009:6009/udp
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/minecraft-wiiu.env
+      - ./environment/minecraft-wiiu.local.env
+
 volumes:
   mitmproxy-pretendo-data:
   mongodb-database:

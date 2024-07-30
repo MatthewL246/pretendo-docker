@@ -92,6 +92,15 @@ async function runAsync() {
         1,
         "0".repeat(64)
     );
+    await createNexServer(
+        "Minecraft",
+        "101D9D00",
+        ["0005000E101D9D00", "0005000E101DBE00", "00050000101D7500"],
+        process.env.SERVER_IP,
+        process.env.MINECRAFT_PORT,
+        1,
+        "0".repeat(64)
+    );
 
     await mongoose.connection.close();
 }

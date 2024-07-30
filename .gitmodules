@@ -79,3 +79,9 @@ path = repos/splatoon
 url = https://github.com/ashquarky/splatoon
 branch = master
 ignore = dirty
+
+[submodule "repos/minecraft-wiiu"]
+path = repos/minecraft-wiiu
+url = https://github.com/PretendoNetwork/minecraft-wiiu
+branch = master
+ignore = dirty
