@@ -228,6 +228,7 @@ if_not_verbose() {
 # Argument parsing framework
 # Uses a lot of Bash parameter expansion tricks: https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameter-Expansion
 argument_variables=()
+argument_variable_defaults=()
 required_argument_variable_indices=()
 positional_argument_variables=()
 option_cases=""
@@ -245,8 +246,12 @@ set_description() {
     help_text_description="$*"
 }
 
-# Adds a boolean option to the script. The variable is set to true if the option is provided or an empty string if it
-# is not. The description is shown in the help text.
+# Adds a boolean option to the script. The description is shown in the help text.
+#
+# If the option is provided to the script:
+#   - The variable is set to true.
+# If the option is not provided to the script:
+#   - The variable is set to an empty string.
 #
 # Usage: add_option options variable_name description
 # Example: add_option "-o --option" "option_enabled" "Enables the option"
@@ -256,24 +261,33 @@ add_option() {
     local description="${3:?${FUNCNAME[0]}: Option description is required}"
 
     argument_variables+=("$variable")
+    argument_variable_defaults+=("")
     option_cases+="
-    ${options// /|})
-        $variable=true
-        shift
-        ;;"
+        ${options// /|})
+            $variable=true
+            shift
+            ;;"
 
     help_text_usage_arguments+=("[${options// / | }]")
     help_text_arguments+=("${options// /, }")
     help_text_argument_descriptions+=("$description")
 }
 
-# Adds an option that allows specifying a value to the script. The variable is set to the value provided or an empty
-# string if the option is not provided. The value name and description are shown in the help text. If the option is
-# required, the script will exit with an error if the option is not provided. If a default value is set, the variable
-# will be set to the default value if the option is provided without a value.
+# Adds an option that allows specifying a value to the script. The value name and description are shown in the help
+# text. An option cannot be required and have a default value at the same time.
 #
-# Usage: add_option_with_value options variable_name value_name description required [default_value]
-# Example: add_option_with_value "-o --option" "option_value" "option-value" "Sets the option value" false "default value"
+# If the option is provided to the script with a value:
+#   - The variable is set to the value specified.
+# If the option is provided to the script without a value:
+#   - If the "default value if specified" is set, the variable is set to this value.
+#   - Otherwise, the script exits with an error.
+# If the option is not provided to the script:
+#   - If the default value is set, the variable is set to this value.
+#   - Otherwise, if the option is required, the script exits with an error.
+#   - Otherwise, the variable is set to an empty string.
+#
+# Usage: add_option_with_value options variable_name value_name description required [default_value] [default_value_if_provided]
+# Example: add_option_with_value "-o --option" "option_value" "value" "Sets the option value" false "default value" "option provided"
 add_option_with_value() {
     local options="${1:?${FUNCNAME[0]}: Option arguments are required}"
     local variable="${2:?${FUNCNAME[0]}: Option variable is required}"
@@ -281,96 +295,105 @@ add_option_with_value() {
     local description="${4:?${FUNCNAME[0]}: Option description is required}"
     local required="${5:?${FUNCNAME[0]}: Option requirement boolean is required}"
     local default_value="${6:-}"
+    local default_value_if_provided="${7:-}"
+
+    if [[ "$required" = true && -n "$default_value" ]]; then
+        print_error "Option with value cannot be required and have a default value at the same time: $options"
+        exit 1
+    fi
 
     argument_variables+=("$variable")
+    argument_variable_defaults+=("$default_value")
 
-    if [[ -n "$default_value" ]]; then
-        # If the argument after this is another option, it should not be set as this option's value and the
-        # arguments should only be shifted once. If this is the last argument, shift errors can be safely ignored.
-        option_cases+="
+    # If the argument after this is another option, it should not be set as this option's value and the arguments should
+    # only be shifted once. If this is the last argument, shift errors can be safely ignored.
+    option_cases+="
         ${options// /|})
             shift
-            $variable=\"\${1:-}\"
-            if [[ \"\$$variable\" == -* ]]; then
-                $variable=
-            else
+            local next=\"\${1:-}\"
+            if [[ \"\$next\" != -* ]]; then
+                $variable=\"\$next\"
                 shift || true
             fi
             if [[ -z \"\$$variable\" ]]; then
-                $variable=\"$default_value\"
+                if [[ -z \"$default_value_if_provided\" ]]; then
+                    print_error \"Option ${options// /, } requires a value for <$value_name>\"
+                    options_error=true
+                else
+                    $variable=\"$default_value_if_provided\"
+                fi
             fi
             ;;"
-    else
-        option_cases+="
-        ${options// /|})
-            shift
-            $variable=\"\${1:-}\"
-            if [[ \"\$$variable\" == -* ]]; then
-                $variable=
-            else
-                shift || true
-            fi
-            if [[ -z \"\$$variable\" ]]; then
-                print_error \"Option ${options// /, } requires a value for <$value_name>\"
-                options_error=true
-            fi
-            ;;"
-    fi
+
+    help_text_arguments+=("${options// /, } <$value_name>")
 
     if [[ "$required" = true ]]; then
         required_argument_variable_indices+=($((${#argument_variables[@]} - 1)))
         help_text_usage_arguments+=("${options// / | } <$value_name>")
-        help_text_arguments+=("${options// /, } <$value_name>")
-        help_text_argument_descriptions+=("$description (required)")
+        description+=" (required)"
     else
         help_text_usage_arguments+=("[${options// / | } <$value_name>]")
-        help_text_arguments+=("${options// /, } <$value_name>")
-        help_text_argument_descriptions+=("$description (optional${default_value:+, default: $default_value})")
+        description+=" (optional${default_value:+, default: $default_value}${default_value_if_provided:+, default if provided without <$value_name>: $default_value_if_provided})"
     fi
+
+    help_text_argument_descriptions+=("$description")
 }
 
-# Adds a positional argument to the script. The variable is set to the value provided. If the argument is required, the
-# script will exit with an error if the argument is not provided.
+# Adds a positional argument to the script. The name and description are shown in the help text. An argument cannot be
+# required and have a default value at the same time.
 #
-# Usage: add_positional_argument name variable_name description required
-# Example: add_positional_argument "file-name" "file_name" "The file to process" true
+# If the argument is provided to the script:
+#   - The variable is set to the value provided.
+# If the argument is not provided to the script:
+#   - If a default value is set, the variable is set to that value.
+#   - Otherwise, if the argument is required, the script exits with an error.
+#   - Otherwise, the variable is set to an empty string.
+#
+# Usage: add_positional_argument name variable_name description required [default_value]
+# Example: add_positional_argument "file-name" "file_name" "The file to process" false "file.txt"
 add_positional_argument() {
     local name="${1:?${FUNCNAME[0]}: Argument name is required}"
     local variable="${2:?${FUNCNAME[0]}: Argument variable is required}"
     local description="${3:?${FUNCNAME[0]}: Argument description is required}"
     local required="${4:?${FUNCNAME[0]}: Argument requirement boolean is required}"
+    local default_value="${5:-}"
+
+    if [[ "$required" = true && -n "$default_value" ]]; then
+        print_error "Positional argument cannot be required and have a default value at the same time: $name"
+        exit 1
+    fi
 
     argument_variables+=("$variable")
+    argument_variable_defaults+=("$default_value")
     positional_argument_variables+=("$variable")
+
+    help_text_arguments+=("<$name>")
 
     if [[ "$required" = true ]]; then
         required_argument_variable_indices+=($((${#argument_variables[@]} - 1)))
         help_text_usage_arguments+=("<$name>")
-        help_text_arguments+=("<$name>")
-        help_text_argument_descriptions+=("$description (required)")
+        description+=" (required)"
     else
         help_text_usage_arguments+=("[<$name>]")
-        help_text_arguments+=("<$name>")
-        help_text_argument_descriptions+=("$description (optional)")
+        description+=" (optional${default_value:+, default: $default_value})"
     fi
+
+    help_text_argument_descriptions+=("$description")
 }
 
-# Parses the provided arguments and sets the variables based on the configured options and positional arguments. Check
-# if options are enabled or arguments are provided by using `if [[ -n "$option_variable" ]]`.
+# Parses the provided arguments and sets the argument variables based on the configured options and positional
+# arguments. Check if options are enabled or arguments are provided by using `if [[ -n "$option_variable" ]]`.
 #
 # Usage: parse_arguments "$@"
 parse_arguments() {
     local positional_arguments=()
-    local variable
+    local i
 
-    # Bash 3.2 will throw an error when accessing an empty array
-    if [[ "${#argument_variables[@]}" -ne 0 ]]; then
-        for variable in "${argument_variables[@]}"; do
-            # Variables should start out global and empty strings
-            # Bash 3.2 does not support the `declare -g` syntax
-            eval "$variable="
-        done
-    fi
+    for i in "${!argument_variables[@]}"; do
+        # Variables should start out global and assigned to their default values
+        # Bash 3.2 does not support the `declare -g` syntax
+        eval "${argument_variables[i]}=${argument_variable_defaults[i]}"
+    done
 
     # Keep verbosity if it was set in a previous script
     show_verbose="${SHOW_VERBOSE:-}"
@@ -390,6 +413,7 @@ parse_arguments() {
     done
 
     # Replace the original arguments with the split ones
+    # Bash 3.2 will throw an error when accessing an empty array
     if [[ "${#split_args[@]}" -ne "0" ]]; then
         set -- "${split_args[@]}"
     fi
@@ -427,7 +451,6 @@ parse_arguments() {
         print_error "Too many positional arguments provided"
         exit 1
     fi
-    local i
     for i in "${!positional_arguments[@]}"; do
         eval "${positional_argument_variables[i]}=${positional_arguments[$i]}"
     done

@@ -4,14 +4,10 @@
 source "$(dirname "$(realpath "$0")")/internal/framework.sh"
 set_description "This backs up MongoDB, PostgreSQL, MinIO, Redis, and mitmproxy data to the backups directory. Run \
 this before doing something risky with the datbases to prevent data loss."
-add_positional_argument "backup-name" "backup_name" "Name of the backup directory, defaults to the current date and time" false
+add_positional_argument "backup-name" "backup_name" "Name of the backup directory" false "backup_$(date +%Y-%m-%dT%H.%M.%S)"
 parse_arguments "$@"
 
 load_dotenv minio.env minio.local.env postgres.env
-
-if [[ -z "$backup_name" ]]; then
-    backup_name="backup_$(date +%Y-%m-%dT%H.%M.%S)"
-fi
 
 backup_dir="$git_base_dir/backups/$backup_name"
 if [[ -d "$backup_dir" ]]; then

@@ -6,7 +6,7 @@ set_description "This creates a community in Juxtaposition, which is required to
 for each community you want to create."
 add_positional_argument "name" "name" "The new community's name" true
 add_positional_argument "description" "description" "The new community's description" false
-add_option_with_value "t --title-ids" "title_ids" "comma-separated-title-IDs" "Comma-separated list of title IDs to include in the community, like \"1,2,3\"" false
+add_option_with_value "-t --title-ids" "title_ids" "comma-separated-title-IDs" "Comma-separated list of title IDs to include in the community, like \"1,2,3\"" false
 add_option_with_value "-i --icon-path" "icon_path" "image-path" "Path to an icon image for the community" false
 add_option_with_value "-b --banner-path" "banner_path" "image-path" "Path to a banner image for the community" false
 parse_arguments "$@"
