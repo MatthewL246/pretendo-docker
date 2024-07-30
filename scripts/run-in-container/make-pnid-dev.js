@@ -16,8 +16,7 @@ async function runAsync() {
     if (pnid) {
         await updatePnidAccessLevel(pnid, 3, "dev");
     } else {
-        console.error(`No PNID found for username ${process.argv[1]}.`);
-        process.exit(1);
+        throw new Error(`No PNID found for username ${process.argv[1]}.`);
     }
 }
 
