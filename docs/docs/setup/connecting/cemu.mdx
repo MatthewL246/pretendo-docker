@@ -26,21 +26,20 @@ This guide will show you how to access your server from the Cemu emulator.
 
   <TabItem value="no-wiiu" label="Without a Wii U">
     <Admonition type="warning">
-      Prefer using the Wii U method if you have access to a Wii U console. This method is more complicated and
-      requires using an account server patch that disables the console verification, which normally blocks invalid OTP
-      and SEEPROM dumps. **The fake OTP and SEEPROM dumps will not work on the official Pretendo server.**
+      Prefer using the Wii U method if you have access to a Wii U console. This method is more complicated and requires
+      using an account server patch that disables console verification, which normally blocks invalid OTP and SEEPROM
+      dumps. **The fake OTP and SEEPROM dumps will not work on the official Pretendo server.**
     </Admonition>
 
-    1. Follow the [browser connecting guide](./browser.mdx) first.
-    2. Visit [the account settings page](https://pretendo.network/account) in your proxied browser and click the
-       `Download account files` button.
-       <Admonition type="info">
-         This button will only show up on your server. This feature was purposefully disabled on the official Pretendo
-         servers to prevent abuse and ban evasion.
-       </Admonition>
-    3. Copy `otp.bin`, `seeprom.bin`, and `mlc01` from the downloaded ZIP file to your Cemu directory.
-    4. Continue with the [official Pretendo Network Cemu installation guide](https://pretendo.network/docs/install/cemu)
-       to enable online mode with Pretendo.
+    1. Run `./scripts/create-cemu-online-files.sh --fake-dumps <pnid>` to generate the necessary online files, including
+       the `account.dat` and the fake dumps. Replace `<pnid>` with your PNID username, and enter the password when
+       prompted.
+       - If you already have another account in Cemu, you can use the `--persistent-id` option to change the persistent
+         ID (like `80000001`) of the generated `account.dat` to one that is not already in use.
+    2. Copy `otp.bin`, `seeprom.bin`, and `mlc01` from the created `online-files` directory to your Cemu directory.
+       Merge the `mlc01` directory with your existing Cemu MLC directory if you have one.
+    3. Continue with the [official Pretendo Network Cemu installation guide](https://pretendo.network/docs/install/cemu)
+       to enable online mode with Pretendo in the account settings.
 
   </TabItem>
 </Tabs>
