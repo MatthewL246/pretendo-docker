@@ -2,7 +2,7 @@
 
 set -eu
 
-databases="friends super_mario_maker"
+databases="friends super_mario_maker pikmin3"
 
 for database in $databases; do
     if [ "$(psql -At -U "$POSTGRES_USER" -c "SELECT 1 FROM pg_database WHERE datname='$database'")" = '' ]; then
