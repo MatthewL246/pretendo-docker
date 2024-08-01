@@ -428,7 +428,7 @@ services:
     restart: unless-stopped
     ports:
       # Go delve debugger
-      - 127.0.0.1:2350:2351
+      - 127.0.0.1:2351:2350
       # Authentication server
       - 6006:6006/udp
       # Secure server
