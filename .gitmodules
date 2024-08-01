@@ -85,3 +85,9 @@ path = repos/minecraft-wiiu
 url = https://github.com/PretendoNetwork/minecraft-wiiu
 branch = main
 ignore = dirty
+
+[submodule "repos/pikmin-3"]
+path = repos/pikmin-3
+url = https://github.com/PretendoNetwork/pikmin-3
+branch = master
+ignore = dirty

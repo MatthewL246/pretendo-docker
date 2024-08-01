@@ -86,6 +86,7 @@ echo "PN_BOSS_CONFIG_GRPC_ACCOUNT_SERVER_API_KEY=$account_grpc_api_key" >>./boss
 echo "PN_SMM_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./super-mario-maker.local.env
 echo "PN_SPLATOON_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./splatoon.local.env
 echo "PN_MINECRAFT_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./minecraft-wiiu.local.env
+echo "PN_PIKMIN3_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./pikmin-3.local.env
 
 # Generate a secret key for MinIO
 minio_secret_key=$(generate_password 32)
@@ -101,6 +102,7 @@ postgres_password=$(generate_password 32)
 echo "POSTGRES_PASSWORD=$postgres_password" >>./postgres.local.env
 echo "PN_FRIENDS_CONFIG_DATABASE_URI=postgres://postgres_pretendo:$postgres_password@postgres/friends?sslmode=disable" >>./friends.local.env
 echo "PN_SMM_POSTGRES_URI=postgres://postgres_pretendo:$postgres_password@postgres/super_mario_maker?sslmode=disable" >>./super-mario-maker.local.env
+echo "PN_PIKMIN3_POSTGRES_URI=postgres://postgres_pretendo:$postgres_password@postgres/pikmin3?sslmode=disable" >>./pikmin-3.local.env
 
 # Generate passwords, a gRPC API key, and an AES key for the friends server
 friends_authentication_password=$(generate_password 32)
@@ -131,6 +133,10 @@ echo "PN_SPLATOON_KERBEROS_PASSWORD=$splat_kerberos_password" >>./splatoon.local
 minecraft_kerberos_password=$(generate_password 32)
 echo "PN_MINECRAFT_KERBEROS_PASSWORD=$minecraft_kerberos_password" >>./minecraft-wiiu.local.env
 
+# Generate a Kerberos password for the Pikmin 3 server
+pikmin3_kerberos_password=$(generate_password 32)
+echo "PN_PIKMIN3_KERBEROS_PASSWORD=$pikmin3_kerberos_password" >>./pikmin-3.local.env
+
 # Generate an AES key for the Miiverse servers
 miiverse_aes_key=$(generate_hex 64)
 echo "PN_MIIVERSE_API_CONFIG_AES_KEY=$miiverse_aes_key" >>./miiverse-api.local.env
@@ -148,6 +154,7 @@ echo "PN_WIIU_CHAT_SECURE_SERVER_LOCATION=$server_ip" >>./wiiu-chat.local.env
 echo "PN_SMM_SECURE_SERVER_HOST=$server_ip" >>./super-mario-maker.local.env
 echo "PN_SPLATOON_SECURE_SERVER_HOST=$server_ip" >>./splatoon.local.env
 echo "PN_MINECRAFT_SECURE_SERVER_HOST=$server_ip" >>./minecraft-wiiu.local.env
+echo "PN_PIKMIN3_SECURE_SERVER_HOST=$server_ip" >>./pikmin-3.local.env
 
 # Get the Wii U IP address
 if [[ -n "$wiiu_ip" ]]; then

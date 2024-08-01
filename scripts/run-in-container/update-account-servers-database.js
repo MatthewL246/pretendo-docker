@@ -100,6 +100,15 @@ async function runAsync() {
         1,
         "0".repeat(64)
     );
+    await createNexServer(
+        "Pikmin 3",
+        "1012BC00",
+        ["000500001012BC00", "000500001012BD00", "000500001012BE00"],
+        process.env.SERVER_IP,
+        process.env.PIKMIN3_PORT,
+        1,
+        "0".repeat(64)
+    );
 }
 
 runAsync().then(() => {

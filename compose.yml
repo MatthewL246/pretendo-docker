@@ -459,6 +459,26 @@ services:
       - ./environment/minecraft-wiiu.env
       - ./environment/minecraft-wiiu.local.env
 
+  pikmin-3:
+    build: ./repos/pikmin-3
+    depends_on:
+      - account
+      - postgres
+    restart: unless-stopped
+    ports:
+      # Go delve debugger
+      - 127.0.0.1:2353:2353
+      # Authentication server
+      - 6010:6010/udp
+      # Secure server
+      - 6011:6011/udp
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/pikmin-3.env
+      - ./environment/pikmin-3.local.env
+
 volumes:
   mitmproxy-pretendo-data:
   mongodb-database:
