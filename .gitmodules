@@ -76,7 +76,7 @@ ignore = dirty
 
 [submodule "repos/splatoon"]
 path = repos/splatoon
-url = https://github.com/ashquarky/splatoon
+url = https://github.com/PretendoNetwork/splatoon
 branch = master
 ignore = dirty
 
