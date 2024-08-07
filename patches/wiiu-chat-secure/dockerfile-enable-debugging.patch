@@ -1,8 +1,8 @@
 diff --git i/Dockerfile w/Dockerfile
-index 20b2b7a..60e3ee3 100644
+index fb8db39..93b708b 100644
 --- i/Dockerfile
 +++ w/Dockerfile
-@@ -10,6 +10,8 @@ ARG build_string=pretendo.friends.docker
+@@ -9,6 +9,8 @@ ARG app_dir
  
  WORKDIR ${app_dir}
  
@@ -11,20 +11,17 @@ index 20b2b7a..60e3ee3 100644
  RUN --mount=type=cache,target=/go/pkg/mod/ \
  	--mount=type=bind,source=go.sum,target=go.sum \
  	--mount=type=bind,source=go.mod,target=go.mod \
-@@ -17,7 +19,7 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
+@@ -16,7 +18,7 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
  
  COPY . .
  RUN --mount=type=cache,target=/go/pkg/mod/ \
--	CGO_ENABLED=0 go build -v -o ${app_dir}/build/server -ldflags "-X 'main.serverBuildString=${build_string}'"
-+	CGO_ENABLED=0 go build -v -o ${app_dir}/build/server -gcflags "all=-N -l" -ldflags "-X 'main.serverBuildString=${build_string}'"
+-	CGO_ENABLED=0 go build -v -o ${app_dir}/build/server
++	CGO_ENABLED=0 go build -gcflags "all=-N -l" -v -o ${app_dir}/build/server
  
  
  # * Running the final application
-@@ -31,6 +33,7 @@ RUN mkdir -p ${app_dir}/log && chown go:go ${app_dir}/log
+@@ -32,4 +34,4 @@ USER go
  
- USER go
- 
-+COPY --from=build /go/bin/dlv ${app_dir}/dlv
  COPY --from=build ${app_dir}/build/server ${app_dir}/server
  
 -CMD [ "./server" ]
