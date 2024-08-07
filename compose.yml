@@ -375,7 +375,7 @@ services:
     restart: always
     ports:
       # Go delve debugger
-      - 127.0.0.1:2346:2346
+      - 127.0.0.1:2346:2345
       # Authentication server
       - 6002:6002/udp
     networks:
@@ -394,7 +394,7 @@ services:
     restart: always
     ports:
       # Go delve debugger
-      - 127.0.0.1:2347:2347
+      - 127.0.0.1:2347:2345
       # Secure server
       - 6003:6003/udp
     networks:
@@ -413,7 +413,7 @@ services:
     restart: always
     ports:
       # Go delve debugger
-      - 127.0.0.1:2348:2348
+      - 127.0.0.1:2348:2345
       # Authentication server
       - 6004:6004/udp
       # Secure server
@@ -433,7 +433,7 @@ services:
     restart: unless-stopped
     ports:
       # Go delve debugger
-      - 127.0.0.1:2351:2350
+      - 127.0.0.1:2349:2345
       # Authentication server
       - 6006:6006/udp
       # Secure server
@@ -452,7 +452,7 @@ services:
     restart: unless-stopped
     ports:
       # Go delve debugger
-      - 127.0.0.1:2352:2350
+      - 127.0.0.1:2350:2345
       # Authentication server
       - 6008:6008/udp
       # Secure server
@@ -472,7 +472,7 @@ services:
     restart: unless-stopped
     ports:
       # Go delve debugger
-      - 127.0.0.1:2353:2353
+      - 127.0.0.1:2351:2349
       # Authentication server
       - 6010:6010/udp
       # Secure server

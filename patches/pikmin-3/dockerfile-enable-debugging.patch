@@ -1,5 +1,5 @@
 diff --git i/Dockerfile w/Dockerfile
-index 2a929a4..4aa6bbe 100644
+index 3e08c61..ca3fcf9 100644
 --- i/Dockerfile
 +++ w/Dockerfile
 @@ -9,6 +9,8 @@ ARG app_dir
@@ -13,7 +13,7 @@ index 2a929a4..4aa6bbe 100644
  	--mount=type=bind,source=go.mod,target=go.mod \
 @@ -17,7 +19,7 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
  COPY . .
- ARG BUILD_STRING=pretendo.supermariomaker.docker
+ ARG BUILD_STRING=pretendo.pikmin3.docker
  RUN --mount=type=cache,target=/go/pkg/mod/ \
 -	CGO_ENABLED=0 go build -ldflags "-X 'main.serverBuildString=${BUILD_STRING}'" -v -o ${app_dir}/build/server
 +	CGO_ENABLED=0 go build -gcflags "all=-N -l" -ldflags "-X 'main.serverBuildString=${BUILD_STRING}'" -v -o ${app_dir}/build/server

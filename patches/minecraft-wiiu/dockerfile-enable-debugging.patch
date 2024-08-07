@@ -1,7 +1,7 @@
-diff --git a/Dockerfile b/Dockerfile
-index 94effb5..902eb1e 100644
---- a/Dockerfile
-+++ b/Dockerfile
+diff --git i/Dockerfile w/Dockerfile
+index 94effb5..509b71c 100644
+--- i/Dockerfile
++++ w/Dockerfile
 @@ -9,6 +9,8 @@ ARG app_dir
  
  WORKDIR ${app_dir}
@@ -16,7 +16,7 @@ index 94effb5..902eb1e 100644
  ARG BUILD_STRING=pretendo.minecraftwiiu.docker
  RUN --mount=type=cache,target=/go/pkg/mod/ \
 -	CGO_ENABLED=0 go build -ldflags "-X 'main.serverBuildString=${BUILD_STRING}'" -v -o ${app_dir}/build/server
-+	CGO_ENABLED=0 go build -ldflags "-X 'main.serverBuildString=${BUILD_STRING}'" -v -o ${app_dir}/build/server -gcflags "all=-N -l"
++	CGO_ENABLED=0 go build -gcflags "all=-N -l" -ldflags "-X 'main.serverBuildString=${BUILD_STRING}'" -v -o ${app_dir}/build/server
  
  
  # * Running the final application
@@ -28,5 +28,4 @@ index 94effb5..902eb1e 100644
  COPY --from=build ${app_dir}/build/server ${app_dir}/server
  
 -CMD [ "./server" ]
-+CMD ["./dlv", "exec", "./server", "--listen=:2348", "--headless", "--api-version=2", "--log", "--accept-multiclient", "--continue"]
-\ No newline at end of file
++CMD ["./dlv", "exec", "./server", "--listen=:2345", "--headless", "--api-version=2", "--log", "--accept-multiclient", "--continue"]
