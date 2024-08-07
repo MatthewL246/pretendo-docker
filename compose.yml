@@ -254,6 +254,7 @@ services:
     networks:
       internal:
     dns: 172.20.0.200
+    command: ["node", "--inspect=0.0.0.0:9229", "."]
     env_file:
       - ./environment/account.env
       - ./environment/account.local.env
@@ -274,6 +275,7 @@ services:
         read_only: true
     networks:
       internal:
+    command: ["node", "--inspect=0.0.0.0:9230", "."]
     dns: 172.20.0.200
 
   friends:
@@ -314,6 +316,7 @@ services:
     networks:
       internal:
     dns: 172.20.0.200
+    command: ["node", "--inspect=0.0.0.0:9231", "."]
     env_file:
       - ./environment/miiverse-api.env
       - ./environment/miiverse-api.local.env
@@ -337,6 +340,7 @@ services:
     networks:
       internal:
     dns: 172.20.0.200
+    command: ["node", "--inspect=0.0.0.0:9232", "."]
     env_file:
       - ./environment/juxtaposition-ui.env
       - ./environment/juxtaposition-ui.local.env
@@ -358,6 +362,7 @@ services:
     networks:
       internal:
     dns: 172.20.0.200
+    command: ["node", "--inspect=0.0.0.0:9233", "."]
     env_file:
       - ./environment/boss.env
       - ./environment/boss.local.env
