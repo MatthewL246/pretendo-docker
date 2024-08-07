@@ -1,5 +1,5 @@
 diff --git i/Dockerfile w/Dockerfile
-index 3e08c61..ca3fcf9 100644
+index 3e08c61..4cc3c7a 100644
 --- i/Dockerfile
 +++ w/Dockerfile
 @@ -9,6 +9,8 @@ ARG app_dir
@@ -20,8 +20,11 @@ index 3e08c61..ca3fcf9 100644
  
  
  # * Running the final application
-@@ -33,4 +35,4 @@ USER go
+@@ -31,6 +33,7 @@ RUN mkdir -p ${app_dir}/log && chown go:go ${app_dir}/log
  
+ USER go
+ 
++COPY --from=build /go/bin/dlv ${app_dir}/dlv
  COPY --from=build ${app_dir}/build/server ${app_dir}/server
  
 -CMD [ "./server" ]
