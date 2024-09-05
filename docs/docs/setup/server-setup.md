@@ -30,7 +30,8 @@ Downloading this repo as a ZIP file from GitHub will **not** work because it use
 
 :::tip[Tips for Windows users]
 
-If you are using Windows, you should clone the repo **inside your WSL distro** for multiple reasons.
+If you are using Windows, you should clone the repo **using the version of Git installed inside your WSL distro**, not 
+Git Bash from Git for Windows, for multiple reasons.
 
 - This avoids Git messing with line endings and breaking shell scripts, which it can do when you clone a repo in Windows
   (due to `autocrlf`).
