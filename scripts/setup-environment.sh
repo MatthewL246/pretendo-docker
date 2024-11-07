@@ -103,6 +103,7 @@ echo "POSTGRES_PASSWORD=$postgres_password" >>./postgres.local.env
 echo "PN_FRIENDS_CONFIG_DATABASE_URI=postgres://postgres_pretendo:$postgres_password@postgres/friends?sslmode=disable" >>./friends.local.env
 echo "PN_SMM_POSTGRES_URI=postgres://postgres_pretendo:$postgres_password@postgres/super_mario_maker?sslmode=disable" >>./super-mario-maker.local.env
 echo "PN_PIKMIN3_POSTGRES_URI=postgres://postgres_pretendo:$postgres_password@postgres/pikmin3?sslmode=disable" >>./pikmin-3.local.env
+echo "PN_SPLATOON_POSTGRES_URI=postgres://postgres_pretendo:$postgres_password@postgres/splatoon?sslmode=disable" >>./splatoon.local.env
 
 # Generate passwords, a gRPC API key, and an AES key for the friends server
 friends_authentication_password=$(generate_password 32)
