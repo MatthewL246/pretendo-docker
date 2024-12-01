@@ -17,6 +17,7 @@ const config: Config = {
     baseUrl: `/${github.repo}/`,
     organizationName: github.username,
     projectName: github.repo,
+    trailingSlash: true,
 
     onBrokenLinks: "throw",
     onBrokenMarkdownLinks: "warn",
