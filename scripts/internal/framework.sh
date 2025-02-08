@@ -229,32 +229,32 @@ if_not_verbose() {
 # with MinGW. All scripts are designed to be run inside a WSL2 distro when running on Windows, and running them in other
 # environments tends to cause various hard-to-debug issues, mainly when interacting with Docker.
 
-# windows_detected=false
+windows_detected=false
 
-# # $OS seems to be the most reliable, as it was set in all the environments I checked
-# if [[ "${OS:-}" = "Windows_NT" ]]; then
-#     windows_detected=true
-# fi
-# # $OSTYPE was also set in all the environments I checked
-# if [[ "${OSTYPE:-}" =~ msys|cygwin ]]; then
-#     windows_detected=true
-# fi
-# # uname should always work as a backup, even if the environment variables are not set as expected
-# if [[ "$(uname -so | tr "[:upper:]" "[:lower:]")" =~ mingw|msys|cygwin ]]; then
-#     windows_detected=true
-# fi
+# $OS seems to be the most reliable, as it was set in all the environments I checked
+if [[ "${OS:-}" = "Windows_NT" ]]; then
+     windows_detected=true
+fi
+# $OSTYPE was also set in all the environments I checked
+if [[ "${OSTYPE:-}" =~ msys|cygwin ]]; then
+    windows_detected=true
+fi
+# uname should always work as a backup, even if the environment variables are not set as expected
+if [[ "$(uname -so | tr "[:upper:]" "[:lower:]")" =~ mingw|msys|cygwin ]]; then
+    windows_detected=true
+fi
 
-# if [[ "$windows_detected" = true ]]; then
-#     print_error "It looks like you are using Windows, but you are not running this script inside a WSL2 distro."
-#     echo
-#     print_info "All pretendo-docker scripts are designed to be run inside your WSL2 distro when running on Windows."
-#     print_info "However, it looks like you are running this script in a different Bash on Windows environment (like Git Bash, Cygwin, MSYS2, or MinGW). Running in these environments tends to cause various hard-to-debug issues."
-#     echo
-#     echo "Note that this issue can be caused by running the script from a Windows shell (like PowerShell or Command Prompt) or by double-clicking it, as Windows will automatically run it with your default app for opening .sh files."
-#     echo
-#     print_info "${term_bold}Please run this script directly from Bash in your primary WSL2 distro instead."
-#     exit 1
-# fi
+if [[ "$windows_detected" = true ]]; then
+    print_error "It looks like you are using Windows, but you are not running this script inside a WSL2 distro."
+    echo
+    print_info "All pretendo-docker scripts are designed to be run inside your WSL2 distro when running on Windows."
+    print_info "However, it looks like you are running this script in a different Bash on Windows environment (like Git Bash, Cygwin, MSYS2, or MinGW). Running in these environments tends to cause various hard-to-debug issues."
+    echo
+    echo "Note that this issue can be caused by running the script from a Windows shell (like PowerShell or Command Prompt) or by double-clicking it, as Windows will automatically run it with your default app for opening .sh files."
+    echo
+    print_info "${term_bold}Please run this script directly from Bash in your primary WSL2 distro instead."
+    exit 1
+fi
 
 # Argument parsing framework
 # Uses a lot of Bash parameter expansion tricks: https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameter-Expansion
