@@ -484,6 +484,26 @@ services:
       - ./environment/pikmin-3.env
       - ./environment/pikmin-3.local.env
 
+  pokken-tournament:
+    build: ./repos/pokken-tournament
+    depends_on:
+      - account
+      - postgres
+    restart: unless-stopped
+    ports:
+      # Go delve debugger
+      - 127.0.0.1:2352:2349
+      # Authentication server
+      - 6012:6012/udp
+      # Secure server
+      - 6013:6013/udp
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/pokken-tournament.env
+      - ./environment/pokken-tournament.local.env
+
 volumes:
   mitmproxy-pretendo-data:
   mongodb-database:
