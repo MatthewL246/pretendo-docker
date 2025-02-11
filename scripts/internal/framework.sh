@@ -233,7 +233,7 @@ windows_detected=false
 
 # $OS seems to be the most reliable, as it was set in all the environments I checked
 if [[ "${OS:-}" = "Windows_NT" ]]; then
-    windows_detected=true
+     windows_detected=true
 fi
 # $OSTYPE was also set in all the environments I checked
 if [[ "${OSTYPE:-}" =~ msys|cygwin ]]; then

@@ -91,3 +91,6 @@ path = repos/pikmin-3
 url = https://github.com/PretendoNetwork/pikmin-3
 branch = master
 ignore = dirty
+[submodule "repos/pokken-tournament"]
+	path = repos/pokken-tournament
+	url = https://github.com/PretendoNetwork/pokken-tournament
