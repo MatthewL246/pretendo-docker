@@ -109,6 +109,14 @@ async function runAsync() {
         1,
         "0".repeat(64)
     );
+    await createNexServer(
+        "Pokken Tournament",
+        "101C5800",
+        ["00050000101DF400", "00050000101C5800", "00050000101DEE00"],
+        process.env.SERVER_IP,
+        process.env.POKKENTOURNAMENT_PORT,
+        1,
+        "0".repeat(64)
 }
 
 runAsync().then(() => {
