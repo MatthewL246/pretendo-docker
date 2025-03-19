@@ -484,6 +484,27 @@ services:
       - ./environment/pikmin-3.env
       - ./environment/pikmin-3.local.env
 
+  mario-kart-8:
+    build: ./repos/mario-kart-8
+    depends_on:
+      - account
+      - friends
+      - mongodb
+      - redis
+      - minio
+    restart: unless-stopped
+    ports:
+      # Authentication server
+      - 5781:5781/udp
+      # Secure server
+      - 5782:5782/udp
+    networks:
+      internal:
+    dns: 172.20.0.200
+    env_file:
+      - ./environment/mario-kart-8.env
+      - ./environment/mario-kart-8.local.env
+
 volumes:
   mitmproxy-pretendo-data:
   mongodb-database:
