@@ -8,14 +8,14 @@ use this if you're trying to update the submodules to a newer version than is su
 fails to apply, a 3-way merge will be attempted."
 parse_arguments "$@"
 
-print_info "Resetting all submodules..."
-run_verbose git submodule sync
-run_verbose git submodule foreach "git reset --hard"
-run_verbose git submodule foreach "git clean -fd"
-run_verbose git submodule update --init --checkout
+print_info "Resetting all submodules (including nested submodules)..."
+run_verbose git submodule sync --recursive
+run_verbose git submodule foreach --recursive "git reset --hard"
+run_verbose git submodule foreach --recursive "git clean -xfd"
+run_verbose git submodule update --init --checkout --recursive
 if [[ -n "$update_remote" ]]; then
-    print_info "Updating submodules from their remotes..."
-    git submodule update --remote
+    print_info "Updating submodules from their remotes (including nested submodules)..."
+    run_verbose git submodule update --remote --recursive
 fi
 
 print_info "Applying patches to submodules..."

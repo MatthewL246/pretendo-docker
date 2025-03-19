@@ -1,0 +1,104 @@
+diff --git a/server_config.py b/server_config.py
+new file mode 100644
+index 0000000..dcb8279
+--- /dev/null
++++ b/server_config.py
+@@ -0,0 +1,98 @@
++from nintendo.nex import settings
++import pymongo
++import pymongo
++import urllib.parse
++import os
++
++GAME_SERVER_ID = 0x1010EB00
++ACCESS_KEY = "25dbf96a"
++NEX_VERSION = 30504
++
++# NEX_SETTINGS = settings.load("friends")
++NEX_SETTINGS = settings.default()
++NEX_SETTINGS.configure(ACCESS_KEY, NEX_VERSION)
++NEX_SETTINGS["prudp.resend_timeout"] = 1.5
++NEX_SETTINGS["prudp.resend_limit"] = 3
++NEX_SETTINGS["prudp.version"] = 1
++NEX_SETTINGS["prudp.max_substream_id"] = 1
++
++
++class MongoCredentials:
++    def __init__(self, host: str, port: int, use_auth: bool = False, username: str = "", password: str = ""):
++        self.host = host
++        self.port = port
++        self.use_auth = use_auth
++        self.username = username
++        self.password = password
++
++    def connect(self):
++        # Username and password must be percent-escaped
++        db_use_auth = self.use_auth
++        db_user = urllib.parse.quote_plus(self.username)
++        db_pass = urllib.parse.quote_plus(self.password)
++        db_host = self.host
++        db_port = self.port
++
++        if db_use_auth:
++            db_uri = 'mongodb://%s:%s@%s:%d' % (db_user, db_pass, db_host, db_port)
++        else:
++            db_uri = 'mongodb://%s:%d' % (db_host, db_port)
++
++        return pymongo.MongoClient(db_uri, serverSelectionTimeoutMS=3000)
++
++
++class NEXConfig:
++    def __init__(self):
++        self.nex_host = "0.0.0.0"
++        self.nex_auth_port = int(os.getenv('PN_MK8_AUTHENTICATION_SERVER_PORT', 1000))
++        self.nex_secure_port = int(os.getenv('PN_MK8_SECURE_SERVER_PORT', 1001))
++        self.nex_secure_user_password = os.getenv('PN_MK8_SECURE_PASSWORD', 'abcdef123456')  # PLEASE, make this a real private password.
++        self.nex_external_address = os.getenv('PN_MK8_SECURE_SERVER_HOST', '0.0.0.0')  # Your external IP, for external clients to connect.
++
++        self.friends_grpc_host = os.getenv('PN_MK8_FRIENDS_GRPC_HOST', '123.123.123.123')
++        self.friends_grpc_port = int(os.getenv('PN_MK8_FRIENDS_GRPC_PORT', 1002))
++        self.friends_grpc_api_key = os.getenv('PN_MK8_FRIENDS_GRPC_API_KEY', 'abcdefghijklmnopqrstuvwxyz123456789')
++
++        self.account_grpc_host = os.getenv('PN_MK8_ACCOUNT_GRPC_HOST', '124.124.124.124')
++        self.account_grpc_port = int(os.getenv('PN_MK8_ACCOUNT_GRPC_PORT', 1003))
++        self.account_grpc_api_key = os.getenv('PN_MK8_ACCOUNT_GRPC_API_KEY', 'abcdefghijklmnopqrstuvwxyz123456789')
++
++        # These gRPC credentials are for the server we're implementing
++        self.mario_kart_8_grpc_host = "localhost"
++        self.mario_kart_8_grpc_port = int(os.getenv('PN_MK8_GRPC_PORT', 50051))
++        self.mario_kart_8_grpc_api_key = os.getenv('PN_MK8_GRPC_API_KEY', 'abcdefghijklmnopqrstuvwxyz123456789')
++
++        self.account_database = os.getenv('PN_MK8_ACCOUNT_DATABASE', 'pretendo_account')
++
++        self.pnid_collection = "pnids"
++        self.nex_account_collection = "nexaccounts"
++
++        self.game_db_server = MongoCredentials(
++            host=os.getenv('PN_MK8_MONGO_HOST', '222.222.222.222'),
++            port=int(os.getenv('PN_MK8_MONGO_PORT', 1004))
++        )
++
++        self.game_database = "mk8"
++
++        self.sequence_collection = "counters"
++        self.gatherings_collection = "gatherings"
++        self.sessions_collection = "sessions"
++        self.tournaments_collection = "tournaments"
++        self.tournaments_score_collection = "tournaments_scores"
++        self.ranking_common_data_collection = "commondata"
++        self.rankings_score_collection = "rankings"
++        self.secure_reports_collection = "secure_reports"
++        self.datastore_collection = "datastore"
++        self.restriction_collection = "restrictions"
++
++        self.s3_endpoint_domain = os.getenv('PN_MK8_CONFIG_S3_ENDPOINT', 'minio.pretendo.cc')
++        self.s3_endpoint = "http://" + self.s3_endpoint_domain
++        self.s3_access_key = os.getenv('PN_MK8_CONFIG_S3_ACCESS_KEY', 'minio_pretendo')
++        self.s3_secret = os.getenv('PN_MK8_CONFIG_S3_SECRET', '...')
++        self.s3_region = "it"
++        self.bucket_name = os.getenv('PN_MK8_CONFIG_S3_BUCKET', 'amkj')
++
++        self.redis_uri = "redis://" + os.getenv('PN_MK8_REDIS_URI', '53.53.53.53:1005')  # redis://HOST[:PORT][?db=DATABASE[&password=PASSWORD]]
++
++
++NEX_CONFIG = NEXConfig()

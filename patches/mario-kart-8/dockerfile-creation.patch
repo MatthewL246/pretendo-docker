@@ -1,0 +1,34 @@
+diff --git a/Dockerfile b/Dockerfile
+new file mode 100644
+index 0000000..9fb5b2d
+--- /dev/null
++++ b/Dockerfile
+@@ -0,0 +1,20 @@
++# Use the official Python image as the base
++FROM python:3.9-slim
++
++# Set the working directory inside the container
++WORKDIR /app
++
++# Copy the requirements file to the working directory
++COPY requirements.txt .
++
++ENV PYTHONPATH="/usr/local/lib/python3.9/site-packages"
++
++# Install dependencies specified in requirements.txt
++RUN python -m pip install --no-cache-dir -r requirements.txt
++
++# Copy all project files into the container
++COPY . .
++
++# Install Git (required for submodules)
++#RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
++
++# Ensure all submodules (including nested ones) are initialized and updated
++#RUN git submodule update --init --recursive
++
++# Generate gRPC Python files before running the application
++RUN python -m grpc_tools.protoc --proto_path=grpc --python_out=. --grpc_python_out=. grpc/amkj_service.proto
++
++# Set the command to run the application
++CMD ["python", "main.py"]
