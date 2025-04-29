@@ -7,7 +7,7 @@ parse_arguments "$@"
 print_info "Setting up Pretendo account servers database..."
 
 load_dotenv .env
-dotenv_files=("friends" "miiverse-api" "wiiu-chat" "super-mario-maker" "splatoon" "minecraft-wiiu" "pikmin-3")
+dotenv_files=("friends" "miiverse-api" "wiiu-chat" "super-mario-maker" "splatoon" "minecraft-wiiu" "pikmin-3" "mario-kart-8")
 for file in "${dotenv_files[@]}"; do
     load_dotenv "$file.env" "$file.local.env"
 done
@@ -24,6 +24,7 @@ run_verbose docker compose exec -e SERVER_IP="$SERVER_IP" \
     -e SPLATOON_PORT="$PN_SPLATOON_AUTHENTICATION_SERVER_PORT" \
     -e MINECRAFT_PORT="$PN_MINECRAFT_AUTHENTICATION_SERVER_PORT" \
     -e PIKMIN3_PORT="$PN_PIKMIN3_AUTHENTICATION_SERVER_PORT" \
+    -e MK8_PORT="$PN_MK8_AUTHENTICATION_SERVER_PORT" \
     account node -e "$create_server_script"
 
 print_success "Account servers database is set up."

@@ -109,6 +109,15 @@ async function runAsync() {
         1,
         "0".repeat(64)
     );
+    await createNexServer(
+        "Mario Kart 8",
+        "1010EB00",
+        ["000500001010EB00", "000500001010EC00", "000500001010ED00"],
+        process.env.SERVER_IP,
+        process.env.MK8_PORT,
+        1,
+        "0".repeat(64)
+    );
 }
 
 runAsync().then(() => {

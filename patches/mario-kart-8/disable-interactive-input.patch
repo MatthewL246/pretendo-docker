@@ -1,0 +1,31 @@
+diff --git a/main.py b/main-diff.py
+index 9fb8233..b9fa3a7 100644
+--- a/main.py
++++ b/main.py
+@@ -8,6 +8,7 @@ import aioconsole
+ import contextlib
+ import datetime
+ import requests
++import signal
+ 
+ from datetime import datetime, timezone
+ 
+@@ -246,7 +247,17 @@ async def main():
+             logging.info("Starting gRPC amkj server on %s", listen_addr)
+ 
+             await server.start()
+-            await aioconsole.ainput("Press enter to exit...\n")
++            
++            # Set signal handlers for graceful shutdown
++            loop = asyncio.get_running_loop()
++            for sig in (signal.SIGINT, signal.SIGTERM):
++                loop.add_signal_handler(sig, lambda: asyncio.create_task(shutdown(server)))
++
++            # Keep server running
++            try:
++                await server.wait_for_termination()
++            except asyncio.CancelledError:
++                pass
+ 
+ 
+ async def sync_amkj_status_to_database(task: asyncio.Task):

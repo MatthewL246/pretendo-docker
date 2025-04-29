@@ -87,6 +87,7 @@ echo "PN_SMM_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./super-mario-maker.l
 echo "PN_SPLATOON_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./splatoon.local.env
 echo "PN_MINECRAFT_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./minecraft-wiiu.local.env
 echo "PN_PIKMIN3_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./pikmin-3.local.env
+echo "PN_MK8_ACCOUNT_GRPC_API_KEY=$account_grpc_api_key" >>./mario-kart-8.local.env
 
 # Generate a secret key for MinIO
 minio_secret_key=$(generate_password 32)
@@ -96,6 +97,7 @@ echo "PN_MIIVERSE_API_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./miiverse-ap
 echo "JUXT_CONFIG_AWS_SPACES_SECRET=$minio_secret_key" >>./juxtaposition-ui.local.env
 echo "PN_BOSS_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./boss.local.env
 echo "PN_SMM_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./super-mario-maker.local.env
+echo "PN_MK8_CONFIG_S3_ACCESS_SECRET=$minio_secret_key" >>./mario-kart-8.local.env
 
 # Generate a password for Postgres
 postgres_password=$(generate_password 32)
@@ -113,11 +115,16 @@ echo "PN_FRIENDS_CONFIG_SECURE_PASSWORD=$friends_secure_password" >>./friends.lo
 friends_api_key=$(generate_password 32)
 echo "PN_FRIENDS_CONFIG_GRPC_API_KEY=$friends_api_key" >>./friends.local.env
 echo "PN_WIIU_CHAT_FRIENDS_GRPC_API_KEY=$friends_api_key" >>./wiiu-chat.local.env
+echo "PN_MK8_FRIENDS_GRPC_API_KEY=$friends_api_key" >>./wiiu-chat.local.env
 echo "PN_MIIVERSE_API_CONFIG_GRPC_FRIENDS_API_KEY=$friends_api_key" >>./miiverse-api.local.env
 echo "JUXT_CONFIG_GRPC_FRIENDS_API_KEY=$friends_api_key" >>./juxtaposition-ui.local.env
 echo "PN_BOSS_CONFIG_GRPC_FRIENDS_SERVER_API_KEY=$friends_api_key" >>./boss.local.env
 friends_aes_key=$(generate_hex 64)
 echo "PN_FRIENDS_CONFIG_AES_KEY=$friends_aes_key" >>./friends.local.env
+
+# Generate a gRPC API Key for Mario Kart 8 server
+mk8_api_key=$(generate_password 32)
+echo "PN_MK8_GRPC_API_KEY=$mk8_api_key" >>./mario-kart-8.local.env
 
 # Generate a Kerberos password for the Wii U Chat server
 chat_kerberos_password=$(generate_password 32)
@@ -138,6 +145,14 @@ echo "PN_MINECRAFT_KERBEROS_PASSWORD=$minecraft_kerberos_password" >>./minecraft
 pikmin3_kerberos_password=$(generate_password 32)
 echo "PN_PIKMIN3_KERBEROS_PASSWORD=$pikmin3_kerberos_password" >>./pikmin-3.local.env
 
+# Generate a Kerberos password for the Mario Kart 8 server
+mk8_kerberos_password=$(generate_password 32)
+echo "PN_MK8_KERBEROS_PASSWORD=$mk8_kerberos_password" >>./mario-kart-8.local.env
+
+# Generate a secure password for the Mario Kart 8 server
+mk8_secure_password=$(generate_password 32)
+echo "PN_MK8_SECURE_PASSWORD=$mk8_secure_password" >>./mario-kart-8.local.env
+
 # Generate an AES key for the Miiverse servers
 miiverse_aes_key=$(generate_hex 64)
 echo "PN_MIIVERSE_API_CONFIG_AES_KEY=$miiverse_aes_key" >>./miiverse-api.local.env
@@ -156,6 +171,7 @@ echo "PN_SMM_SECURE_SERVER_HOST=$server_ip" >>./super-mario-maker.local.env
 echo "PN_SPLATOON_SECURE_SERVER_HOST=$server_ip" >>./splatoon.local.env
 echo "PN_MINECRAFT_SECURE_SERVER_HOST=$server_ip" >>./minecraft-wiiu.local.env
 echo "PN_PIKMIN3_SECURE_SERVER_HOST=$server_ip" >>./pikmin-3.local.env
+echo "PN_MK8_SECURE_SERVER_HOST=$server_ip" >>./mario-kart-8.local.env
 
 # Get the Wii U IP address
 if [[ -n "$wiiu_ip" ]]; then
